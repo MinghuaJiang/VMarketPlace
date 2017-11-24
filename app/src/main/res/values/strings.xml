@@ -8,9 +8,9 @@
     <string name="login_with_facebook">Facebook</string>
     <string name="login_with_google">Google</string>
     <string name="login_methods_seperator">----------------- or ------------------</string>
-    <string name="hint_username">username field</string>
-    <string name="hint_password">password should be at least 8 digits</string>
-    <string name="confirm_button">Confirm</string>
-    <string name="register_later">I would like to register later.(not recommended)</string>
+    <string name="hint_username">Username or Email</string>
+    <string name="hint_password">Password</string>
+    <string name="confirm_button">Log in</string>
+    <string name="register_later">Forgot your password?</string>
     <string name="click"><![CDATA[>]]></string>
 </resources>
