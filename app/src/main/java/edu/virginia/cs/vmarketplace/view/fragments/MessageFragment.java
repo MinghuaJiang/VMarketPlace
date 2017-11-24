@@ -13,7 +13,7 @@ import edu.virginia.cs.vmarketplace.R;
 
 public class MessageFragment extends AbstractFragment{
     public MessageFragment(){
-        super("message", R.drawable.ic_message_black_24dp);
+        super("message", R.drawable.ic_message_24dp);
     }
 
     @Override

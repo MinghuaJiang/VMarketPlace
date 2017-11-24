@@ -27,7 +27,7 @@ import edu.virginia.cs.vmarketplace.view.SoldActivity;
 public class ProfileFragment extends AbstractFragment{
 
     public ProfileFragment(){
-        super("profile", R.drawable.ic_account_circle_black_24dp);
+        super("profile", R.drawable.user_24p);
     }
 
     @Override
