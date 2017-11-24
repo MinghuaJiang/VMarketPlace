@@ -44,9 +44,8 @@ public class ProfileFragment extends AbstractFragment{
         list.add(new ProfileItem(R.drawable.ic_publish_black_24dp, ProfileItem.ProfileType.SOLD_BY_ME, 3));
         list.add(new ProfileItem(R.drawable.ic_get_app_black_24dp, ProfileItem.ProfileType.BOUGHT_BY_ME, 10));
         list.add(new ProfileItem(R.drawable.ic_stars_black_24dp, ProfileItem.ProfileType.ADDED_TO_FAVIORITE, 5));
-        list.add(new ProfileItem(R.drawable.ic_settings_black_24dp, ProfileItem.ProfileType.SETTING, -1));
         ProfileItemAdapter adapter = new ProfileItemAdapter(getActivity(), list);
-        ListView listView = (ListView) rootView.findViewById(R.id.profile_container);
+        ListView listView = rootView.findViewById(R.id.profile_container);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -63,6 +62,12 @@ public class ProfileFragment extends AbstractFragment{
                 }
             }
         });
+
+        ListView settingView =  rootView.findViewById(R.id.settings_container);
+        list = new ArrayList<ProfileItem>();
+        list.add(new ProfileItem(R.drawable.ic_settings_black_24dp, ProfileItem.ProfileType.SETTING, -1));
+        adapter = new ProfileItemAdapter(getActivity(), list);
+        settingView.setAdapter(adapter);
 
         return rootView;
     }

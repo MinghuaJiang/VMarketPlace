@@ -4,5 +4,7 @@
     <color name="colorPrimaryDark">#ffa500</color>
     <color name="colorAccent">#FF4081</color>
     <color name="splashBackground">#ffa500</color>
-    <color name="tan_background">#FFF7DA</color>
+    <color name="seperator">#ccccb3</color>
+    <color name="click">#d6d6c2</color>
+    <color name="tan_background">#FFFFFF</color>
 </resources>
