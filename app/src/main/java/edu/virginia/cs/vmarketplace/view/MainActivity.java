@@ -1,5 +1,6 @@
 package edu.virginia.cs.vmarketplace.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -13,6 +14,8 @@ import edu.virginia.cs.vmarketplace.view.fragments.PlaceFragment;
 import edu.virginia.cs.vmarketplace.view.fragments.ProfileFragment;
 import edu.virginia.cs.vmarketplace.view.fragments.PublishFragment;
 import edu.virginia.cs.vmarketplace.view.fragments.ViewPagerAdapter;
+
+import static edu.virginia.cs.vmarketplace.model.AppConstant.SWITCH_TAB;
 
 /**
  * Created by cutehuazai on 11/21/17.
@@ -40,15 +43,23 @@ public class MainActivity extends AppCompatActivity{
         for(int i = 0; i < fragments.length;i++){
             tabLayout.getTabAt(i).setIcon(fragments[i].getIconResourceId());
         }
+
+        Intent intent = getIntent();
+
+        if (intent.hasExtra(SWITCH_TAB)) {
+            int tab = intent.getExtras().getInt(SWITCH_TAB);
+            tabLayout.getTabAt(tab).select();
+        }
+
     }
 
     private void initFragments(){
-        fragments = new AbstractFragment[4];
+        fragments = new AbstractFragment[5];
         fragments[0] = new HomeFragment();
         fragments[1] = new PlaceFragment();
-        //fragments[2] = new PublishFragment();
-        fragments[2] = new MessageFragment();
-        fragments[3] = new ProfileFragment();
+        fragments[2] = new PublishFragment();
+        fragments[3] = new MessageFragment();
+        fragments[4] = new ProfileFragment();
 
     }
 }
