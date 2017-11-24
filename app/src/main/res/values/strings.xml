@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">vMarketPlace</string>
+    <string name="published_by_me">Published By Me</string>
+    <string name="sold_by_me">Sold By Me</string>
+    <string name="bought_by_me">Bought By Me</string>
+    <string name="added_to_favorite">Added To Favorite</string>
+    <string name="settings">Settings</string>
 </resources>

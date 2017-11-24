@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/list_item_height"
+    android:background="@color/tan_background"
+    android:minHeight="@dimen/list_item_height">
+
+    <ImageView
+        android:id="@+id/profileimage"
+        android:layout_width="@dimen/list_item_height"
+        android:layout_height="@dimen/list_item_height"
+        android:paddingLeft="16dp"
+        />
+    <RelativeLayout
+        android:id="@+id/text_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_item_height"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/profileimage"
+        >
+
+        <TextView
+            android:id="@+id/profiletype"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/list_item_height"
+            android:gravity="center"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@android:color/black"
+            android:paddingLeft="16dp"
+            />
+
+
+        <TextView
+            android:id="@+id/profilecount"
+            android:layout_width="24dp"
+            android:layout_height="@dimen/list_item_height"
+            android:gravity="center"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+             />
+    </RelativeLayout>
+
+</RelativeLayout>
