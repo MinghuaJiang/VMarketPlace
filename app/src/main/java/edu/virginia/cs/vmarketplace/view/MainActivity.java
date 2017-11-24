@@ -43,12 +43,12 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void initFragments(){
-        fragments = new AbstractFragment[4];
+        fragments = new AbstractFragment[5];
         fragments[0] = new HomeFragment();
         fragments[1] = new PlaceFragment();
-        //fragments[2] = new PublishFragment();
-        fragments[2] = new MessageFragment();
-        fragments[3] = new ProfileFragment();
+        fragments[2] = new PublishFragment();
+        fragments[3] = new MessageFragment();
+        fragments[4] = new ProfileFragment();
 
     }
 }
