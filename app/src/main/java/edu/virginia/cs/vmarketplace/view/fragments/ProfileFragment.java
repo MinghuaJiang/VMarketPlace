@@ -1,9 +1,6 @@
-package edu.virginia.cs.vmarketplace.view;
+package edu.virginia.cs.vmarketplace.view.fragments;
 
-import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,14 +10,15 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.ProfileItem;
+import edu.virginia.cs.vmarketplace.view.BoughtActivity;
+import edu.virginia.cs.vmarketplace.view.FavoriteActivity;
+import edu.virginia.cs.vmarketplace.view.PublishActivity;
+import edu.virginia.cs.vmarketplace.view.SoldActivity;
 
 /**
  * Created by cutehuazai on 11/23/17.

@@ -1,4 +1,4 @@
-package edu.virginia.cs.vmarketplace.view;
+package edu.virginia.cs.vmarketplace.view.fragments;
 
 
 import android.support.v4.app.Fragment;

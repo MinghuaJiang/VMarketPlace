@@ -1,4 +1,4 @@
-package edu.virginia.cs.vmarketplace.view;
+package edu.virginia.cs.vmarketplace.view.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,15 +11,15 @@ import edu.virginia.cs.vmarketplace.R;
  * Created by cutehuazai on 11/23/17.
  */
 
-public class HomeFragment extends AbstractFragment {
-    public HomeFragment() {
-        super("home", R.drawable.ic_home_black_24dp);
+public class PlaceFragment extends AbstractFragment {
+    public PlaceFragment(){
+        super("place", R.drawable.ic_my_location_black_24dp);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.home, container, false);
+        View rootView = inflater.inflate(R.layout.place, container, false);
         return rootView;
     }
 }

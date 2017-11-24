@@ -6,6 +6,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import edu.virginia.cs.vmarketplace.R;
+import edu.virginia.cs.vmarketplace.view.fragments.AbstractFragment;
+import edu.virginia.cs.vmarketplace.view.fragments.HomeFragment;
+import edu.virginia.cs.vmarketplace.view.fragments.MessageFragment;
+import edu.virginia.cs.vmarketplace.view.fragments.PlaceFragment;
+import edu.virginia.cs.vmarketplace.view.fragments.ProfileFragment;
+import edu.virginia.cs.vmarketplace.view.fragments.PublishFragment;
+import edu.virginia.cs.vmarketplace.view.fragments.ViewPagerAdapter;
 
 /**
  * Created by cutehuazai on 11/21/17.
