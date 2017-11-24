@@ -24,26 +24,36 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".view.LoginActivity"
+            android:label="Login"
+            android:theme="@style/AppTheme" />
+
         <activity android:name=".view.MainActivity" />
+
         <activity
             android:name=".view.PublishActivity"
             android:label="@string/published_by_me"
             android:parentActivityName=".view.MainActivity"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name=".view.SoldActivity"
             android:label="@string/sold_by_me"
             android:parentActivityName=".view.MainActivity"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name=".view.BoughtActivity"
             android:label="@string/bought_by_me"
             android:parentActivityName=".view.MainActivity"
             android:theme="@style/AppTheme" />
+
         <activity android:name=".view.FavoriteActivity"
             android:label="@string/added_to_favorite"
             android:parentActivityName=".view.MainActivity"
-            android:theme="@style/AppTheme" ></activity>
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>
