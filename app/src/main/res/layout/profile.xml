@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/tan_background"
     android:orientation="vertical"
-    tools:context="edu.virginia.cs.vmarketplace.view.ProfileFragment">
+    tools:context="edu.virginia.cs.vmarketplace.view.fragments.ProfileFragment">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/user_container"
