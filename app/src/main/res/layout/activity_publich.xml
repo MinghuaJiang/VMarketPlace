@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="edu.virginia.cs.vmarketplace.view.PublichActivity">
+
+    <TextView
+        android:id="@+id/second_hand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="240dp"
+        android:text="@string/second_hand"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/second_hand_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:contentDescription="@string/second_hand"
+        app:layout_constraintEnd_toEndOf="@+id/second_hand"
+        app:layout_constraintHorizontal_bias="0.764"
+        app:layout_constraintStart_toStartOf="@+id/second_hand"
+        app:layout_constraintTop_toBottomOf="@+id/second_hand"
+        app:srcCompat="@drawable/second_hand_logo" />
+
+    <TextView
+        android:id="@+id/sublease"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="80dp"
+        android:layout_marginTop="240dp"
+        android:text="@string/sublease"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/sublease_image"
+        android:layout_width="54dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="@+id/sublease"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/sublease"
+        app:layout_constraintTop_toBottomOf="@+id/sublease"
+        android:contentDescription="@string/sublease"
+        app:srcCompat="@drawable/sublease_logo" />
+
+    <TextView
+        android:id="@+id/rides"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="92dp"
+        android:text="@string/rides"
+        app:layout_constraintEnd_toEndOf="@+id/second_hand"
+        app:layout_constraintStart_toStartOf="@+id/second_hand"
+        app:layout_constraintTop_toBottomOf="@+id/second_hand" />
+
+    <ImageView
+        android:id="@+id/rides_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:contentDescription="@string/rides"
+        app:layout_constraintEnd_toEndOf="@+id/rides"
+        app:layout_constraintStart_toStartOf="@+id/rides"
+        app:layout_constraintTop_toBottomOf="@+id/rides"
+        app:srcCompat="@drawable/ride_logo" />
+
+    <TextView
+        android:id="@+id/activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="92dp"
+        android:text="@string/activities"
+        app:layout_constraintEnd_toEndOf="@+id/sublease"
+        app:layout_constraintStart_toStartOf="@+id/sublease"
+        app:layout_constraintTop_toBottomOf="@+id/sublease" />
+
+    <ImageView
+        android:id="@+id/activity_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="24dp"
+        android:contentDescription="@string/activities"
+        app:layout_constraintEnd_toEndOf="@+id/activity"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/activity"
+        app:layout_constraintTop_toBottomOf="@+id/activity"
+        app:srcCompat="@drawable/activity_logo" />
+
+    <ImageView
+        android:id="@+id/close_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/close_btn"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rides_image"
+        app:srcCompat="@android:drawable/ic_notification_clear_all" />
+
+</android.support.constraint.ConstraintLayout>
