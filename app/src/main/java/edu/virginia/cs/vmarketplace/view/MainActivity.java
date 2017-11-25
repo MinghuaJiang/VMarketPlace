@@ -22,14 +22,17 @@ import static edu.virginia.cs.vmarketplace.model.AppConstant.SWITCH_TAB;
  */
 
 public class MainActivity extends AppCompatActivity{
+
     private AbstractFragment[] fragments;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initFragments();
         // Set the content of the activity to use the activity_main.xml layout file
         setContentView(R.layout.activity_main);
+
         // Find the view pager that will allow the user to swipe between fragments
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        ViewPager viewPager = findViewById(R.id.viewpager);
 
         // Create an adapter that knows which fragment should be shown on each page
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), fragments);
@@ -37,7 +40,7 @@ public class MainActivity extends AppCompatActivity{
         // Set the adapter onto the view pager
         viewPager.setAdapter(adapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        TabLayout tabLayout = findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
         for(int i = 0; i < fragments.length;i++){
