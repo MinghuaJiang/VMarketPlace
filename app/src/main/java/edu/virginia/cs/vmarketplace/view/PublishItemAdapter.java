@@ -34,9 +34,6 @@ public class PublishItemAdapter extends ArrayAdapter<PublishItem> {
 
         PublishItem currentItem = getItem(position);
 
-        ImageView imageView = listView.findViewById(R.id.image);
-        imageView.setImageResource(currentItem.getImageResourceId());
-
         TextView titleView = listView.findViewById(R.id.title);
         titleView.setText(currentItem.getTitle());
 

@@ -34,9 +34,6 @@ public class SoldItemAdapter extends ArrayAdapter<SoldItem> {
 
         SoldItem currentItem = getItem(position);
 
-        ImageView imageView = listView.findViewById(R.id.image);
-        imageView.setImageResource(currentItem.getImageResourceId());
-
         TextView titleView = listView.findViewById(R.id.title);
         titleView.setText(currentItem.getTitle());
 

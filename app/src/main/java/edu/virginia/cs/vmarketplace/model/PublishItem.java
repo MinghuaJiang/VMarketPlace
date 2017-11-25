@@ -8,7 +8,6 @@ public class PublishItem {
     private long id;
     private double price;
     private String image;
-    private int imageResourceId;
     private String title;
     private int replyCount;
     private int viewCount;
@@ -23,10 +22,6 @@ public class PublishItem {
 
     public String getImage() {
         return image;
-    }
-
-    public int getImageResourceId() {
-        return imageResourceId;
     }
 
     public String getTitle() {
@@ -51,10 +46,6 @@ public class PublishItem {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public void setImageResourceId(int imageResourceId) {
-        this.imageResourceId = imageResourceId;
     }
 
     public void setTitle(String title) {

@@ -34,7 +34,6 @@ public class PublishActivity extends AppCompatActivity {
         List<PublishItem> list = new ArrayList<PublishItem>();
         PublishItem item = new PublishItem();
         item.setId(1);
-        item.setImageResourceId(R.drawable.family_father);
         item.setTitle("Cool Kid");
         item.setPrice(100.0);
         item.setReplyCount(5);
@@ -42,7 +41,6 @@ public class PublishActivity extends AppCompatActivity {
         list.add(item);
         item = new PublishItem();
         item.setId(2);
-        item.setImageResourceId(R.drawable.family_mother);
         item.setTitle("Bao");
         item.setPrice(200.0);
         item.setReplyCount(3);
