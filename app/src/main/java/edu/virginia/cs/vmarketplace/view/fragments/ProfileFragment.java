@@ -40,7 +40,7 @@ public class ProfileFragment extends AbstractFragment{
         TextView textView = rootView.findViewById(R.id.user_id);
         textView.setText(user.getUsername());
         CircleImageView imageView = rootView.findViewById(R.id.user_pic);
-        Picasso.with(getActivity()).load(user.getUserPic()).fit().placeholder(R.drawable.place_holder_64p).into(imageView);
+        Picasso.with(getActivity()).load(user.getUserPic()).fit().placeholder(R.drawable.place_holder_96p).into(imageView);
 
         List<ProfileItem> list = new ArrayList<ProfileItem>();
         list.add(new ProfileItem(R.drawable.publish_24p, ProfileItem.ProfileType.PUBLISH_BY_ME, 5));
