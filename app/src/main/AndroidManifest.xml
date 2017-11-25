@@ -50,7 +50,8 @@
             android:label="@string/added_to_favorite"
             android:parentActivityName=".view.MainActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".view.PublichActivity"></activity>
+        <activity android:name=".view.PublishActivity" />
+        <activity android:name=".view.UseCameraActivity"></activity>
     </application>
 
 </manifest>

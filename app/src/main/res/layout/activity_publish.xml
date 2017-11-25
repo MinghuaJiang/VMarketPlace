@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.virginia.cs.vmarketplace.view.PublichActivity">
+    tools:context="edu.virginia.cs.vmarketplace.view.PublishActivity">
 
     <TextView
         android:id="@+id/second_hand"
@@ -24,6 +24,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:contentDescription="@string/second_hand"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintEnd_toEndOf="@+id/second_hand"
         app:layout_constraintHorizontal_bias="0.764"
         app:layout_constraintStart_toStartOf="@+id/second_hand"
@@ -46,11 +48,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:contentDescription="@string/sublease"
         app:layout_constraintEnd_toEndOf="@+id/sublease"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/sublease"
         app:layout_constraintTop_toBottomOf="@+id/sublease"
-        android:contentDescription="@string/sublease"
         app:srcCompat="@drawable/sublease_logo" />
 
     <TextView
@@ -70,6 +74,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:contentDescription="@string/rides"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintEnd_toEndOf="@+id/rides"
         app:layout_constraintStart_toStartOf="@+id/rides"
         app:layout_constraintTop_toBottomOf="@+id/rides"
@@ -93,6 +99,8 @@
         android:layout_marginEnd="8dp"
         android:layout_marginTop="24dp"
         android:contentDescription="@string/activities"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintEnd_toEndOf="@+id/activity"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/activity"
@@ -105,9 +113,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:contentDescription="@string/close_btn"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rides_image"
-        app:srcCompat="@android:drawable/ic_notification_clear_all" />
+        app:srcCompat="@drawable/close_24p" />
 
 </android.support.constraint.ConstraintLayout>
