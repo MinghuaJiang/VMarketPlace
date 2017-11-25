@@ -52,7 +52,7 @@
         android:layout_below="@+id/google_login"
         android:layout_centerHorizontal="true"/>
 
-    <EditText
+    <edu.virginia.cs.vmarketplace.view.MyEditText
         android:layout_width = "wrap_content"
         android:layout_height = "wrap_content"
         android:id = "@+id/input_username"
@@ -64,7 +64,7 @@
         android:layout_alignParentStart = "true"
         android:layout_alignParentEnd = "true" />
 
-    <EditText
+    <edu.virginia.cs.vmarketplace.view.MyEditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPassword"

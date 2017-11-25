@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,7 +20,7 @@ import edu.virginia.cs.vmarketplace.model.ProfileItem;
 import edu.virginia.cs.vmarketplace.model.User;
 import edu.virginia.cs.vmarketplace.view.BoughtActivity;
 import edu.virginia.cs.vmarketplace.view.FavoriteActivity;
-import edu.virginia.cs.vmarketplace.view.PublishActivity;
+import edu.virginia.cs.vmarketplace.view.ProfilePublishActivity;
 import edu.virginia.cs.vmarketplace.view.SoldActivity;
 
 /**
@@ -37,11 +36,11 @@ public class ProfileFragment extends AbstractFragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.profile, container, false);
-        User user = new User("helloword", "");
+        User user = new User("helloword", "https://s3.amazonaws.com/vmarketplace/profile/index.png");
         TextView textView = rootView.findViewById(R.id.user_id);
         textView.setText(user.getUsername());
         CircleImageView imageView = rootView.findViewById(R.id.user_pic);
-        Picasso.with(getActivity()).load(user.getUserPic()).fit().into(imageView);
+        Picasso.with(getActivity()).load(user.getUserPic()).fit().placeholder(R.drawable.place_holder_64p).into(imageView);
 
         List<ProfileItem> list = new ArrayList<ProfileItem>();
         list.add(new ProfileItem(R.drawable.publish_24p, ProfileItem.ProfileType.PUBLISH_BY_ME, 5));
@@ -77,7 +76,7 @@ public class ProfileFragment extends AbstractFragment{
     }
 
     private void handlePublish(){
-        Intent intent = new Intent(getActivity(), PublishActivity.class);
+        Intent intent = new Intent(getActivity(), ProfilePublishActivity.class);
         startActivity(intent);
     }
 

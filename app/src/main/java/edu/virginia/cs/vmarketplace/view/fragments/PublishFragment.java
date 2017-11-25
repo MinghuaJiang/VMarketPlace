@@ -13,13 +13,13 @@ import edu.virginia.cs.vmarketplace.R;
 
 public class PublishFragment extends AbstractFragment{
     public PublishFragment(){
-        super("publish", R.drawable.add_24p);
+        super("profile_publish", R.drawable.add_24p);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.publish, container, false);
+        View rootView = inflater.inflate(R.layout.profile_publish, container, false);
         return rootView;
     }
 }

@@ -10,22 +10,20 @@ import java.util.List;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.AppConstant;
-import edu.virginia.cs.vmarketplace.model.ProfileItem;
 import edu.virginia.cs.vmarketplace.model.PublishItem;
-import edu.virginia.cs.vmarketplace.view.fragments.ProfileItemAdapter;
 
 /**
  * Created by cutehuazai on 11/23/17.
  */
 
-public class PublishActivity extends AppCompatActivity {
+public class ProfilePublishActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_detail);
         ListView listView = findViewById(R.id.profile_detail_list);
-        PublishItemAdapter adapter = new PublishItemAdapter(this, getPublishList());
+        ProfilePublishItemAdapter adapter = new ProfilePublishItemAdapter(this, getPublishList());
         listView.setAdapter(adapter);
     }
 

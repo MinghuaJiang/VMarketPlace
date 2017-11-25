@@ -19,8 +19,8 @@ import edu.virginia.cs.vmarketplace.model.PublishItem;
  * Created by cutehuazai on 11/24/17.
  */
 
-public class PublishItemAdapter extends ArrayAdapter<PublishItem> {
-    public PublishItemAdapter(@NonNull Context context, @NonNull List<PublishItem> objects) {
+public class ProfilePublishItemAdapter extends ArrayAdapter<PublishItem> {
+    public ProfilePublishItemAdapter(@NonNull Context context, @NonNull List<PublishItem> objects) {
         super(context, 0, objects);
     }
 

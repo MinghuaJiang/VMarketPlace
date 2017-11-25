@@ -33,7 +33,7 @@
         <activity android:name=".view.MainActivity" />
 
         <activity
-            android:name=".view.PublishActivity"
+            android:name=".view.ProfilePublishActivity"
             android:label="@string/published_by_me"
 
             android:parentActivityName=".view.MainActivity"
