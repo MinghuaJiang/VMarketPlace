@@ -12,7 +12,7 @@ public class BoughtActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bought);
+        setContentView(R.layout.list_detail);
     }
 
     @Override

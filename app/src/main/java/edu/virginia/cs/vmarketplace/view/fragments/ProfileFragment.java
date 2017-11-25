@@ -10,11 +10,15 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.ProfileItem;
+import edu.virginia.cs.vmarketplace.model.User;
 import edu.virginia.cs.vmarketplace.view.BoughtActivity;
 import edu.virginia.cs.vmarketplace.view.FavoriteActivity;
 import edu.virginia.cs.vmarketplace.view.PublishActivity;
@@ -25,25 +29,25 @@ import edu.virginia.cs.vmarketplace.view.SoldActivity;
  */
 
 public class ProfileFragment extends AbstractFragment{
-
     public ProfileFragment(){
-        super("profile", R.drawable.ic_account_circle_black_24dp);
+        super("profile", R.drawable.user_24p);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.profile, container, false);
+        User user = new User("helloword", "");
         TextView textView = rootView.findViewById(R.id.user_id);
-        textView.setText("helloworld");
-        ImageView imageView = rootView.findViewById(R.id.user_pic);
-        imageView.setImageResource(R.drawable.family_son);
+        textView.setText(user.getUsername());
+        CircleImageView imageView = rootView.findViewById(R.id.user_pic);
+        Picasso.with(getActivity()).load(user.getUserPic()).fit().into(imageView);
 
         List<ProfileItem> list = new ArrayList<ProfileItem>();
-        list.add(new ProfileItem(R.drawable.ic_open_in_new_black_24dp, ProfileItem.ProfileType.PUBLISH_BY_ME, 5));
-        list.add(new ProfileItem(R.drawable.ic_publish_black_24dp, ProfileItem.ProfileType.SOLD_BY_ME, 3));
-        list.add(new ProfileItem(R.drawable.ic_get_app_black_24dp, ProfileItem.ProfileType.BOUGHT_BY_ME, 10));
-        list.add(new ProfileItem(R.drawable.ic_stars_black_24dp, ProfileItem.ProfileType.ADDED_TO_FAVIORITE, 5));
+        list.add(new ProfileItem(R.drawable.publish_24p, ProfileItem.ProfileType.PUBLISH_BY_ME, 5));
+        list.add(new ProfileItem(R.drawable.sold_24p, ProfileItem.ProfileType.SOLD_BY_ME, 3));
+        list.add(new ProfileItem(R.drawable.bought_24p, ProfileItem.ProfileType.BOUGHT_BY_ME, 10));
+        list.add(new ProfileItem(R.drawable.star_24p, ProfileItem.ProfileType.ADDED_TO_FAVIORITE, 5));
         ProfileItemAdapter adapter = new ProfileItemAdapter(getActivity(), list);
         ListView listView = rootView.findViewById(R.id.profile_container);
         listView.setAdapter(adapter);
@@ -65,7 +69,7 @@ public class ProfileFragment extends AbstractFragment{
 
         ListView settingView =  rootView.findViewById(R.id.settings_container);
         list = new ArrayList<ProfileItem>();
-        list.add(new ProfileItem(R.drawable.ic_settings_black_24dp, ProfileItem.ProfileType.SETTING, -1));
+        list.add(new ProfileItem(R.drawable.settings_24p, ProfileItem.ProfileType.SETTING, -1));
         adapter = new ProfileItemAdapter(getActivity(), list);
         settingView.setAdapter(adapter);
 

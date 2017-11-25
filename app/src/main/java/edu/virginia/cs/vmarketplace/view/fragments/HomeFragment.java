@@ -13,7 +13,7 @@ import edu.virginia.cs.vmarketplace.R;
 
 public class HomeFragment extends AbstractFragment {
     public HomeFragment() {
-        super("home", R.drawable.ic_home_black_24dp);
+        super("home", R.drawable.home_24p);
     }
 
     @Override

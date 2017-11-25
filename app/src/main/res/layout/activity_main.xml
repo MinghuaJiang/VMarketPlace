@@ -23,6 +23,4 @@
         app:tabMode="fixed"
         app:tabTextAppearance="@style/CustomTabText"/>
 
-
-
 </LinearLayout>

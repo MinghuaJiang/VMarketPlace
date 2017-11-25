@@ -13,7 +13,7 @@ import edu.virginia.cs.vmarketplace.R;
 
 public class PublishFragment extends AbstractFragment{
     public PublishFragment(){
-        super("publish", R.drawable.ic_add_circle_outline_black_36dp);
+        super("publish", R.drawable.add_24p);
     }
 
     @Override
