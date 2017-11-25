@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
+import edu.virginia.cs.vmarketplace.view.login.LoginActivity;
+
 /**
  * Created by cutehuazai on 11/22/17.
  */
