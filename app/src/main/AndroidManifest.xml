@@ -27,7 +27,7 @@
         </activity>
 
         <activity
-            android:name=".view.LoginActivity"
+            android:name=".view.login.LoginActivity"
             android:label="Login"
             android:theme="@style/AppTheme" />
 
