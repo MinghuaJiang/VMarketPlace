@@ -6,6 +6,7 @@ package edu.virginia.cs.vmarketplace.model;
 
 public class SoldItem {
     private long id;
+    private String productType;
     private double price;
     private String image;
     private String title;
@@ -29,6 +30,14 @@ public class SoldItem {
 
     public int getMessageId() {
         return messageId;
+    }
+
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
     }
 
     public void setMessageId(int messageId) {

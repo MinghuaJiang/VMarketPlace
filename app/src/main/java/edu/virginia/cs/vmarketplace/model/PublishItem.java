@@ -6,11 +6,16 @@ package edu.virginia.cs.vmarketplace.model;
 
 public class PublishItem {
     private long id;
+    private String productType;
     private double price;
     private String image;
     private String title;
     private int replyCount;
     private int viewCount;
+
+    public String getProductType() {
+        return productType;
+    }
 
     public long getId() {
         return id;
@@ -58,5 +63,9 @@ public class PublishItem {
 
     public void setViewCount(int viewCount) {
         this.viewCount = viewCount;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
     }
 }

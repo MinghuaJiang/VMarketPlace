@@ -26,6 +26,8 @@ public class MessageFragment extends AbstractFragment{
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.message, container, false);
         ListView listView = rootView.findViewById(R.id.message_detail_list);
+        MessageItemAdapter adapter = new MessageItemAdapter(getActivity(), getMessageItemList());
+        listView.setAdapter(adapter);
 
         return rootView;
     }
@@ -34,6 +36,11 @@ public class MessageFragment extends AbstractFragment{
         List<MessageItem> result = new ArrayList<MessageItem>();
         MessageItem item = new MessageItem();
         item.setSellerName("Ben");
+        item.setThumbPic("https://s3.amazonaws.com/vmarketplace/product/bag.png");
+        item.setSellerPic("https://s3.amazonaws.com/vmarketplace/profile/index.png");
+        item.setLatestMessage("test");
+        item.setLatestUpdateTime("2017-11-02");
+        result.add(item);
         return result;
 
     }

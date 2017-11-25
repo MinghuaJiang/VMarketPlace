@@ -31,11 +31,14 @@ public class SoldActivity extends AppCompatActivity {
         item.setId(1);
         item.setTitle("Cool Kid");
         item.setPrice(100.0);
+        item.setProductType("Ride");
         list.add(item);
         item = new SoldItem();
         item.setId(2);
         item.setTitle("Bao");
         item.setPrice(200.0);
+        item.setProductType("Second Hand");
+        item.setImage("https://s3.amazonaws.com/vmarketplace/product/bag.png");
         list.add(item);
 
         return list;

@@ -16,7 +16,6 @@
             android:layout_width="@dimen/list_item_height_large"
             android:layout_height="@dimen/list_item_height_large"
             android:paddingLeft="16dp"
-            android:src="@drawable/place_holder_24p"
             />
         <LinearLayout
             android:id="@+id/text_container"
@@ -63,48 +62,38 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/list_item_height">
-        <ImageView
-            android:id="@+id/contact"
+
+        <TextView
+            android:id="@+id/product_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="@dimen/seperator_height"
-            android:layout_marginBottom="@dimen/seperator_height"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:background="@drawable/ic_chat_24dp"
+            android:gravity="center"
+            android:textColor="@color/count"
             />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/contact"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="4dp"
-            android:text="Contact Buyer"
-            android:gravity="center"/>
+
         <Button
             android:id="@+id/review"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Review"
-            android:layout_toLeftOf="@id/other"
-            android:background="@color/tan_background"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_toLeftOf="@id/contact"
+            android:background="@drawable/review_24dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             />
         <Button
-            android:id="@+id/other"
-            android:layout_width="36dp"
-            android:layout_height="wrap_content"
+            android:id="@+id/contact"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:text="..."
             android:layout_alignParentRight="true"
-            android:background="@color/tan_background"
+            android:background="@drawable/ic_chat_24dp"
             />
     </RelativeLayout>
 </LinearLayout>

@@ -59,4 +59,16 @@ public class MessageItem {
     public void setLatestUpdateTime(String latestUpdateTime) {
         this.latestUpdateTime = latestUpdateTime;
     }
+
+    @Override
+    public String toString() {
+        return "MessageItem{" +
+                "id=" + id +
+                ", sellerPic='" + sellerPic + '\'' +
+                ", sellerName='" + sellerName + '\'' +
+                ", thumbPic='" + thumbPic + '\'' +
+                ", latestMessage='" + latestMessage + '\'' +
+                ", latestUpdateTime='" + latestUpdateTime + '\'' +
+                '}';
+    }
 }

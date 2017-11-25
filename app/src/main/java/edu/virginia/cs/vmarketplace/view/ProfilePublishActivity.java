@@ -36,6 +36,8 @@ public class ProfilePublishActivity extends AppCompatActivity {
         item.setPrice(100.0);
         item.setReplyCount(5);
         item.setViewCount(200);
+        item.setProductType("Second Hand");
+        item.setImage("https://s3.amazonaws.com/vmarketplace/product/bag.png");
         list.add(item);
         item = new PublishItem();
         item.setId(2);
@@ -43,7 +45,19 @@ public class ProfilePublishActivity extends AppCompatActivity {
         item.setPrice(200.0);
         item.setReplyCount(3);
         item.setViewCount(100);
+        item.setProductType("Ride");
         list.add(item);
+
+        item = new PublishItem();
+        item.setId(3);
+        item.setTitle("Bao");
+        item.setPrice(200.0);
+        item.setReplyCount(3);
+        item.setViewCount(100);
+        item.setProductType("Sublease");
+        item.setImage("https://s3.amazonaws.com/vmarketplace/product/Apartment.png");
+        list.add(item);
+
 
         return list;
     }
