@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import edu.virginia.cs.vmarketplace.R;
@@ -16,6 +15,7 @@ public class PublishActivity extends AppCompatActivity {
     private static String subleaseIdentifier = "SUBLEASE";
     private static String ridesIdentifier = "RIDES";
     private static String activitiesIdentifier = "ACTIVITIES";
+    private static final int BACK_TO_MAIN = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,10 +27,10 @@ public class PublishActivity extends AppCompatActivity {
         secondHand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent useCameraIntent = new Intent(PublishActivity.this, UseCameraActivity.class);
+                Intent useCameraIntent = new Intent(PublishActivity.this, CameraActivity.class);
                 String tag = secondHandIdentifier;
                 useCameraIntent.putExtra(Intent.EXTRA_TEXT, tag);
-                startActivity(useCameraIntent);
+                startActivityForResult(useCameraIntent, BACK_TO_MAIN);
             }
         });
 
@@ -39,7 +39,7 @@ public class PublishActivity extends AppCompatActivity {
         sublease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent useCameraIntent = new Intent(PublishActivity.this, UseCameraActivity.class);
+                Intent useCameraIntent = new Intent(PublishActivity.this, CameraActivity.class);
                 String tag = subleaseIdentifier;
                 useCameraIntent.putExtra(Intent.EXTRA_TEXT, tag);
                 startActivity(useCameraIntent);
@@ -51,7 +51,7 @@ public class PublishActivity extends AppCompatActivity {
         rides.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent useCameraIntent = new Intent(PublishActivity.this, UseCameraActivity.class);
+                Intent useCameraIntent = new Intent(PublishActivity.this, CameraActivity.class);
                 String tag = ridesIdentifier;
                 useCameraIntent.putExtra(Intent.EXTRA_TEXT, tag);
                 startActivity(useCameraIntent);
@@ -63,7 +63,7 @@ public class PublishActivity extends AppCompatActivity {
         activities.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent useCameraIntent = new Intent(PublishActivity.this, UseCameraActivity.class);
+                Intent useCameraIntent = new Intent(PublishActivity.this, CameraActivity.class);
                 String tag = activitiesIdentifier;
                 useCameraIntent.putExtra(Intent.EXTRA_TEXT, tag);
                 startActivity(useCameraIntent);
@@ -79,5 +79,14 @@ public class PublishActivity extends AppCompatActivity {
                 startActivity(IntentUtil.jumpWithTabRecorded(intent.getIntExtra(AppConstant.PREVIOUS_TAB, 0), PublishActivity.this, MainActivity.class));
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (requestCode == BACK_TO_MAIN) {
+            Intent backIntent = new Intent(this, MainActivity.class);
+            startActivity(backIntent);
+        }
     }
 }

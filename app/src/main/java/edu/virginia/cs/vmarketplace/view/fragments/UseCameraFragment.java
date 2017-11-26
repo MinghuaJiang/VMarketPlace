@@ -1,4 +1,5 @@
-package edu.virginia.cs.vmarketplace.view;
+package edu.virginia.cs.vmarketplace.view.fragments;
+
 
 import android.Manifest;
 import android.app.Activity;
@@ -8,40 +9,52 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import edu.virginia.cs.vmarketplace.R;
+import edu.virginia.cs.vmarketplace.view.MainActivity;
 
-public class UseCameraActivity extends AppCompatActivity {
+/**
+ * Created by cutehuazai on 11/25/17.
+ */
+
+public class UseCameraFragment extends AbstractFragment {
     public static final int MY_PERMISSIONS_REQUEST_CAMERA = 100;
     public static final String ALLOW_KEY = "ALLOWED";
     public static final String CAMERA_PREF = "camera_pref";
+    private static final int BACK_TO_MAIN = 1;
+
+    public UseCameraFragment(){
+        super("Camera", 0);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_use_camera);
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            if (getFromPref(this, ALLOW_KEY)) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.use_camera, container, false);
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            if (getFromPref(getActivity(), ALLOW_KEY)) {
                 showSettingsAlert();
-            } else if (ContextCompat.checkSelfPermission(this,
+            } else if (ContextCompat.checkSelfPermission(getActivity(),
                     Manifest.permission.CAMERA)
 
                     != PackageManager.PERMISSION_GRANTED) {
 
                 // Should we show an explanation?
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                         Manifest.permission.CAMERA)) {
                     showAlert();
                 } else {
                     // No explanation needed, we can request the permission.
-                    ActivityCompat.requestPermissions(this,
+                    ActivityCompat.requestPermissions(getActivity(),
                             new String[]{Manifest.permission.CAMERA},
                             MY_PERMISSIONS_REQUEST_CAMERA);
                 }
@@ -49,8 +62,9 @@ public class UseCameraActivity extends AppCompatActivity {
         } else {
             openCamera();
         }
-
+        return rootView;
     }
+
     public static void saveToPreferences(Context context, String key, Boolean allowed) {
         SharedPreferences myPrefs = context.getSharedPreferences(CAMERA_PREF,
                 Context.MODE_PRIVATE);
@@ -66,7 +80,7 @@ public class UseCameraActivity extends AppCompatActivity {
     }
 
     private void showAlert() {
-        AlertDialog alertDialog = new AlertDialog.Builder(UseCameraActivity.this).create();
+        AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
         alertDialog.setTitle("Alert");
         alertDialog.setMessage("App needs to access the Camera.");
 
@@ -74,7 +88,7 @@ public class UseCameraActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        finish();
+                        getActivity().finish();
                     }
                 });
 
@@ -83,7 +97,7 @@ public class UseCameraActivity extends AppCompatActivity {
 
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        ActivityCompat.requestPermissions(UseCameraActivity.this,
+                        ActivityCompat.requestPermissions(getActivity(),
                                 new String[]{Manifest.permission.CAMERA},
                                 MY_PERMISSIONS_REQUEST_CAMERA);
                     }
@@ -92,7 +106,7 @@ public class UseCameraActivity extends AppCompatActivity {
     }
 
     private void showSettingsAlert() {
-        AlertDialog alertDialog = new AlertDialog.Builder(UseCameraActivity.this).create();
+        AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
         alertDialog.setTitle("Alert");
         alertDialog.setMessage("App needs to access the Camera.");
 
@@ -110,7 +124,7 @@ public class UseCameraActivity extends AppCompatActivity {
 
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        startInstalledAppDetailsActivity(UseCameraActivity.this);
+                        startInstalledAppDetailsActivity(getActivity());
                     }
                 });
 
@@ -128,7 +142,7 @@ public class UseCameraActivity extends AppCompatActivity {
                         boolean
                                 showRationale =
                                 ActivityCompat.shouldShowRequestPermissionRationale(
-                                        this, permission);
+                                        getActivity(), permission);
 
                         if (showRationale) {
                             showAlert();
@@ -139,7 +153,7 @@ public class UseCameraActivity extends AppCompatActivity {
                             // or open another dialog explaining
                             // again the permission and directing to
                             // the app setting
-                            saveToPreferences(UseCameraActivity.this, ALLOW_KEY, true);
+                            saveToPreferences(getActivity(), ALLOW_KEY, true);
                         }
                     }
                 }
@@ -151,7 +165,7 @@ public class UseCameraActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
     }
 
@@ -172,6 +186,15 @@ public class UseCameraActivity extends AppCompatActivity {
 
     private void openCamera() {
         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        startActivity(intent);
+        startActivityForResult(intent, BACK_TO_MAIN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (requestCode == BACK_TO_MAIN) {
+            Intent backIntent = new Intent(getActivity(), MainActivity.class);
+            startActivity(backIntent);
+        }
     }
 }
