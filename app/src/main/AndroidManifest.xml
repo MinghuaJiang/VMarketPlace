@@ -53,7 +53,6 @@
             android:label="@string/added_to_favorite"
             android:parentActivityName=".view.MainActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".view.CameraActivity" />
         <activity
             android:name=".view.SoldReviewActivity"
             android:label="@string/review_detail"
