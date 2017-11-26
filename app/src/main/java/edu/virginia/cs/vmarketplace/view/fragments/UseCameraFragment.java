@@ -30,6 +30,7 @@ public class UseCameraFragment extends AbstractFragment {
     public static final int MY_PERMISSIONS_REQUEST_CAMERA = 100;
     public static final String ALLOW_KEY = "ALLOWED";
     public static final String CAMERA_PREF = "camera_pref";
+    public static final int OPEN_CAMERA_CODE = 0;
 
     public UseCameraFragment(){
         super("Camera", 0);
@@ -184,7 +185,13 @@ public class UseCameraFragment extends AbstractFragment {
     }
 
     private void openCamera() {
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        startActivity(intent);
+        Intent useCameraIntent = new Intent("android.media.action.IMAGE_CAPTURE");
+        startActivityForResult(useCameraIntent, OPEN_CAMERA_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 }
