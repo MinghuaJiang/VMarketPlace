@@ -27,7 +27,7 @@ public class PublishActivity extends AppCompatActivity {
         secondHand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent useCameraIntent = new Intent(PublishActivity.this, CameraActivity.class);
+                Intent useCameraIntent = new Intent(PublishActivity.this, WritePostActivity.class);
                 String tag = secondHandIdentifier;
                 useCameraIntent.putExtra(Intent.EXTRA_TEXT, tag);
                 startActivityForResult(useCameraIntent, BACK_FROM_CAMERA);
@@ -39,7 +39,7 @@ public class PublishActivity extends AppCompatActivity {
         sublease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent useCameraIntent = new Intent(PublishActivity.this, CameraActivity.class);
+                Intent useCameraIntent = new Intent(PublishActivity.this, WritePostActivity.class);
                 String tag = subleaseIdentifier;
                 useCameraIntent.putExtra(Intent.EXTRA_TEXT, tag);
                 startActivity(useCameraIntent);
@@ -51,7 +51,7 @@ public class PublishActivity extends AppCompatActivity {
         rides.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent useCameraIntent = new Intent(PublishActivity.this, CameraActivity.class);
+                Intent useCameraIntent = new Intent(PublishActivity.this, WritePostActivity.class);
                 String tag = ridesIdentifier;
                 useCameraIntent.putExtra(Intent.EXTRA_TEXT, tag);
                 startActivity(useCameraIntent);
@@ -63,7 +63,7 @@ public class PublishActivity extends AppCompatActivity {
         activities.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent useCameraIntent = new Intent(PublishActivity.this, CameraActivity.class);
+                Intent useCameraIntent = new Intent(PublishActivity.this, WritePostActivity.class);
                 String tag = activitiesIdentifier;
                 useCameraIntent.putExtra(Intent.EXTRA_TEXT, tag);
                 startActivity(useCameraIntent);

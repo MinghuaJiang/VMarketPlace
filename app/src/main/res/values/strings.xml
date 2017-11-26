@@ -19,4 +19,17 @@
     <string name="rides">Rides</string>
     <string name="activities">Activities</string>
     <string name="close_btn">close</string>
+    <string name="login">Login</string>
+    <string name="publish">Publish</string>
+    <string name="write_post">Post</string>
+    <string name="hint_title">Title</string>
+    <string name="post_content">content includes no more than 2000 words</string>
+    <string name="post_contact_title">Your title</string>
+    <string name="post_address">Address(optional)</string>
+    <string name="post_phone">Phone Number(optional)</string>
+    <string name="post_btn">Confirm</string>
+    <string name="choose_from_album">Choose from album</string>
+    <string name="use_camera">Use camera</string>
+    <string name="close_popup">Close pop up</string>
+    <string name="fake_text">Besides finding the source of the issue, I found the solution. If android:inputType is used, then textMultiLine must be used to enable multi-line support. Also, using inputType supersedes the code android:singleLine="false". If using inputType, then, to reiterate, textMultiLine must be used or the EditText object will only consist of one line, without word-wrapping.</string>
 </resources>
