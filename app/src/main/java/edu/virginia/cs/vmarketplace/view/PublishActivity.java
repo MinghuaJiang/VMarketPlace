@@ -15,7 +15,7 @@ public class PublishActivity extends AppCompatActivity {
     private static String subleaseIdentifier = "SUBLEASE";
     private static String ridesIdentifier = "RIDES";
     private static String activitiesIdentifier = "ACTIVITIES";
-    private static final int BACK_TO_MAIN = 1;
+    private static final int BACK_FROM_CAMERA = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class PublishActivity extends AppCompatActivity {
                 Intent useCameraIntent = new Intent(PublishActivity.this, CameraActivity.class);
                 String tag = secondHandIdentifier;
                 useCameraIntent.putExtra(Intent.EXTRA_TEXT, tag);
-                startActivityForResult(useCameraIntent, BACK_TO_MAIN);
+                startActivityForResult(useCameraIntent, BACK_FROM_CAMERA);
             }
         });
 
@@ -84,7 +84,7 @@ public class PublishActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        if (requestCode == BACK_TO_MAIN) {
+        if (requestCode == BACK_FROM_CAMERA && resultCode == RESULT_CANCELED) {
             Intent backIntent = new Intent(this, MainActivity.class);
             startActivity(backIntent);
         }

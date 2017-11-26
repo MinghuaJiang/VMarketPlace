@@ -1,11 +1,14 @@
 package edu.virginia.cs.vmarketplace.view;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -52,6 +55,17 @@ public class SoldItemAdapter extends ArrayAdapter<SoldItem> {
 
         TextView typeView = listView.findViewById(R.id.product_type);
         typeView.setText(currentItem.getProductType());
+
+        Button reviewButton = listView.findViewById(R.id.review);
+        reviewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), SoldReviewActivity.class);
+                getContext().startActivity(intent);
+            }
+        });
+
+        Button messageButton = listView.findViewById(R.id.contact);
 
         return listView;
     }
