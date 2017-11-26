@@ -53,10 +53,15 @@
             android:theme="@style/AppTheme" />
         <activity android:name=".view.PublishActivity" />
         <activity android:name=".view.CameraActivity" />
-        <activity android:name=".view.SoldReviewActivity"
+        <activity
+            android:name=".view.SoldReviewActivity"
             android:label="@string/review_detail"
             android:parentActivityName=".view.SoldActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".view.MessageDetailActivity"
+            android:label="Message Detail"
+            android:parentActivityName=".view.MainActivity"
+            android:theme="@style/AppTheme" ></activity>
     </application>
 
 </manifest>

@@ -1,9 +1,11 @@
 package edu.virginia.cs.vmarketplace.view.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import java.util.List;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.MessageItem;
+import edu.virginia.cs.vmarketplace.view.MessageDetailActivity;
 
 /**
  * Created by cutehuazai on 11/23/17.
@@ -26,8 +29,18 @@ public class MessageFragment extends AbstractFragment{
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.message, container, false);
         ListView listView = rootView.findViewById(R.id.message_detail_list);
-        MessageItemAdapter adapter = new MessageItemAdapter(getActivity(), getMessageItemList());
+        final List<MessageItem> list = getMessageItemList();
+        MessageItemAdapter adapter = new MessageItemAdapter(getActivity(), list);
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                MessageItem item = list.get(position);
+                Intent intent = new Intent(getActivity(), MessageDetailActivity.class);
+                startActivity(intent);
+            }
+        });
 
         return rootView;
     }
