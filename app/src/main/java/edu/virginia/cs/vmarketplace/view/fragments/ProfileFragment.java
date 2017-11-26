@@ -36,11 +36,20 @@ public class ProfileFragment extends AbstractFragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.profile, container, false);
-        User user = new User("helloword", "https://s3.amazonaws.com/vmarketplace/profile/index.png");
+        User user = new User("helloworld", "https://s3.amazonaws.com/vmarketplace/profile/index.png", "4.5/5.0");
         TextView textView = rootView.findViewById(R.id.user_id);
         textView.setText(user.getUsername());
+
+        TextView ratingView = rootView.findViewById(R.id.user_rating);
+        if(user.getUserRating() == null) {
+            ratingView.setText("Rating  "+"Newcomer");
+        }else{
+            ratingView.setText("Rating  "+user.getUserRating());
+        }
         CircleImageView imageView = rootView.findViewById(R.id.user_pic);
         Picasso.with(getActivity()).load(user.getUserPic()).fit().placeholder(R.drawable.place_holder_96p).into(imageView);
+
+
 
         List<ProfileItem> list = new ArrayList<ProfileItem>();
         list.add(new ProfileItem(R.drawable.publish_24p, ProfileItem.ProfileType.PUBLISH_BY_ME, 5));

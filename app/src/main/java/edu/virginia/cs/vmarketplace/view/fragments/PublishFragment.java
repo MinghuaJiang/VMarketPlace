@@ -19,12 +19,8 @@ public class PublishFragment extends AbstractFragment{
         super("publish", R.drawable.add_24p);
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        // start publish activity
-        Intent startPublishActivityIntent = new Intent(getActivity(), PublishActivity.class);
-        startActivity(startPublishActivityIntent);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return super.onCreateView(inflater,container,savedInstanceState);
     }
 }

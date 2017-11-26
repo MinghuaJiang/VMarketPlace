@@ -12,6 +12,7 @@ import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.AppConstant;
 import edu.virginia.cs.vmarketplace.model.PublishItem;
 import edu.virginia.cs.vmarketplace.model.SoldItem;
+import edu.virginia.cs.vmarketplace.util.IntentUtil;
 
 public class SoldActivity extends AppCompatActivity {
 
@@ -46,13 +47,7 @@ public class SoldActivity extends AppCompatActivity {
 
     @Override
     public Intent getSupportParentActivityIntent() { // getParentActivityIntent() if you are not using the Support Library
-        final Bundle bundle = new Bundle();
-        final Intent intent = new Intent(this, MainActivity.class);
-
-        bundle.putInt(AppConstant.SWITCH_TAB, AppConstant.TAB_PROFILE); // Both constants are defined in your code
-        intent.putExtras(bundle);
-
-        return intent;
+        return IntentUtil.jumpWithTabRecorded(AppConstant.TAB_PROFILE, this, MainActivity.class);
     }
 
 }

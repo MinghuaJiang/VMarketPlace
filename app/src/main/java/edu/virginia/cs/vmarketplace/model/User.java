@@ -6,11 +6,13 @@ package edu.virginia.cs.vmarketplace.model;
 
 public class User {
     private String username;
+    private String userRating;
     private String userPic;
 
-    public User(String username, String userPic) {
+    public User(String username, String userPic, String userRating) {
         this.username = username;
         this.userPic = userPic;
+        this.userRating = userRating;
     }
 
     public String getUsername() {
@@ -19,5 +21,9 @@ public class User {
 
     public String getUserPic() {
         return userPic;
+    }
+
+    public String getUserRating(){
+        return userRating;
     }
 }

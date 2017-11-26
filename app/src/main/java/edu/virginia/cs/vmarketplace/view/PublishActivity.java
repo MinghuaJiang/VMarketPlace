@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import edu.virginia.cs.vmarketplace.R;
+import edu.virginia.cs.vmarketplace.model.AppConstant;
+import edu.virginia.cs.vmarketplace.util.IntentUtil;
 
 public class PublishActivity extends AppCompatActivity {
     private static String secondHandIdentifier = "SECOND_HAND";
@@ -73,8 +75,8 @@ public class PublishActivity extends AppCompatActivity {
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent backToMainPageIntent = new Intent(PublishActivity.this, MainActivity.class);
-                startActivity(backToMainPageIntent);
+                Intent intent = PublishActivity.this.getIntent();
+                startActivity(IntentUtil.jumpWithTabRecorded(intent.getIntExtra(AppConstant.PREVIOUS_TAB, 0), PublishActivity.this, MainActivity.class));
             }
         });
     }
