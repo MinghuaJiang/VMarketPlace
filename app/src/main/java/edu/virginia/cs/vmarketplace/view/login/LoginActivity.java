@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         // username-password login
         initApp();
         Button confirmButton = findViewById(R.id.confirm_button);
-        final TextView proceedAnyway = findViewById(R.id.register_later);
+        final TextView proceedAnyway = findViewById(R.id.register);
 
         proceedAnyway.setOnClickListener(new View.OnClickListener(){
             @Override

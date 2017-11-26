@@ -40,16 +40,16 @@ public class LoginHelper {
     private static final String clientSecret = "q3r3bb008cc9v3tsej3a8rtvjk2jqqeuaq2lta9gciooqmgj8lc";
 
     /**
-     * Set Your User Pools region.
+     * Set Your AppUser Pools region.
      * e.g. if your user pools are in US East (N Virginia) then set cognitoRegion = Regions.US_EAST_1.
      */
     private static final Regions cognitoRegion = Regions.US_EAST_1;
 
-    // User details from the service
+    // AppUser details from the service
     private static CognitoUserSession currSession;
     private static CognitoUserDetails userDetails;
 
-    // User details to display - they are the current values, including any local modification
+    // AppUser details to display - they are the current values, including any local modification
     private static boolean phoneVerified;
     private static boolean emailVerified;
 

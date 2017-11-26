@@ -58,10 +58,12 @@
             android:label="@string/review_detail"
             android:parentActivityName=".view.SoldActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".view.MessageDetailActivity"
+        <activity
+            android:name=".view.MessageDetailActivity"
             android:label="Message Detail"
             android:parentActivityName=".view.MainActivity"
-            android:theme="@style/AppTheme" ></activity>
+            android:theme="@style/AppTheme.Message" />
+        <activity android:name=".view.RegisterActivity"></activity>
     </application>
 
 </manifest>

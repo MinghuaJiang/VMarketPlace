@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import edu.virginia.cs.vmarketplace.R;
+import edu.virginia.cs.vmarketplace.model.AppConstant;
 import edu.virginia.cs.vmarketplace.model.PublishItem;
 import edu.virginia.cs.vmarketplace.model.SoldItem;
 
@@ -66,6 +67,16 @@ public class SoldItemAdapter extends ArrayAdapter<SoldItem> {
         });
 
         Button messageButton = listView.findViewById(R.id.contact);
+
+        messageButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), MessageDetailActivity.class);
+                intent.putExtra(AppConstant.JUMP_FROM, AppConstant.SOLD_ACTIVITY);
+                getContext().startActivity(intent);
+            }
+        });
 
         return listView;
     }

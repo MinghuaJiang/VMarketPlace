@@ -16,8 +16,8 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.virginia.cs.vmarketplace.R;
+import edu.virginia.cs.vmarketplace.model.AppUser;
 import edu.virginia.cs.vmarketplace.model.ProfileItem;
-import edu.virginia.cs.vmarketplace.model.User;
 import edu.virginia.cs.vmarketplace.view.BoughtActivity;
 import edu.virginia.cs.vmarketplace.view.FavoriteActivity;
 import edu.virginia.cs.vmarketplace.view.ProfilePublishActivity;
@@ -36,7 +36,7 @@ public class ProfileFragment extends AbstractFragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.profile, container, false);
-        User user = new User("helloworld", "https://s3.amazonaws.com/vmarketplace/profile/index.png", "4.5/5.0");
+        AppUser user = new AppUser("helloworld", "https://s3.amazonaws.com/vmarketplace/profile/index.png", "4.5/5.0");
         TextView textView = rootView.findViewById(R.id.user_id);
         textView.setText(user.getUsername());
 

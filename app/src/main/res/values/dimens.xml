@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="list_item_height">48dp</dimen>
+    <dimen name="list_item_height_small">64dp</dimen>
     <dimen name="list_item_height_medium">72dp</dimen>
     <dimen name="list_item_height_large">120dp</dimen>
     <dimen name="seperator_height">12dp</dimen>

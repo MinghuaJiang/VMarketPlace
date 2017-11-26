@@ -12,7 +12,8 @@
     <string name="login_with_facebook">Facebook</string>
     <string name="login_with_google">Google</string>
     <string name="hint_password">Password</string>
-    <string name="register_later">I would like to register later.(not recommended)</string>
+    <string name="register">Register</string>
+    <string name="member">Not a member yet?</string>
     <string name="second_hand">Second Hand</string>
     <string name="sublease">Sublease</string>
     <string name="rides">Rides</string>

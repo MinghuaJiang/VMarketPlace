@@ -90,16 +90,31 @@
         android:layout_alignParentEnd="true"/>
 
     <TextView
-        android:id="@+id/register_later"
-        android:text="@string/register_later"
+        android:id="@+id/member"
+        android:text="Not a member yet?"
         android:textColor="@color/hint_color"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/confirm_button"
+        android:paddingLeft="36dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        />
+
+    <TextView
+        android:id="@+id/register"
+        android:text="@string/register"
+        android:textColor="@android:color/holo_blue_dark"
         android:clickable="true"
         android:focusable="true"
         android:onClick="proceed_anyway"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/confirm_button"
+        android:layout_toRightOf="@+id/member"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_centerHorizontal="true"/>
+        android:paddingLeft="16dp"
+        />
 
 </RelativeLayout>

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.virginia.cs.vmarketplace.R;
+import edu.virginia.cs.vmarketplace.model.AppConstant;
 import edu.virginia.cs.vmarketplace.model.MessageItem;
 import edu.virginia.cs.vmarketplace.view.MessageDetailActivity;
 
@@ -38,6 +39,7 @@ public class MessageFragment extends AbstractFragment{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 MessageItem item = list.get(position);
                 Intent intent = new Intent(getActivity(), MessageDetailActivity.class);
+                intent.putExtra(AppConstant.JUMP_FROM, AppConstant.MAIN_ACTIVITY);
                 startActivity(intent);
             }
         });
