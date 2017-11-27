@@ -27,6 +27,7 @@ import static edu.virginia.cs.vmarketplace.model.AppConstant.SWITCH_TAB;
  */
 
 public class MainActivity extends AppCompatActivity{
+    public static String PACKAGE_NAME;
 
     private AbstractFragment[] fragments;
 
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity{
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PACKAGE_NAME = getApplicationContext().getPackageName();
+
         position = 0;
         initFragments();
         // Set the content of the activity to use the activity_main.xml layout file
