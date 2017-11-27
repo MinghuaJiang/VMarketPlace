@@ -5,10 +5,13 @@ import android.content.Context;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.config.AWSConfigurable;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.amazonaws.mobileconnectors.pinpoint.PinpointConfiguration;
+import com.amazonaws.mobileconnectors.pinpoint.PinpointManager;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 
 import edu.virginia.cs.vmarketplace.view.login.MySignInUI;
+
 
 /**
  * Created by cutehuazai on 11/27/17.
@@ -44,6 +47,15 @@ public class AWSClientFactory {
                         .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
                         .build();
         return transferUtility;
+    }
+
+    public PinpointManager getPinpointManager(Context context){
+        PinpointConfiguration pinpointConfig = new PinpointConfiguration(
+                context,
+                AWSMobileClient.getInstance().getCredentialsProvider(),
+                AWSMobileClient.getInstance().getConfiguration());
+
+        return new PinpointManager(pinpointConfig);
     }
 
 

@@ -12,6 +12,8 @@ import com.amazonaws.mobile.client.AWSMobileClient;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.AppConstant;
+import edu.virginia.cs.vmarketplace.service.AnalyticService;
+import edu.virginia.cs.vmarketplace.util.AWSClientFactory;
 import edu.virginia.cs.vmarketplace.view.fragments.AbstractFragment;
 import edu.virginia.cs.vmarketplace.view.fragments.HomeFragment;
 import edu.virginia.cs.vmarketplace.view.fragments.MessageFragment;
@@ -35,8 +37,8 @@ public class MainActivity extends AppCompatActivity{
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AnalyticService.getInstance().logNormalUsage(Application.getPinpointManager(getApplicationContext()));
         PACKAGE_NAME = getApplicationContext().getPackageName();
-
         position = 0;
         initFragments();
         // Set the content of the activity to use the activity_main.xml layout file
