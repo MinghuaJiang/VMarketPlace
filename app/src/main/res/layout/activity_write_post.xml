@@ -45,102 +45,124 @@
             app:layout_constraintStart_toStartOf="@+id/post_title"
             app:layout_constraintTop_toBottomOf="@+id/post_title"/>
 
-        <ImageView
-            android:id="@+id/add_image_1"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="8dp"
-            android:clickable="true"
-            android:focusable="true"
+        <GridLayout
+            android:id="@+id/gridlayout_insert_point"
             app:layout_constraintStart_toStartOf="@+id/post_content"
             app:layout_constraintTop_toBottomOf="@+id/post_content"
-            app:srcCompat="@drawable/add_image_dotted" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </GridLayout>
 
         <ImageView
-            android:id="@+id/add_image_2"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:id="@+id/add_image"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
             android:layout_marginStart="0dp"
             android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/gridlayout_insert_point"
+            app:layout_constraintTop_toBottomOf="@+id/gridlayout_insert_point"
             android:clickable="true"
             android:focusable="true"
-            app:layout_constraintStart_toEndOf="@+id/add_image_1"
-            app:layout_constraintTop_toBottomOf="@+id/post_content"
-            app:srcCompat="@drawable/add_image_dotted" />
+            app:srcCompat="@drawable/add_image_dotted"
+            android:contentDescription="@string/add_more_image" />
 
-        <ImageView
-            android:id="@+id/add_image_3"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="8dp"
-            android:clickable="true"
-            android:focusable="true"
-            app:layout_constraintStart_toEndOf="@+id/add_image_2"
-            app:layout_constraintTop_toBottomOf="@+id/post_content"
-            app:srcCompat="@drawable/add_image_dotted" />
+        <!--<ImageView-->
+            <!--android:id="@+id/add_image_1"-->
+            <!--android:layout_width="80dp"-->
+            <!--android:layout_height="80dp"-->
+            <!--android:layout_marginStart="0dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:clickable="true"-->
+            <!--android:focusable="true"-->
+            <!--app:layout_constraintStart_toStartOf="@+id/post_content"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/post_content"-->
+            <!--app:srcCompat="@drawable/add_image_dotted" />-->
 
-        <ImageView
-            android:id="@+id/add_image_4"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="8dp"
-            android:clickable="true"
-            android:focusable="true"
-            app:layout_constraintStart_toEndOf="@+id/add_image_3"
-            app:layout_constraintTop_toBottomOf="@+id/post_content"
-            app:srcCompat="@drawable/add_image_dotted" />
+        <!--<ImageView-->
+            <!--android:id="@+id/add_image_2"-->
+            <!--android:layout_width="80dp"-->
+            <!--android:layout_height="80dp"-->
+            <!--android:layout_marginStart="0dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:clickable="true"-->
+            <!--android:focusable="true"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/add_image_1"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/post_content"-->
+            <!--app:srcCompat="@drawable/add_image_dotted" />-->
 
-        <ImageView
-            android:id="@+id/add_image_5"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="8dp"
-            android:clickable="true"
-            android:focusable="true"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/add_image_1"
-            app:layout_constraintTop_toBottomOf="@+id/add_image_1"
-            app:srcCompat="@drawable/add_image_dotted" />
+        <!--<ImageView-->
+            <!--android:id="@+id/add_image_3"-->
+            <!--android:layout_width="80dp"-->
+            <!--android:layout_height="80dp"-->
+            <!--android:layout_marginStart="0dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:clickable="true"-->
+            <!--android:focusable="true"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/add_image_2"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/post_content"-->
+            <!--app:srcCompat="@drawable/add_image_dotted" />-->
 
-        <ImageView
-            android:id="@+id/add_image_6"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="8dp"
-            android:clickable="true"
-            android:focusable="true"
-            app:layout_constraintStart_toEndOf="@+id/add_image_5"
-            app:layout_constraintTop_toBottomOf="@+id/add_image_1"
-            app:srcCompat="@drawable/add_image_dotted" />
+        <!--<ImageView-->
+            <!--android:id="@+id/add_image_4"-->
+            <!--android:layout_width="80dp"-->
+            <!--android:layout_height="80dp"-->
+            <!--android:layout_marginStart="0dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:clickable="true"-->
+            <!--android:focusable="true"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/add_image_3"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/post_content"-->
+            <!--app:srcCompat="@drawable/add_image_dotted" />-->
 
-        <ImageView
-            android:id="@+id/add_image_7"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="8dp"
-            android:clickable="true"
-            android:focusable="true"
-            app:layout_constraintStart_toEndOf="@+id/add_image_6"
-            app:layout_constraintTop_toBottomOf="@+id/add_image_1"
-            app:srcCompat="@drawable/add_image_dotted" />
+        <!--<ImageView-->
+            <!--android:id="@+id/add_image_5"-->
+            <!--android:layout_width="80dp"-->
+            <!--android:layout_height="80dp"-->
+            <!--android:layout_marginStart="0dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:clickable="true"-->
+            <!--android:focusable="true"-->
+            <!--app:layout_constraintLeft_toLeftOf="parent"-->
+            <!--app:layout_constraintStart_toStartOf="@+id/add_image_1"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/add_image_1"-->
+            <!--app:srcCompat="@drawable/add_image_dotted" />-->
 
-        <ImageView
-            android:id="@+id/add_image_8"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="8dp"
-            android:clickable="true"
-            android:focusable="true"
-            app:layout_constraintStart_toEndOf="@+id/add_image_7"
-            app:layout_constraintTop_toBottomOf="@+id/add_image_1"
-            app:srcCompat="@drawable/add_image_dotted" />
+        <!--<ImageView-->
+            <!--android:id="@+id/add_image_6"-->
+            <!--android:layout_width="80dp"-->
+            <!--android:layout_height="80dp"-->
+            <!--android:layout_marginStart="0dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:clickable="true"-->
+            <!--android:focusable="true"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/add_image_5"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/add_image_1"-->
+            <!--app:srcCompat="@drawable/add_image_dotted" />-->
+
+        <!--<ImageView-->
+            <!--android:id="@+id/add_image_7"-->
+            <!--android:layout_width="80dp"-->
+            <!--android:layout_height="80dp"-->
+            <!--android:layout_marginStart="0dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:clickable="true"-->
+            <!--android:focusable="true"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/add_image_6"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/add_image_1"-->
+            <!--app:srcCompat="@drawable/add_image_dotted" />-->
+
+        <!--<ImageView-->
+            <!--android:id="@+id/add_image_8"-->
+            <!--android:layout_width="80dp"-->
+            <!--android:layout_height="80dp"-->
+            <!--android:layout_marginStart="0dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:clickable="true"-->
+            <!--android:focusable="true"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/add_image_7"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/add_image_1"-->
+            <!--app:srcCompat="@drawable/add_image_dotted" />-->
 
         <ImageView
             android:id="@+id/add_location"
@@ -151,8 +173,8 @@
             android:clickable="true"
             android:focusable="true"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/add_image_5"
-            app:layout_constraintTop_toBottomOf="@+id/add_image_5"
+            app:layout_constraintStart_toStartOf="@+id/add_image"
+            app:layout_constraintTop_toBottomOf="@+id/add_image"
             app:srcCompat="@drawable/ic_location" />
 
         <EditText

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -19,7 +20,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -39,15 +42,16 @@ public class WritePostActivity extends AppCompatActivity {
     private AbstractFragment[] fragments;
     private String mCurrentPhotoPath;
     private static final int MY_CAMERA_REQUEST_CODE = 100;
+
     // request code for popup window
     private static final int REQUEST_USE_ALBUM = 0;
     private static final int REQUEST_TAKE_PHOTO = 1;
+    final PostDataHolder postDataHolder = PostDataHolder.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_post);
-//        savedImages = new ArrayList<>();
 
         EditText writeTitle = findViewById(R.id.post_title);
         writeTitle.setOnClickListener(new View.OnClickListener() {
@@ -67,14 +71,77 @@ public class WritePostActivity extends AppCompatActivity {
             }
         });
 
-        final ImageView addImageView = findViewById(R.id.add_image_1);
+        // for addImage icon
+        final ImageView addImageView = findViewById(R.id.add_image);
         addImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // show popup window
-                showPopup(WritePostActivity.this);
+                showPopup(WritePostActivity.this, REQUEST_TAKE_PHOTO);
             }
         });
+
+//        // dynamically create image views
+//        GridLayout gridLayout = findViewById(R.id.gridlayout_insert_point);
+//        int total = postDataHolder.getImageCount();
+//        int column = 4;
+//        int row = 3;
+//        gridLayout.setColumnCount(column);
+//        gridLayout.setRowCount(row);
+//        for(int i=0, c=0, r=0; i<postDataHolder.getSavedImage().size() && i <= total; i++, c++) {
+//            if(c == column) {
+//                c = 0;
+//                r++;
+//            }
+//            ImageView oImageView = new ImageView(this);
+//            oImageView.setId(r * column + c);
+//            String curBitmapPath = postDataHolder.getSavedImage().get(r * column + c);
+//            oImageView.setImageBitmap(postDataHolder.getBitmapMap().get(curBitmapPath));
+//            oImageView.setLayoutParams(new ViewGroup.LayoutParams(oImageView.getDrawable().getIntrinsicWidth(),
+//                    oImageView.getDrawable().getIntrinsicHeight()));
+//            GridLayout.Spec rowSpan = GridLayout.spec(GridLayout.UNDEFINED, 1);
+//            GridLayout.Spec colSpan = GridLayout.spec(GridLayout.UNDEFINED, 1);
+//            if(r == 0 && c == 0) {
+//                colSpan = GridLayout.spec(GridLayout.UNDEFINED, 2);
+//                rowSpan = GridLayout.spec(GridLayout.UNDEFINED, 2);
+//            }
+//            GridLayout.LayoutParams gridParam = new GridLayout.LayoutParams(rowSpan, colSpan);
+//            gridParam.setMarginStart(8);
+//            gridLayout.addView(oImageView, gridParam);
+//        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // dynamically create image views
+        GridLayout gridLayout = findViewById(R.id.gridlayout_insert_point);
+        int total = postDataHolder.getImageCount();
+        int column = 4;
+        int row = 3;
+        gridLayout.setColumnCount(column);
+        gridLayout.setRowCount(row);
+        for(int i=0, c=0, r=0; i<postDataHolder.getSavedImage().size() && i <= total; i++, c++) {
+            if(c == column) {
+                c = 0;
+                r++;
+            }
+            ImageView oImageView = new ImageView(this);
+            oImageView.setId(r * column + c);
+            String curBitmapPath = postDataHolder.getSavedImage().get(r * column + c);
+            oImageView.setImageBitmap(postDataHolder.getBitmapMap().get(curBitmapPath));
+            oImageView.setLayoutParams(new ViewGroup.LayoutParams(oImageView.getDrawable().getIntrinsicWidth(),
+                    oImageView.getDrawable().getIntrinsicHeight()));
+            GridLayout.Spec rowSpan = GridLayout.spec(GridLayout.UNDEFINED, 1);
+            GridLayout.Spec colSpan = GridLayout.spec(GridLayout.UNDEFINED, 1);
+            if(r == 0 && c == 0) {
+                colSpan = GridLayout.spec(GridLayout.UNDEFINED, 2);
+                rowSpan = GridLayout.spec(GridLayout.UNDEFINED, 2);
+            }
+            GridLayout.LayoutParams gridParam = new GridLayout.LayoutParams(rowSpan, colSpan);
+            gridParam.setMarginStart(8);
+            gridLayout.addView(oImageView, gridParam);
+        }
     }
 
     @Override
@@ -83,15 +150,14 @@ public class WritePostActivity extends AppCompatActivity {
             case REQUEST_TAKE_PHOTO:
                 // use camera succeeded
                 if(resultCode == RESULT_OK) {
-                    System.out.println(resultCode);
-                    ImageView requester = findViewById(R.id.add_image_1);
+                    ImageView requester = findViewById(R.id.add_image);
                     shrinkImage(requester);
                 }
         }
     }
 
     // The method that displays the popup.
-    private void showPopup(final Activity context) {
+    private void showPopup(final Activity context, final int request_code) {
         // Inflate the popup_layout.xml
         LinearLayout viewGroup = context.findViewById(R.id.popup_layout);
         LayoutInflater layoutInflater = (LayoutInflater) context
@@ -125,6 +191,30 @@ public class WritePostActivity extends AppCompatActivity {
                             MY_CAMERA_REQUEST_CODE);
                 }else {
                     handleUseCamera();
+                }
+
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                // Ensure that there's a camera activity to handle the intent
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    // Create the File where the photo should go
+                    File photoFile = null;
+                    try {
+                        photoFile = createImageFile();
+                    } catch (IOException ex) {
+                        // Error occurred while creating the File
+                        ex.printStackTrace();
+                    }
+                    // Continue only if the File was successfully created
+                    if (photoFile != null) {
+                        Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
+                                "edu.virginia.cs.vmarketplace.fileprovider", photoFile);
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                        startActivityForResult(takePictureIntent, request_code);
+                        // add image to gallery
+                        galleryAddPic();
+
+                        popup.dismiss();
+                    }
                 }
             }
         });
@@ -165,7 +255,6 @@ public class WritePostActivity extends AppCompatActivity {
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
                 // add image to gallery
                 galleryAddPic();
-//                        imageList.add(mCurrentPhotoPath);
             }
         }
     }
@@ -184,7 +273,7 @@ public class WritePostActivity extends AppCompatActivity {
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = image.getAbsolutePath();
         PostDataHolder postDataHolder = PostDataHolder.getInstance();
-        postDataHolder.setImageLocation1(mCurrentPhotoPath);
+        postDataHolder.setCurImageLocation(mCurrentPhotoPath);
         postDataHolder.getSavedImage().add(mCurrentPhotoPath);
         return image;
     }
@@ -206,7 +295,7 @@ public class WritePostActivity extends AppCompatActivity {
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
         PostDataHolder postDataHolder = PostDataHolder.getInstance();
-        BitmapFactory.decodeFile(postDataHolder.getImageLocation1(), bmOptions);
+        BitmapFactory.decodeFile(postDataHolder.getCurImageLocation(), bmOptions);
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
 
@@ -217,8 +306,13 @@ public class WritePostActivity extends AppCompatActivity {
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaleFactor;
 
-        Bitmap bitmap = BitmapFactory.decodeFile(postDataHolder.getImageLocation1(), bmOptions);
-        view.setImageBitmap(bitmap);
+        Bitmap bitmap = BitmapFactory.decodeFile(postDataHolder.getCurImageLocation(), bmOptions);
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+        Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap , 0, 0, bitmap.getWidth(),
+                bitmap.getHeight(), matrix, true);
+        postDataHolder.getBitmapMap().put(postDataHolder.getCurImageLocation(), rotatedBitmap);
+        System.out.println("*********");
     }
 
 
