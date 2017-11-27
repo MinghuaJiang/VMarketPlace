@@ -19,7 +19,6 @@
     <string name="rides">Rides</string>
     <string name="activities">Activities</string>
     <string name="close_btn">close</string>
-<<<<<<< Updated upstream
     <string name="login">Login</string>
     <string name="publish">Publish</string>
     <string name="write_post">Post</string>
@@ -33,8 +32,6 @@
     <string name="use_camera">Use camera</string>
     <string name="close_popup">Close pop up</string>
     <string name="fake_text">Besides finding the source of the issue, I found the solution. If android:inputType is used, then textMultiLine must be used to enable multi-line support. Also, using inputType supersedes the code android:singleLine="false". If using inputType, then, to reiterate, textMultiLine must be used or the EditText object will only consist of one line, without word-wrapping.</string>
-=======
     <string name="facebook_app_id">292014607986179</string>
     <string name="fb_login_protocol_scheme">fb292014607986179</string>
->>>>>>> Stashed changes
 </resources>
