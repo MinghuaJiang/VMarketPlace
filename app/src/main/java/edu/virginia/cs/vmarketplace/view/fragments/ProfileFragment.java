@@ -16,7 +16,10 @@ import com.amazonaws.mobile.auth.core.IdentityHandler;
 import com.amazonaws.mobile.auth.core.IdentityManager;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.config.AWSConfigurable;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.util.CognitoIdentityProviderClientConfig;
 import com.amazonaws.regions.Regions;
+import com.amazonaws.services.cognitoidentityprovider.AmazonCognitoIdentityProvider;
+import com.amazonaws.services.cognitoidentityprovider.model.GetUserRequest;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -24,6 +27,8 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.virginia.cs.vmarketplace.R;
+import edu.virginia.cs.vmarketplace.model.AppContext;
+import edu.virginia.cs.vmarketplace.model.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.AppUser;
 import edu.virginia.cs.vmarketplace.model.ProfileItem;
 import edu.virginia.cs.vmarketplace.view.BoughtActivity;
@@ -48,9 +53,10 @@ public class ProfileFragment extends AbstractFragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.profile, container, false);
-        final IdentityManager identityManager = IdentityManager.getDefaultIdentityManager();
-        AppUser user = new AppUser(identityManager.getCachedUserID());
-        enrichUserInfo(user);
+
+        AppUser user = AppContextManager.getContextManager()
+                .getAppContext().getUser();
+
         TextView textView = rootView.findViewById(R.id.user_id);
         textView.setText(user.getUsername());
 
@@ -97,12 +103,11 @@ public class ProfileFragment extends AbstractFragment{
         list.add(new ProfileItem(R.drawable.settings_24p, ProfileItem.ProfileType.SETTING, -1));
         adapter = new ProfileItemAdapter(getActivity(), list);
         settingView.setAdapter(adapter);
-
         Button button = rootView.findViewById(R.id.logout);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                identityManager.signOut();
+                AppContextManager.getContextManager().getAppContext().signOut();
                 Intent intent = new Intent(getActivity(), AWSLoginActivity.class);
                 startActivity(intent);
             }
@@ -131,7 +136,4 @@ public class ProfileFragment extends AbstractFragment{
         startActivity(intent);
     }
 
-    private void enrichUserInfo(AppUser user){
-
-    }
 }

@@ -9,17 +9,11 @@
     <string name="hint_username">Username or Email</string>
     <string name="confirm_button">Log in</string>
     <string name="click"><![CDATA[>]]></string>
-    <string name="login_with_facebook">Facebook</string>
-    <string name="login_with_google">Google</string>
-    <string name="hint_password">Password</string>
-    <string name="register">Register</string>
-    <string name="member">Not a member yet?</string>
     <string name="second_hand">Second Hand</string>
     <string name="sublease">Sublease</string>
     <string name="rides">Rides</string>
     <string name="activities">Activities</string>
     <string name="close_btn">close</string>
-    <string name="login">Login</string>
     <string name="publish">Publish</string>
     <string name="write_post">Post</string>
     <string name="hint_title">Title</string>

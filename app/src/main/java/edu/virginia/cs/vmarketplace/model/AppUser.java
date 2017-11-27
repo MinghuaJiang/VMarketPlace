@@ -12,7 +12,7 @@ public class AppUser {
         this.username = username;
     }
 
-    public String getUsername() {
+    public String getUsername(){
         return username;
     }
 
