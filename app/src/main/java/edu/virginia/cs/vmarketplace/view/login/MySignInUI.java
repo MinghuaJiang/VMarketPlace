@@ -32,13 +32,18 @@ import com.amazonaws.mobile.auth.core.DefaultSignInResultHandler;
 import com.amazonaws.mobile.auth.core.IdentityManager;
 import com.amazonaws.mobile.auth.core.IdentityProvider;
 import com.amazonaws.mobile.auth.core.signin.ui.buttons.SignInButton;
+import com.amazonaws.mobile.auth.facebook.FacebookSignInProvider;
 import com.amazonaws.mobile.auth.ui.AuthUIConfiguration;
 import com.amazonaws.mobile.auth.ui.SignInActivity;
+import com.amazonaws.mobile.auth.userpools.CognitoUserPoolsSignInProvider;
 import com.amazonaws.mobile.config.AWSConfigurable;
 import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
+import com.amazonaws.services.cognitoidentityprovider.AmazonCognitoIdentityProvider;
 
 import edu.virginia.cs.vmarketplace.model.AppContextManager;
+import edu.virginia.cs.vmarketplace.model.AppUserEnrichStrategy;
+import edu.virginia.cs.vmarketplace.model.CognitoPoolEnrichStrategy;
 
 public class MySignInUI implements AWSConfigurable {
 
@@ -92,10 +97,11 @@ public class MySignInUI implements AWSConfigurable {
             @Override
             public void onSuccess(Activity activity, IdentityProvider identityProvider) {
                 if (identityProvider != null) {
-                    Log.d(LOG_TAG, "Sign-in succeeded. The identity provider name is available here using: " +
+                    Log.i(LOG_TAG, "Sign-in succeeded. The identity provider name is available here using: " +
                             identityProvider.getDisplayName());
-                    CognitoUserPool pool = new CognitoUserPool(context, identityManager.getConfiguration());
-                    AppContextManager.getContextManager().loadCurrentUser(pool.getCurrentUser().getUserId());
+                    Log.i(LOG_TAG, "The identity provider name is available here using: " +
+                            identityProvider.toString());
+                    initAppContext(identityManager, identityProvider);
                     startNextActivity(activity, loginNextActivity);
                 }
             }
@@ -109,6 +115,21 @@ public class MySignInUI implements AWSConfigurable {
         });
 
         SignInActivity.startSignInActivity(this.loginCallingActivity, this.authUIConfiguration);
+    }
+
+    private void initAppContext(IdentityManager identityManager, IdentityProvider provider){
+        AppUserEnrichStrategy strategy = null;
+        if(provider instanceof CognitoUserPoolsSignInProvider) {
+            CognitoUserPool pool = new CognitoUserPool(context, identityManager.getConfiguration());
+            AppContextManager.getContextManager().loadCurrentUser(pool.getCurrentUser().getUserId());
+            strategy = new CognitoPoolEnrichStrategy();
+        }else if(provider instanceof FacebookSignInProvider){
+
+        }else{
+
+        }
+
+        AppContextManager.getContextManager().getAppContext().enrichUser(strategy);
     }
 
     /**

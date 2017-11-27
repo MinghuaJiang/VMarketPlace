@@ -20,6 +20,17 @@
       "Region": "us-east-1"
     }
   },
+  "S3TransferUtility": {
+    "Default": {
+      "Bucket": "vmarketplace-userfiles-mobilehub-440270839",
+      "Region": "us-east-1"
+    }
+  },
+  "Cognito": {
+    "Default": {
+      "Region": "us-east-1"
+    }
+  },
   "PinpointAnalytics": {
     "Default": {
       "AppId": "02e97c33b6244cef8a65a6a10b129874",
@@ -31,9 +42,14 @@
       "Region": "us-east-1"
     }
   },
+  "UserFileManager": {
+    "Default": {
+      "Bucket": "vmarketplace-userfiles-mobilehub-440270839",
+      "Region": "us-east-1"
+    }
+  },
   "GoogleSignIn": {
-    "ClientId-WebApp": "vmarketplace-187308",
-    "ClientId-iOS": "vmarketplace-187308",
+    "ClientId-WebApp": "184697464235-08a2k1b8k4k5ua9s92uuq8mhgsemofv0.apps.googleusercontent.com",
     "Permissions": "email,profile,openid"
   },
   "FacebookSignIn": {

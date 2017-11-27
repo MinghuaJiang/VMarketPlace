@@ -16,6 +16,12 @@ public class AppContext {
     public void loadContext(String userId){
         user = new AppUser(userId);
     }
+
+    public void enrichUser(AppUserEnrichStrategy strategy){
+        user.setUserPic(strategy.getUserPic());
+        user.setUserRating(strategy.getUserRating());
+    }
+
     public AppUser getUser(){
         return user;
     }
