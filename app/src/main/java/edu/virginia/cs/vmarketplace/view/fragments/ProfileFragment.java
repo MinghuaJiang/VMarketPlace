@@ -14,6 +14,8 @@ import com.amazonaws.auth.AWSCognitoIdentityProvider;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobile.auth.core.IdentityHandler;
 import com.amazonaws.mobile.auth.core.IdentityManager;
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobile.config.AWSConfigurable;
 import com.amazonaws.regions.Regions;
 import com.squareup.picasso.Picasso;
 
@@ -49,7 +51,6 @@ public class ProfileFragment extends AbstractFragment{
         final IdentityManager identityManager = IdentityManager.getDefaultIdentityManager();
         AppUser user = new AppUser(identityManager.getCachedUserID());
         enrichUserInfo(user);
-
         TextView textView = rootView.findViewById(R.id.user_id);
         textView.setText(user.getUsername());
 

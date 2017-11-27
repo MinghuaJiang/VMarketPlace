@@ -1,15 +1,19 @@
 package edu.virginia.cs.vmarketplace.view;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -34,7 +38,7 @@ import edu.virginia.cs.vmarketplace.view.fragments.AbstractFragment;
 public class WritePostActivity extends AppCompatActivity {
     private AbstractFragment[] fragments;
     private String mCurrentPhotoPath;
-
+    private static final int MY_CAMERA_REQUEST_CODE = 100;
     // request code for popup window
     private static final int REQUEST_USE_ALBUM = 0;
     private static final int REQUEST_TAKE_PHOTO = 1;
@@ -115,27 +119,12 @@ public class WritePostActivity extends AppCompatActivity {
         useCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                // Ensure that there's a camera activity to handle the intent
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    // Create the File where the photo should go
-                    File photoFile = null;
-                    try {
-                        photoFile = createImageFile();
-                    } catch (IOException ex) {
-                        // Error occurred while creating the File
-                        ex.printStackTrace();
-                    }
-                    // Continue only if the File was successfully created
-                    if (photoFile != null) {
-                        Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
-                                "edu.virginia.cs.vmarketplace.fileprovider", photoFile);
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-                        // add image to gallery
-                        galleryAddPic();
-//                        imageList.add(mCurrentPhotoPath);
-                    }
+                if ( Build.VERSION.SDK_INT >= 23 &&
+                        ContextCompat.checkSelfPermission(context, android.Manifest.permission.CAMERA ) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.CAMERA},
+                            MY_CAMERA_REQUEST_CODE);
+                }else {
+                    handleUseCamera();
                 }
             }
         });
@@ -154,6 +143,31 @@ public class WritePostActivity extends AppCompatActivity {
                 popup.dismiss();
             }
         });
+    }
+
+    private void handleUseCamera(){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                ex.printStackTrace();
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
+                        "edu.virginia.cs.vmarketplace.fileprovider", photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                // add image to gallery
+                galleryAddPic();
+//                        imageList.add(mCurrentPhotoPath);
+            }
+        }
     }
 
     private File createImageFile() throws IOException {
@@ -205,5 +219,15 @@ public class WritePostActivity extends AppCompatActivity {
 
         Bitmap bitmap = BitmapFactory.decodeFile(postDataHolder.getImageLocation1(), bmOptions);
         view.setImageBitmap(bitmap);
+    }
+
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MY_CAMERA_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                handleUseCamera();
+            }
+        }
     }
 }
