@@ -6,10 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.amazonaws.auth.AWSCognitoIdentityProvider;
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.mobile.auth.core.IdentityHandler;
+import com.amazonaws.mobile.auth.core.IdentityManager;
+import com.amazonaws.regions.Regions;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -23,13 +28,15 @@ import edu.virginia.cs.vmarketplace.view.BoughtActivity;
 import edu.virginia.cs.vmarketplace.view.FavoriteActivity;
 import edu.virginia.cs.vmarketplace.view.ProfilePublishActivity;
 import edu.virginia.cs.vmarketplace.view.SoldActivity;
+import edu.virginia.cs.vmarketplace.view.login.AWSLoginActivity;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by cutehuazai on 11/23/17.
  */
 
 public class ProfileFragment extends AbstractFragment{
-    private AWSCognitoIdentityProvider provider;
 
     public ProfileFragment(){
         super("profile", R.drawable.user_24p);
@@ -38,8 +45,11 @@ public class ProfileFragment extends AbstractFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.profile, container, false);
-        AppUser user = new AppUser("helloworld", "https://s3.amazonaws.com/vmarketplace/profile/index.png", "4.5/5.0");
+        final View rootView = inflater.inflate(R.layout.profile, container, false);
+        final IdentityManager identityManager = IdentityManager.getDefaultIdentityManager();
+        AppUser user = new AppUser(identityManager.getCachedUserID());
+        enrichUserInfo(user);
+
         TextView textView = rootView.findViewById(R.id.user_id);
         textView.setText(user.getUsername());
 
@@ -50,8 +60,11 @@ public class ProfileFragment extends AbstractFragment{
             ratingView.setText("Rating  "+user.getUserRating());
         }
         CircleImageView imageView = rootView.findViewById(R.id.user_pic);
-        Picasso.with(getActivity()).load(user.getUserPic()).fit().placeholder(R.drawable.place_holder_96p).into(imageView);
-
+        if(user.getUserPic() != null) {
+            Picasso.with(getActivity()).load(user.getUserPic()).fit().placeholder(R.drawable.place_holder_96p).into(imageView);
+        }else{
+            imageView.setImageResource(R.drawable.place_holder_96p);
+        }
 
 
         List<ProfileItem> list = new ArrayList<ProfileItem>();
@@ -84,6 +97,16 @@ public class ProfileFragment extends AbstractFragment{
         adapter = new ProfileItemAdapter(getActivity(), list);
         settingView.setAdapter(adapter);
 
+        Button button = rootView.findViewById(R.id.logout);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                identityManager.signOut();
+                Intent intent = new Intent(getActivity(), AWSLoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return rootView;
     }
 
@@ -105,5 +128,9 @@ public class ProfileFragment extends AbstractFragment{
     private void handleFavorite(){
         Intent intent = new Intent(getActivity(), FavoriteActivity.class);
         startActivity(intent);
+    }
+
+    private void enrichUserInfo(AppUser user){
+
     }
 }

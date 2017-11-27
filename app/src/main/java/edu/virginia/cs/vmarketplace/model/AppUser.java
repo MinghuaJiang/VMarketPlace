@@ -8,11 +8,8 @@ public class AppUser {
     private String username;
     private String userRating;
     private String userPic;
-
-    public AppUser(String username, String userPic, String userRating) {
+    public AppUser(String username) {
         this.username = username;
-        this.userPic = userPic;
-        this.userRating = userRating;
     }
 
     public String getUsername() {
@@ -25,5 +22,13 @@ public class AppUser {
 
     public String getUserRating(){
         return userRating;
+    }
+
+    public void setUserRating(String userRating) {
+        this.userRating = userRating;
+    }
+
+    public void setUserPic(String userPic) {
+        this.userPic = userPic;
     }
 }

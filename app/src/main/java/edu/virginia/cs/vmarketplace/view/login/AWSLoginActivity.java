@@ -22,7 +22,7 @@ public class AWSLoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_awslogin);
+
         AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
             @Override
             public void onComplete(final AWSStartupResult awsStartupResult) {
@@ -42,8 +42,6 @@ public class AWSLoginActivity extends AppCompatActivity {
                 signinUI.login(AWSLoginActivity.this, MainActivity.class).authUIConfiguration(config).execute();
             }
         }).execute();
-
-        initTabs();
     }
 
     private void initTabs(){
