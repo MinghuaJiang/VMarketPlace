@@ -63,6 +63,7 @@
             android:label="Message Detail"
             android:parentActivityName=".view.MainActivity"
             android:theme="@style/AppTheme.Message" />
+<<<<<<< Updated upstream
         <activity android:name=".view.RegisterActivity"/>
         <activity
             android:name=".view.PublishActivity"
@@ -72,6 +73,26 @@
             android:name=".view.WritePostActivity"
             android:label="@string/write_post"
             android:theme="@style/AppTheme"/>
+=======
+        <activity android:name=".view.RegisterActivity" />
+        <activity android:name=".view.login.AWSLoginActivity"
+            android:theme="@style/AppTheme.FullScreen"></activity>
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id" />
+
+>>>>>>> Stashed changes
     </application>
+
 
 </manifest>

@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.amazonaws.auth.AWSCognitoIdentityProvider;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ import edu.virginia.cs.vmarketplace.view.SoldActivity;
  */
 
 public class ProfileFragment extends AbstractFragment{
+    private AWSCognitoIdentityProvider provider;
+
     public ProfileFragment(){
         super("profile", R.drawable.user_24p);
     }
