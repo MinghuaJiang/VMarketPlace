@@ -207,7 +207,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="32dp"
             android:text="@string/post_btn"
-            android:background="@color/google_button"
+            android:background="@color/confirm_button"
             android:clickable="true"
             android:focusable="true"
             app:layout_constraintEnd_toEndOf="parent"
