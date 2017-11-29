@@ -13,7 +13,7 @@ import edu.virginia.cs.vmarketplace.R;
 
 public class PlaceFragment extends AbstractFragment {
     public PlaceFragment(){
-        super("place", R.drawable.place_24p);
+        super("place", R.drawable.subscribe_24p);
     }
 
     @Override

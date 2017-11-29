@@ -29,4 +29,5 @@
     <string name="facebook_app_id">292014607986179</string>
     <string name="fb_login_protocol_scheme">fb292014607986179</string>
     <string name="add_more_image">Add more Image</string>
+    <string name="action_profile">Check Profile</string>
 </resources>

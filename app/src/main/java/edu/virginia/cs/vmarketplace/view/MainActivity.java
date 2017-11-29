@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity{
     public static String PACKAGE_NAME;
 
     private AbstractFragment[] fragments;
+    private int[] iconFill;
 
     private int position;
 
@@ -67,13 +68,15 @@ public class MainActivity extends AppCompatActivity{
                     Intent startPublishActivityIntent = new Intent(MainActivity.this, PublishActivity.class);
                     startPublishActivityIntent.putExtra(AppConstant.PREVIOUS_TAB, position);
                     startActivity(startPublishActivityIntent);
+                }else{
+                    tab.setIcon(iconFill[tab.getPosition()]);
                 }
                 position = tab.getPosition();
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
+                tab.setIcon(fragments[tab.getPosition()].getIconResourceId());
             }
 
             @Override
@@ -83,11 +86,12 @@ public class MainActivity extends AppCompatActivity{
         });
 
         Intent intent = getIntent();
-
+        int tabIndex = 0;
         if (intent.hasExtra(SWITCH_TAB)) {
-            int tabIndex = intent.getExtras().getInt(SWITCH_TAB);
+            tabIndex = intent.getExtras().getInt(SWITCH_TAB);
             tabLayout.getTabAt(tabIndex).select();
         }
+        tabLayout.getTabAt(tabIndex).setIcon(iconFill[tabIndex]);
     }
 
     private void initFragments(){
@@ -97,5 +101,10 @@ public class MainActivity extends AppCompatActivity{
         fragments[2] = new PublishFragment();
         fragments[3] = new MessageFragment();
         fragments[4] = new ProfileFragment();
+        iconFill = new int[5];
+        iconFill[0] = R.drawable.home_24p_fill;
+        iconFill[1] = R.drawable.subscribe_24p_fill;
+        iconFill[3] = R.drawable.message_24p_fill;
+        iconFill[4] = R.drawable.user_24p_fill;
     }
 }

@@ -33,7 +33,7 @@ public class ProfilePublishActivity extends AppCompatActivity {
         List<PublishItem> list = new ArrayList<PublishItem>();
         PublishItem item = new PublishItem();
         item.setId(1);
-        item.setTitle("Cool Kid");
+        item.setTitle("Women HandBag");
         item.setPrice(100.0);
         item.setReplyCount(5);
         item.setViewCount(200);
@@ -42,7 +42,7 @@ public class ProfilePublishActivity extends AppCompatActivity {
         list.add(item);
         item = new PublishItem();
         item.setId(2);
-        item.setTitle("Bao");
+        item.setTitle("A Ride to IAD");
         item.setPrice(200.0);
         item.setReplyCount(3);
         item.setViewCount(100);
@@ -51,8 +51,8 @@ public class ProfilePublishActivity extends AppCompatActivity {
 
         item = new PublishItem();
         item.setId(3);
-        item.setTitle("Bao");
-        item.setPrice(200.0);
+        item.setTitle("Apartment Sublease");
+        item.setPrice(500.0);
         item.setReplyCount(3);
         item.setViewCount(100);
         item.setProductType("Sublease");

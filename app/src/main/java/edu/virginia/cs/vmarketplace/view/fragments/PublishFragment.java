@@ -13,7 +13,7 @@ import edu.virginia.cs.vmarketplace.R;
 
 public class PublishFragment extends AbstractFragment{
     public PublishFragment(){
-        super("publish", R.drawable.add_24p);
+        super("publish", R.drawable.add_24p_fill);
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

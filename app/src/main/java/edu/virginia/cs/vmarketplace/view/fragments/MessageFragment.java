@@ -22,7 +22,7 @@ import edu.virginia.cs.vmarketplace.view.MessageDetailActivity;
 
 public class MessageFragment extends AbstractFragment{
     public MessageFragment(){
-        super("message", R.drawable.ic_message_24dp);
+        super("message", R.drawable.message_24p);
     }
 
     @Override
@@ -40,6 +40,8 @@ public class MessageFragment extends AbstractFragment{
                 MessageItem item = list.get(position);
                 Intent intent = new Intent(getActivity(), MessageDetailActivity.class);
                 intent.putExtra(AppConstant.JUMP_FROM, AppConstant.MAIN_ACTIVITY);
+                intent.putExtra(AppConstant.SELLER_NAME, item.getSellerName());
+                intent.putExtra(AppConstant.MESSAGE_ID, item.getId());
                 startActivity(intent);
             }
         });

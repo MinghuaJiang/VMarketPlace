@@ -6,15 +6,20 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.github.bassaer.chatmessageview.model.User;
 import com.github.bassaer.chatmessageview.models.Message;
@@ -25,8 +30,10 @@ import java.util.Random;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.AppConstant;
+import edu.virginia.cs.vmarketplace.model.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.AppUser;
 import edu.virginia.cs.vmarketplace.util.IntentUtil;
+import edu.virginia.cs.vmarketplace.view.fragments.MessageFragment;
 
 public class MessageDetailActivity extends AppCompatActivity {
     private boolean isOpen;
@@ -35,18 +42,32 @@ public class MessageDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_detail);
+        Toolbar toolbar =
+                 findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+
+        // Get a support ActionBar corresponding to this toolbar
+        ActionBar ab = getSupportActionBar();
+
+        // Enable the Up button
+        ab.setDisplayHomeAsUpEnabled(true);
+        ab.setTitle("");
+        Intent intent = getIntent();
+        TextView textView = findViewById(R.id.toolbar_title);
+        textView.setText(intent.getStringExtra(AppConstant.SELLER_NAME));
+
         final ChatView mChatView = findViewById(R.id.chat_view);
         final ViewGroup.LayoutParams layoutParams = mChatView.getLayoutParams();
         //AppUser id
         int myId = 0;
-        //AppUser icon
-        Bitmap myIcon = BitmapFactory.decodeResource(getResources(), R.drawable.face_2);
-        //AppUser name
-        String myName = "Michael";
+        //User name
+        String myName = AppContextManager.getContextManager().getAppContext().getUser().getUsername();
+        //User icon
+        Bitmap myIcon = BitmapFactory.decodeResource(getResources(), R.drawable.place_holder_64p);
 
         int yourId = 1;
+        String yourName = intent.getStringExtra(AppConstant.SELLER_NAME);
         Bitmap yourIcon = BitmapFactory.decodeResource(getResources(), R.drawable.face_1);
-        String yourName = "Emily";
 
         final User me = new User(myId, myName, myIcon);
         final User you = new User(yourId, yourName, yourIcon);
@@ -58,7 +79,7 @@ public class MessageDetailActivity extends AppCompatActivity {
         //Set UI parameters if you need
         mChatView.setRightBubbleColor(ContextCompat.getColor(this, R.color.message_me));
         mChatView.setLeftBubbleColor(ContextCompat.getColor(this, R.color.message_you));
-        mChatView.setBackgroundColor(ContextCompat.getColor(this, R.color.click));
+        mChatView.setBackgroundColor(ContextCompat.getColor(this, R.color.separator));
         mChatView.setSendIcon(R.drawable.ic_action_send);
         mChatView.setSendButtonColor(Color.BLACK);
         mChatView.setRightMessageTextColor(Color.BLACK);
@@ -75,8 +96,9 @@ public class MessageDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!isOpen) {
                     mChatView.setOptionIcon(R.drawable.close_24p);
+                    mChatView.hideKeyboard();
                     isOpen = true;
-                    layoutParams.height = 1000;
+                    layoutParams.height = 460;
                     mChatView.setLayoutParams(layoutParams);
                 } else {
                     mChatView.setOptionIcon(R.drawable.add_24p);
@@ -86,6 +108,7 @@ public class MessageDetailActivity extends AppCompatActivity {
                 }
             }
         });
+
 
         mChatView.setOnClickSendButtonListener(new View.OnClickListener() {
             @Override
@@ -97,6 +120,7 @@ public class MessageDetailActivity extends AppCompatActivity {
                             .setRightMessage(true)
                             .setMessageText(mChatView.getInputText())
                             .hideIcon(false)
+                            .setUsernameVisibility(false)
                             .build();
                     //Set to chat view
                     mChatView.send(message);
@@ -107,6 +131,8 @@ public class MessageDetailActivity extends AppCompatActivity {
                     final Message receivedMessage = new Message.Builder()
                             .setUser(you)
                             .setRightMessage(false)
+                            .setUsernameVisibility(false)
+                            .hideIcon(false)
                             .setMessageText(ChatBot.INSTANCE.talk(me.getName(), message.getMessageText()))
                             .build();
 
@@ -134,5 +160,27 @@ public class MessageDetailActivity extends AppCompatActivity {
         }else{
             return new Intent(this, SoldActivity.class);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.message_detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

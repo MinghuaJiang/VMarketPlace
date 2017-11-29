@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:drawable="@drawable/wallet_48p"
+        android:bottom="@dimen/button_margin"
+        android:top="@dimen/button_margin"
+        android:left="@dimen/button_margin"
+        android:right="@dimen/button_margin"/>
+    <item>
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+            android:shape="rectangle" >
+
+            <corners
+                android:bottomLeftRadius="7dp"
+                android:bottomRightRadius="7dp"
+                android:radius="0.1dp"
+                android:topLeftRadius="7dp"
+                android:topRightRadius="7dp" />
+
+            <stroke
+                android:width="1dp"
+                android:color="#E8E6E7" />
+
+        </shape>
+    </item>
+
+</layer-list>
