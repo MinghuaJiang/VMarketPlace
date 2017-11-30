@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "edu.virginia.cs.vmarketplace"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 26
         multiDexEnabled = true
         versionCode 1
@@ -37,11 +37,11 @@ dependencies {
     implementation 'com.amazonaws:aws-android-sdk-s3:2.6.7'
     implementation 'com.amazonaws:aws-android-sdk-cognito:2.6.7'
     implementation 'com.amazonaws:aws-android-sdk-pinpoint:2.6.7'
-    implementation ('com.amazonaws:aws-android-sdk-mobile-client:2.6.7@aar'){ transitive = true;}
-    implementation ('com.amazonaws:aws-android-sdk-auth-userpools:2.6.7@aar'){ transitive = true;}
-    implementation ('com.amazonaws:aws-android-sdk-auth-ui:2.6.7@aar'){ transitive = true; }
-    implementation ('com.amazonaws:aws-android-sdk-auth-facebook:2.6.7@aar') { transitive = true; }
-    implementation ('com.amazonaws:aws-android-sdk-auth-google:2.6.7@aar') { transitive = true; }
+    implementation('com.amazonaws:aws-android-sdk-mobile-client:2.6.7@aar') { transitive = true; }
+    implementation('com.amazonaws:aws-android-sdk-auth-userpools:2.6.7@aar') { transitive = true; }
+    implementation('com.amazonaws:aws-android-sdk-auth-ui:2.6.7@aar') { transitive = true; }
+    implementation('com.amazonaws:aws-android-sdk-auth-facebook:2.6.7@aar') { transitive = true; }
+    implementation('com.amazonaws:aws-android-sdk-auth-google:2.6.7@aar') { transitive = true; }
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'

@@ -5,22 +5,25 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
+    <uses-feature android:name="android.hardware.camera2.full" />
+
     <application
-        android:name="edu.virginia.cs.vmarketplace.view.Application"
+        android:name=".view.Application"
         android:allowBackup="true"
         android:icon="@mipmap/logo_48dp"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.FullScreen">
-
-        <service android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService" android:enabled="true" />
+        <service
+            android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
+            android:enabled="true" />
 
         <activity
             android:name=".view.SplashActivity"
@@ -36,37 +39,61 @@
             android:name=".view.ProfilePublishActivity"
             android:label="@string/published_by_me"
             android:parentActivityName=".view.MainActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme.FullScreen">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.MainActivity" />
+        </activity>
         <activity
-            android:name=".view.SoldActivity"
+            android:name=".view.ProfileSoldActivity"
             android:label="@string/sold_by_me"
             android:parentActivityName=".view.MainActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme.FullScreen">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.MainActivity" />
+        </activity>
         <activity
             android:name=".view.BoughtActivity"
             android:label="@string/bought_by_me"
             android:parentActivityName=".view.MainActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.MainActivity" />
+        </activity>
         <activity
             android:name=".view.FavoriteActivity"
             android:label="@string/added_to_favorite"
             android:parentActivityName=".view.MainActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.MainActivity" />
+        </activity>
         <activity
             android:name=".view.SoldReviewActivity"
             android:label="@string/review_detail"
-            android:parentActivityName=".view.SoldActivity"
-            android:theme="@style/AppTheme" />
+            android:parentActivityName=".view.ProfileSoldActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.ProfileSoldActivity" />
+        </activity>
         <activity
             android:name=".view.MessageDetailActivity"
             android:parentActivityName=".view.MainActivity"
-            android:theme="@style/AppTheme.Message" />
+            android:theme="@style/AppTheme.Message">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.MainActivity" />
+        </activity>
         <activity
             android:name=".view.PublishActivity"
             android:label="@string/publish"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme.FullScreen" />
         <activity
-            android:name=".view.WritePostActivity"
+            android:name=".view.PostFormActivity"
             android:label="@string/write_post"
             android:theme="@style/AppTheme" />
         <activity
@@ -99,7 +126,8 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".view.HomePageActivity"></activity>
+        <activity android:name=".view.HomePageActivity" />
+        <activity android:name=".view.PhotoActivity"></activity>
     </application>
 
 </manifest>

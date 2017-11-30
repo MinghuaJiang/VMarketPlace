@@ -1,8 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/profile_detail_list"
-    android:orientation="vertical"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/refresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:divider="@color/separator"
-    android:dividerHeight="@dimen/seperator_height"/>
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/my_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimaryDark"
+            android:elevation="4dp"
+            android:theme="@style/AppTheme.Message">
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="?android:textAppearanceMedium" />
+        </android.support.v7.widget.Toolbar>
+
+        <ListView
+            android:id="@+id/profile_detail_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/separator"
+            android:dividerHeight="@dimen/seperator_height"
+            android:orientation="vertical" />
+    </LinearLayout>
+
+</android.support.v4.widget.SwipeRefreshLayout>

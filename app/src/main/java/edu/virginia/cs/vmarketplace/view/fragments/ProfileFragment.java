@@ -2,7 +2,6 @@ package edu.virginia.cs.vmarketplace.view.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +10,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.amazonaws.auth.AWSCognitoIdentityProvider;
-import com.amazonaws.auth.CognitoCachingCredentialsProvider;
-import com.amazonaws.mobile.auth.core.IdentityHandler;
-import com.amazonaws.mobile.auth.core.IdentityManager;
-import com.amazonaws.mobile.client.AWSMobileClient;
-import com.amazonaws.mobile.config.AWSConfigurable;
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.util.CognitoIdentityProviderClientConfig;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.cognitoidentityprovider.AmazonCognitoIdentityProvider;
-import com.amazonaws.services.cognitoidentityprovider.model.GetUserRequest;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -28,17 +17,14 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.virginia.cs.vmarketplace.R;
-import edu.virginia.cs.vmarketplace.model.AppContext;
 import edu.virginia.cs.vmarketplace.model.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.AppUser;
 import edu.virginia.cs.vmarketplace.model.ProfileItem;
 import edu.virginia.cs.vmarketplace.view.BoughtActivity;
 import edu.virginia.cs.vmarketplace.view.FavoriteActivity;
 import edu.virginia.cs.vmarketplace.view.ProfilePublishActivity;
-import edu.virginia.cs.vmarketplace.view.SoldActivity;
+import edu.virginia.cs.vmarketplace.view.ProfileSoldActivity;
 import edu.virginia.cs.vmarketplace.view.login.AWSLoginActivity;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by cutehuazai on 11/23/17.
@@ -123,7 +109,7 @@ public class ProfileFragment extends AbstractFragment{
     }
 
     private void handleSold(){
-        Intent intent = new Intent(getActivity(), SoldActivity.class);
+        Intent intent = new Intent(getActivity(), ProfileSoldActivity.class);
         startActivity(intent);
     }
 

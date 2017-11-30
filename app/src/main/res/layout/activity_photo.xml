@@ -7,16 +7,15 @@
     android:layout_height="match_parent"
     android:background="@color/tan_background"
     android:orientation="vertical"
-    android:clipChildren="false"
-    tools:context="edu.virginia.cs.vmarketplace.view.MainActivity">
+    tools:context="edu.virginia.cs.vmarketplace.view.PhotoActivity">
 
-    <edu.virginia.cs.vmarketplace.view.NonSwipeableViewPager
+    <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-   <android.support.design.widget.TabLayout
+    <android.support.design.widget.TabLayout
         android:id="@+id/sliding_tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

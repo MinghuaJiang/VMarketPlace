@@ -25,8 +25,8 @@ import edu.virginia.cs.vmarketplace.model.SoldItem;
  * Created by cutehuazai on 11/24/17.
  */
 
-public class SoldItemAdapter extends ArrayAdapter<SoldItem> {
-    public SoldItemAdapter(@NonNull Context context, @NonNull List<SoldItem> objects) {
+public class ProfileSoldItemAdapter extends ArrayAdapter<SoldItem> {
+    public ProfileSoldItemAdapter(@NonNull Context context, @NonNull List<SoldItem> objects) {
         super(context, 0, objects);
     }
 

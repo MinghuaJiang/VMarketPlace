@@ -10,15 +10,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.bassaer.chatmessageview.model.User;
@@ -31,9 +26,7 @@ import java.util.Random;
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.AppConstant;
 import edu.virginia.cs.vmarketplace.model.AppContextManager;
-import edu.virginia.cs.vmarketplace.model.AppUser;
 import edu.virginia.cs.vmarketplace.util.IntentUtil;
-import edu.virginia.cs.vmarketplace.view.fragments.MessageFragment;
 
 public class MessageDetailActivity extends AppCompatActivity {
     private boolean isOpen;
@@ -158,7 +151,7 @@ public class MessageDetailActivity extends AppCompatActivity {
         if(jumpFrom == AppConstant.MAIN_ACTIVITY) {
             return IntentUtil.jumpWithTabRecorded(AppConstant.TAB_MESSAGE, this, MainActivity.class);
         }else{
-            return new Intent(this, SoldActivity.class);
+            return new Intent(this, ProfileSoldActivity.class);
         }
     }
 

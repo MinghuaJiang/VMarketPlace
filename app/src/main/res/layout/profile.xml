@@ -9,12 +9,6 @@
     android:orientation="vertical"
     tools:context="edu.virginia.cs.vmarketplace.view.fragments.ProfileFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/seperator_height"
-        android:background="@color/separator">
-    </TextView>
-
     <android.support.constraint.ConstraintLayout
         android:id="@+id/user_container"
         android:layout_width="match_parent"
@@ -70,6 +64,12 @@
             app:layout_constraintTop_toTopOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/seperator_height"
+        android:background="@color/separator">
+    </TextView>
+
     <ListView
         android:id="@+id/profile_container"
         android:layout_width="match_parent"
@@ -101,7 +101,5 @@
         android:textColor="@color/tan_background"
         android:layout_gravity="center"
         android:textAppearance="?android:textAppearanceMedium"
-
         />
-
 </LinearLayout>

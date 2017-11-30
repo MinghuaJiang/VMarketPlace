@@ -38,7 +38,7 @@ import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.PostDataHolder;
 import edu.virginia.cs.vmarketplace.view.fragments.AbstractFragment;
 
-public class WritePostActivity extends AppCompatActivity {
+public class PostFormActivity extends AppCompatActivity {
     private AbstractFragment[] fragments;
     private String mCurrentPhotoPath;
     private static final int MY_CAMERA_REQUEST_CODE = 100;
@@ -77,7 +77,7 @@ public class WritePostActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // show popup window
-                showPopup(WritePostActivity.this, REQUEST_TAKE_PHOTO);
+                showPopup(PostFormActivity.this, REQUEST_TAKE_PHOTO);
             }
         });
 
