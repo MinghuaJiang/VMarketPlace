@@ -164,7 +164,8 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                 String location = locationView.getText().toString();
                 double price = Double.valueOf(priceView.getText().toString());
                 String category = (String)spinner.getSelectedItem();
-                
+                Intent intent = new Intent(PublishFormActivity.this, PublishSuccessActivity.class);
+                startActivity(intent);
             }
         });
     }

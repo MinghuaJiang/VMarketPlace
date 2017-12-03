@@ -37,4 +37,5 @@
     <string name="choose_location">Choose Location</string>
     <string name="title_not_empty">Title can\'t be empty</string>
     <string name="price_not_empty">Price can\'t be empty</string>
+    <string name="publish_succuess">Published Sucessfully</string>
 </resources>

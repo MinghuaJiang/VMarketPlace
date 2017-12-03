@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -26,10 +26,9 @@
         <service
             android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
             android:enabled="true" />
-        
-        <service android:name=".service.FetchAddressIntentService"
-            android:exported="false"
-            />
+        <service
+            android:name=".service.FetchAddressIntentService"
+            android:exported="false" />
 
         <activity
             android:name=".view.SplashActivity"
@@ -129,9 +128,11 @@
         <activity
             android:name=".view.MessageAlbumActivity"
             android:theme="@style/AppTheme.FullScreen" />
-        <activity android:name=".view.PublishFormActivity"
-            android:theme="@style/AppTheme.FullScreen"
-            ></activity>
+        <activity
+            android:name=".view.PublishFormActivity"
+            android:theme="@style/AppTheme.FullScreen" />
+        <activity android:name=".view.PublishSuccessActivity"
+            android:theme="@style/AppTheme.FullScreen"></activity>
     </application>
 
 </manifest>
