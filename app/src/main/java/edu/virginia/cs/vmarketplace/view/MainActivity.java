@@ -5,14 +5,19 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.TableLayout;
+
+import com.amazonaws.mobile.client.AWSMobileClient;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.AppConstant;
 import edu.virginia.cs.vmarketplace.service.AnalyticService;
+import edu.virginia.cs.vmarketplace.util.AWSClientFactory;
 import edu.virginia.cs.vmarketplace.view.fragments.AbstractFragment;
 import edu.virginia.cs.vmarketplace.view.fragments.HomeFragment;
 import edu.virginia.cs.vmarketplace.view.fragments.MessageFragment;
-import edu.virginia.cs.vmarketplace.view.fragments.SubscriptionFragment;
+import edu.virginia.cs.vmarketplace.view.fragments.PlaceFragment;
 import edu.virginia.cs.vmarketplace.view.fragments.ProfileFragment;
 import edu.virginia.cs.vmarketplace.view.fragments.PublishFragment;
 import edu.virginia.cs.vmarketplace.view.fragments.ViewPagerAdapter;
@@ -92,7 +97,7 @@ public class MainActivity extends AppCompatActivity{
     private void initFragments(){
         fragments = new AbstractFragment[5];
         fragments[0] = new HomeFragment();
-        fragments[1] = new SubscriptionFragment();
+        fragments[1] = new PlaceFragment();
         fragments[2] = new PublishFragment();
         fragments[3] = new MessageFragment();
         fragments[4] = new ProfileFragment();
