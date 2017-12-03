@@ -28,7 +28,7 @@
             android:text="Publish"
             android:id="@+id/toolbar_title" />
     </android.support.v7.widget.Toolbar>
-    <LinearLayout
+    <ScrollView
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="450dp"
@@ -37,7 +37,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/activity_horizontal_margin">
+            >
             <edu.virginia.cs.vmarketplace.view.MyEditText
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/list_item_height"
@@ -45,6 +45,10 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
+                android:gravity="top"
+                android:layout_marginTop="@dimen/content_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 app:backgroundTint="@color/separator"
                 android:id="@+id/title"
                 />
@@ -57,9 +61,11 @@
                 android:layout_alignParentRight="true"
                 android:gravity="top"
                 android:backgroundTint="@android:color/transparent"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:id="@+id/description"
                 />
-            <GridView
+            <edu.virginia.cs.vmarketplace.view.NonScrollGridView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:verticalSpacing="@dimen/button_margin"
@@ -67,12 +73,16 @@
                 android:layout_below="@id/description"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentRight="true"
-                android:id="@+id/container"></GridView>
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:id="@+id/container"></edu.virginia.cs.vmarketplace.view.NonScrollGridView>
             <RelativeLayout
                 android:id="@+id/location_container"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/button_margin_large"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_below="@id/container">
                 <ImageView
                     android:id="@+id/location_logo"
@@ -92,13 +102,81 @@
                     android:layout_marginLeft="@dimen/content_padding"
                     android:text="Loading"/>
             </RelativeLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_margin"
+                android:background="@color/separator"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_below="@id/location_container"
+                android:id="@+id/seperator"
+                >
+            </TextView>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/list_item_height"
+                android:layout_below="@id/seperator"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="@dimen/content_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:id="@+id/price_container"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Price       $"
+                    android:gravity="center"
+                    android:id="@+id/price_tag"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
+                    />
+                <edu.virginia.cs.vmarketplace.view.MyEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/list_item_height"
+                    app:backgroundTint="@color/separator"
+                    android:layout_toRightOf="@id/price_tag"
+                    android:id="@+id/price"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/list_item_height"
+                android:layout_below="@id/price_container"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="@dimen/content_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:id="@+id/category_container"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Category"
+                    android:gravity="center"
+                    android:id="@+id/catgory_tag"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
+                    />
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/list_item_height"
+                    android:layout_toRightOf="@id/catgory_tag"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:id="@+id/category"
+                    />
+            </RelativeLayout>
+
         </RelativeLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/button_margin"
-            android:background="@color/separator">
-        </TextView>
-    </LinearLayout>
+    </ScrollView>
     <LinearLayout
         android:id="@+id/buttom_bar"
         android:layout_width="match_parent"

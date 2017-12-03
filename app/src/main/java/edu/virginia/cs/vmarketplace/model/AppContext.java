@@ -9,6 +9,8 @@ import com.amazonaws.mobile.auth.core.IdentityManager;
 public class AppContext {
     private AppUser user;
     private IdentityManager manager;
+    private String currentCategory;
+
     public AppContext(){
         manager = IdentityManager.getDefaultIdentityManager();
     }
@@ -29,4 +31,13 @@ public class AppContext {
     public void signOut(){
         manager.signOut();
     }
+
+    public String getCurrentCategory() {
+        return currentCategory;
+    }
+
+    public void setCurrentCategory(String currentCategory) {
+        this.currentCategory = currentCategory;
+    }
+
 }

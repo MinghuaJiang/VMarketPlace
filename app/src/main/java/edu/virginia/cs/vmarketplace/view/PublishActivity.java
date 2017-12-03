@@ -11,13 +11,15 @@ import android.widget.ImageView;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.AppConstant;
+import edu.virginia.cs.vmarketplace.model.AppContext;
+import edu.virginia.cs.vmarketplace.model.AppContextManager;
 import edu.virginia.cs.vmarketplace.util.IntentUtil;
 
 public class PublishActivity extends AppCompatActivity {
-    private static String secondHandIdentifier = "SECOND_HAND";
-    private static String subleaseIdentifier = "SUBLEASE";
-    private static String ridesIdentifier = "RIDES";
-    private static String activitiesIdentifier = "ACTIVITIES";
+    private static String secondHandIdentifier = "Second Hand";
+    private static String subleaseIdentifier = "Sublease";
+    private static String ridesIdentifier = "Ride";
+    private static String activitiesIdentifier = "Activity";
     private static final int BACK_FROM_CAMERA = 1;
 
     @Override
@@ -32,9 +34,8 @@ public class PublishActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent useCameraIntent = new Intent(PublishActivity.this, PhotoActivity.class);
-                String tag = secondHandIdentifier;
-                useCameraIntent.putExtra(Intent.EXTRA_TEXT, tag);
-                startActivityForResult(useCameraIntent, BACK_FROM_CAMERA);
+                AppContextManager.getContextManager().getAppContext().setCurrentCategory(secondHandIdentifier);
+                startActivity(useCameraIntent);
             }
         });
 
@@ -44,8 +45,7 @@ public class PublishActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent useCameraIntent = new Intent(PublishActivity.this, PhotoActivity.class);
-                String tag = subleaseIdentifier;
-                useCameraIntent.putExtra(Intent.EXTRA_TEXT, tag);
+                AppContextManager.getContextManager().getAppContext().setCurrentCategory(subleaseIdentifier);
                 startActivity(useCameraIntent);
             }
         });
@@ -56,8 +56,7 @@ public class PublishActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent useCameraIntent = new Intent(PublishActivity.this, PublishFormActivity.class);
-                String tag = ridesIdentifier;
-                useCameraIntent.putExtra(Intent.EXTRA_TEXT, tag);
+                AppContextManager.getContextManager().getAppContext().setCurrentCategory(ridesIdentifier);
                 startActivity(useCameraIntent);
             }
         });
@@ -68,8 +67,7 @@ public class PublishActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent useCameraIntent = new Intent(PublishActivity.this, PhotoActivity.class);
-                String tag = activitiesIdentifier;
-                useCameraIntent.putExtra(Intent.EXTRA_TEXT, tag);
+                AppContextManager.getContextManager().getAppContext().setCurrentCategory(activitiesIdentifier);
                 startActivity(useCameraIntent);
             }
         });

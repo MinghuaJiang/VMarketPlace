@@ -15,14 +15,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.virginia.cs.vmarketplace.R;
+import edu.virginia.cs.vmarketplace.model.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.LocationConstant;
 import edu.virginia.cs.vmarketplace.model.PreviewImageItem;
 import edu.virginia.cs.vmarketplace.service.FetchAddressIntentService;
@@ -84,19 +85,27 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
         ab.setDisplayShowTitleEnabled(false);
 
         mFiles = getIntent().getStringArrayListExtra("image");
+        String category = AppContextManager.getContextManager().getAppContext().getCurrentCategory();
+
         gridView = findViewById(R.id.container);
 
         locationLogo = findViewById(R.id.location_logo);
 
         locationView = findViewById(R.id.location);
 
+        Spinner spinner = findViewById(R.id.category);
+        ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.category_item, getCategory(category));
+        spinner.setAdapter(spinnerAdapter);
+
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
-        adapter = new ImageViewAdapter(this, new ArrayList<PreviewImageItem>());
-        gridView.setAdapter(adapter);
-        adapter.setmFiles(mFiles);
-        getSupportLoaderManager().restartLoader(0, null, this).forceLoad();
-
+        if(mFiles != null) {
+            adapter = new ImageViewAdapter(this, new ArrayList<PreviewImageItem>());
+            gridView.setAdapter(adapter);
+            adapter.setmFiles(mFiles);
+            getSupportLoaderManager().restartLoader(0, null, this).forceLoad();
+        }else{
+            gridView.setVisibility(View.GONE);
+        }
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                     MY_LOCATION_REQUEST_CODE);
@@ -108,7 +117,6 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                     // Got last known location. In some rare situations this can be null.
                     if (location != null && Geocoder.isPresent()) {
                         // Logic to handle location object
-                        System.out.println("hihihi");
                         mLastKnowLocation = location;
                         startIntentService();
                     }
@@ -181,5 +189,29 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                 }
             }
         }
+    }
+
+    private List<String> getCategory(String category){
+        List<String> result = new ArrayList();
+        if(category.equals("Second Hand")) {
+            result.add("Appliance");
+            result.add("Bicycle");
+            result.add("Book");
+            result.add("Car");
+            result.add("PC/Laptop");
+            result.add("Digital Device");
+            result.add("Furniture");
+            result.add("Game Device");
+            result.add("Kitchenware");
+            result.add("Other");
+        }else if(category.equals("Sublease")){
+            result.add("Apartment");
+            result.add("House");
+        }else if(category.equals("Ride")){
+            result.add("One-way Trip");
+            result.add("Round Trip");
+        }
+
+        return result;
     }
 }
