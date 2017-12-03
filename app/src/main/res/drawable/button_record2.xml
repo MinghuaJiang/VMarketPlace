@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:bottom="@dimen/button_margin"
+        android:top="@dimen/button_margin"
+        android:left="@dimen/button_margin"
+        android:right="@dimen/button_margin"
+        >
+        <shape
+            android:shape="oval"
+            >
+            <solid
+                android:color="@color/message_me"/>
+        </shape>
+    </item>
+
+    <item>
+        <shape android:shape="oval">
+            <size
+                android:width="@dimen/list_item_height_large"
+                android:height="@dimen/list_item_height_large" />
+            <stroke
+                android:width="4dp"
+                android:color="#E8E6E7" />
+        </shape>
+    </item>
+
+    <item android:bottom="@dimen/button_margin_large"
+        android:top="@dimen/button_margin_large"
+        android:left="@dimen/button_margin_large"
+        android:right="@dimen/button_margin_large"
+        android:drawable="@drawable/camera_24dp"
+        >
+        <size
+            android:width="@dimen/list_item_height_large"
+            android:height="@dimen/list_item_height_large" />
+    </item>
+
+</layer-list>

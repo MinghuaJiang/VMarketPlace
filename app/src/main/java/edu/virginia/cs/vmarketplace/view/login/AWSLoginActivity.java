@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.amazonaws.mobile.auth.facebook.FacebookButton;
-import com.amazonaws.mobile.auth.google.GoogleButton;
 import com.amazonaws.mobile.auth.ui.AuthUIConfiguration;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.AWSStartupHandler;
@@ -29,7 +28,7 @@ public class AWSLoginActivity extends AppCompatActivity {
                                 .userPools(true)  // true? show the Email and Password UI
                                 .signInButton(FacebookButton.class) // Show Facebook button
                                 // Show Google button
-                                .signInButton(GoogleButton.class)
+                                //.signInButton(GoogleButton.class)
                                 .logoResId(R.mipmap.logo_48dp) // Change the logo
                                 .backgroundColor(ContextCompat.getColor(AWSLoginActivity.this,R.color.tan_background)) // Change the backgroundColor
                                 .isBackgroundColorFullScreen(true) // Full screen backgroundColor the backgroundColor full screenff

@@ -10,6 +10,7 @@ public class AppConstant {
     public static final String JUMP_FROM = "jump_from";
     public static final String SELLER_NAME = "sellername";
     public static final String MESSAGE_ID = "messageid";
+    public static final String FILE_LIST = "file_list";
 
     public static final int TAB_MESSAGE = 3;
     public static final int TAB_PROFILE = 4;

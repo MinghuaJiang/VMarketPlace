@@ -14,26 +14,47 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.github.bassaer.chatmessageview.model.User;
 import com.github.bassaer.chatmessageview.models.Message;
 import com.github.bassaer.chatmessageview.util.ChatBot;
 import com.github.bassaer.chatmessageview.views.ChatView;
-
+import java.io.File;
+import java.util.List;
 import java.util.Random;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.AppConstant;
+import edu.virginia.cs.vmarketplace.model.AppContext;
 import edu.virginia.cs.vmarketplace.model.AppContextManager;
+import edu.virginia.cs.vmarketplace.util.AWSClientFactory;
+import edu.virginia.cs.vmarketplace.util.ImageUtil;
 import edu.virginia.cs.vmarketplace.util.IntentUtil;
+import edu.virginia.cs.vmarketplace.view.fragments.UseCameraFragment;
 
 public class MessageDetailActivity extends AppCompatActivity {
     private boolean isOpen;
 
+    private ChatView mChatView;
+
+    private User me;
+
+    private TextView textView;
+
+    private Intent inputIntent;
+
+    private TransferUtility transferUtility;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        transferUtility = AWSClientFactory.getInstance().getTransferUtility(getApplicationContext());
         setContentView(R.layout.activity_message_detail);
         Toolbar toolbar =
                  findViewById(R.id.my_toolbar);
@@ -44,12 +65,30 @@ public class MessageDetailActivity extends AppCompatActivity {
 
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
-        ab.setTitle("");
-        Intent intent = getIntent();
-        TextView textView = findViewById(R.id.toolbar_title);
-        textView.setText(intent.getStringExtra(AppConstant.SELLER_NAME));
+        ab.setDisplayShowTitleEnabled(false);
+        inputIntent = getIntent();
+        textView = findViewById(R.id.toolbar_title);
+        textView.setText(inputIntent.getStringExtra(AppConstant.SELLER_NAME));
 
-        final ChatView mChatView = findViewById(R.id.chat_view);
+        Button cameraButton = findViewById(R.id.camera);
+        cameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MessageDetailActivity.this, MessageCameraActivity.class);
+                intent.putExtra(AppConstant.SELLER_NAME, textView.getText());
+                startActivityForResult(intent, UseCameraFragment.REQUEST_FROM_MESSAGE);
+            }
+        });
+
+        Button albumButton = findViewById(R.id.album);
+        albumButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        mChatView = findViewById(R.id.chat_view);
         final ViewGroup.LayoutParams layoutParams = mChatView.getLayoutParams();
         //AppUser id
         int myId = 0;
@@ -59,10 +98,10 @@ public class MessageDetailActivity extends AppCompatActivity {
         Bitmap myIcon = BitmapFactory.decodeResource(getResources(), R.drawable.place_holder_64p);
 
         int yourId = 1;
-        String yourName = intent.getStringExtra(AppConstant.SELLER_NAME);
+        String yourName = inputIntent.getStringExtra(AppConstant.SELLER_NAME);
         Bitmap yourIcon = BitmapFactory.decodeResource(getResources(), R.drawable.face_1);
 
-        final User me = new User(myId, myName, myIcon);
+        me = new User(myId, myName, myIcon);
         final User you = new User(yourId, yourName, yourIcon);
 
         mChatView.setAutoScroll(true);
@@ -141,6 +180,10 @@ public class MessageDetailActivity extends AppCompatActivity {
                 }
             }
         });
+        if(inputIntent.hasExtra("image")){
+            List<String> result = inputIntent.getStringArrayListExtra("image");
+            sendPictureFromFile(result);
+        }
     }
 
 
@@ -175,5 +218,46 @@ public class MessageDetailActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void sendPictureFromFile(List<String> uriList){
+        for(String str : uriList) {
+            final File file = new File(str);
+            final TransferObserver observer = transferUtility
+                    .upload("uploads" + "/" + file.getName(), file);
+
+            final Message message = new Message.Builder()
+                    .setUser(me)
+                    .setRightMessage(true)
+                    .setType(Message.Type.PICTURE)
+                    .setPicture(ImageUtil.decodeSampledBitmapFromFile(str,100, 100))
+                    .hideIcon(false)
+                    .setUsernameVisibility(false)
+                    .build();
+            System.out.println(observer.getBucket());
+            System.out.println(observer.getAbsoluteFilePath());
+            System.out.println(observer.getKey());
+            System.out.println(observer.getId());
+            observer.setTransferListener(new TransferListener() {
+                @Override
+                public void onStateChanged(int id, TransferState state) {
+                    if(state == TransferState.COMPLETED){
+                        file.delete();
+                    }
+                }
+
+                @Override
+                public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                    System.out.println(((double)bytesCurrent)/bytesTotal + " finished");
+                }
+
+                @Override
+                public void onError(int id, Exception ex) {
+
+                }
+            });
+            //Set to chat view
+            mChatView.send(message);
+        }
     }
 }

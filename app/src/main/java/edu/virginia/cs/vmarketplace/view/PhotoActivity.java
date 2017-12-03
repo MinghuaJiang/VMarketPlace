@@ -9,6 +9,7 @@ import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.view.fragments.AbstractFragment;
 import edu.virginia.cs.vmarketplace.view.fragments.PlaceFragment;
 import edu.virginia.cs.vmarketplace.view.fragments.ProfileFragment;
+import edu.virginia.cs.vmarketplace.view.fragments.UseAlbumFragment;
 import edu.virginia.cs.vmarketplace.view.fragments.UseCameraFragment;
 import edu.virginia.cs.vmarketplace.view.fragments.ViewPagerAdapter;
 
@@ -36,7 +37,8 @@ public class PhotoActivity extends AppCompatActivity {
     private void initFragments() {
         fragments = new AbstractFragment[2];
         fragments[0] = new UseCameraFragment();
-        fragments[1] = new ProfileFragment();
+        fragments[1] = new UseAlbumFragment();
+        ((UseCameraFragment)fragments[0]).setRequestCode(UseCameraFragment.REQUEST_FROM_PUBLISH);
     }
 }
 

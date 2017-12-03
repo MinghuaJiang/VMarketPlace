@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <edu.virginia.cs.vmarketplace.view.AutoFitTextureView
+        android:id="@+id/texture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
+
+    <RelativeLayout
+        android:id="@+id/tool_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_item_height">
+        <Button
+            android:id="@+id/close_btn"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/close_white_24p"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
+
+        <Button
+            android:id="@+id/flash_btn"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/flash_off"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/big_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:id="@+id/scroll_gallery"
+        android:layout_above="@id/control"
+        android:fillViewport="true"
+        >
+    <LinearLayout
+        android:id="@+id/gallery_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/cameraBackground"
+        android:orientation="horizontal">
+        <GridView
+            android:id="@+id/gallery"
+            android:layout_width="600dp"
+            android:layout_height="wrap_content"
+            android:horizontalSpacing="@dimen/content_padding"
+            android:numColumns="10"
+            android:paddingBottom="@dimen/content_padding"
+            android:paddingLeft="@dimen/content_padding"
+            android:paddingRight="@dimen/content_padding"
+            android:paddingTop="@dimen/content_padding"></GridView>
+    </LinearLayout>
+    </HorizontalScrollView>
+    <FrameLayout
+        android:id="@+id/control"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_item_height_large"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/tan_background">
+
+        <Button
+            android:id="@+id/picture"
+            android:layout_width="@dimen/list_item_height_medium"
+            android:layout_height="@dimen/list_item_height_medium"
+            android:layout_gravity="center"
+            android:background="@drawable/button_record" />
+
+        <Button
+            android:id="@+id/next"
+            android:layout_width="@dimen/list_item_height"
+            android:layout_height="@dimen/list_item_height"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/button_next" />
+
+    </FrameLayout>
+
+</RelativeLayout>

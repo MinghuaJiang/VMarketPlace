@@ -5,7 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -24,6 +26,10 @@
         <service
             android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
             android:enabled="true" />
+        
+        <service android:name=".service.FetchAddressIntentService"
+            android:exported="false"
+            />
 
         <activity
             android:name=".view.SplashActivity"
@@ -93,10 +99,6 @@
             android:label="@string/publish"
             android:theme="@style/AppTheme.FullScreen" />
         <activity
-            android:name=".view.PostFormActivity"
-            android:label="@string/write_post"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".view.login.AWSLoginActivity"
             android:theme="@style/AppTheme.FullScreen" />
         <activity
@@ -116,18 +118,20 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="edu.virginia.cs.vmarketplace.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
-
         <activity android:name=".view.HomePageActivity" />
-        <activity android:name=".view.PhotoActivity"></activity>
+        <activity
+            android:name=".view.PhotoActivity"
+            android:theme="@style/AppTheme.FullScreen" />
+        <activity android:name=".view.LocationActivity" />
+        <activity
+            android:name=".view.MessageCameraActivity"
+            android:theme="@style/AppTheme.FullScreen" />
+        <activity
+            android:name=".view.MessageAlbumActivity"
+            android:theme="@style/AppTheme.FullScreen" />
+        <activity android:name=".view.PublishFormActivity"
+            android:theme="@style/AppTheme.FullScreen"
+            ></activity>
     </application>
 
 </manifest>

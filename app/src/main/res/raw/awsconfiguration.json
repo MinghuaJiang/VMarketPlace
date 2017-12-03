@@ -48,10 +48,6 @@
       "Region": "us-east-1"
     }
   },
-  "GoogleSignIn": {
-    "ClientId-WebApp": "184697464235-08a2k1b8k4k5ua9s92uuq8mhgsemofv0.apps.googleusercontent.com",
-    "Permissions": "email,profile,openid"
-  },
   "FacebookSignIn": {
     "AppId": "292014607986179",
     "Permissions": "public_profile"

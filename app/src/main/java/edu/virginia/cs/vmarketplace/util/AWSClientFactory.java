@@ -9,6 +9,8 @@ import com.amazonaws.mobileconnectors.pinpoint.PinpointConfiguration;
 import com.amazonaws.mobileconnectors.pinpoint.PinpointManager;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
 
 import edu.virginia.cs.vmarketplace.view.login.MySignInUI;
 
@@ -41,8 +43,9 @@ public class AWSClientFactory {
     }
 
     public TransferUtility getTransferUtility(Context context){
+        AmazonS3 s3 = new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider());
         TransferUtility transferUtility =
-                TransferUtility.builder()
+                TransferUtility.builder().s3Client(s3)
                         .context(context)
                         .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
                         .build();

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:top="3dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/hint_color" />
+            <size
+                android:width="68dp"
+                android:height="68dp" />
+        </shape>
+    </item>
+    <item
+        android:drawable="@drawable/add_24p"
+        android:gravity="center"
+        android:height="32dp"
+        android:width="32dp">
+        />
+    </item>
+</layer-list>

@@ -1,9 +1,12 @@
 package edu.virginia.cs.vmarketplace.view;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import edu.virginia.cs.vmarketplace.R;
@@ -22,6 +25,7 @@ public class PublishActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish);
 
+        ConstraintLayout layout = findViewById(R.id.container);
         // second hand logic begins here
         ImageView secondHand = findViewById(R.id.second_hand_image);
         secondHand.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +55,7 @@ public class PublishActivity extends AppCompatActivity {
         rides.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent useCameraIntent = new Intent(PublishActivity.this, PostFormActivity.class);
+                Intent useCameraIntent = new Intent(PublishActivity.this, PublishFormActivity.class);
                 String tag = ridesIdentifier;
                 useCameraIntent.putExtra(Intent.EXTRA_TEXT, tag);
                 startActivity(useCameraIntent);

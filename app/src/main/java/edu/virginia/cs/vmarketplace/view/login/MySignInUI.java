@@ -44,6 +44,7 @@ import com.amazonaws.services.cognitoidentityprovider.AmazonCognitoIdentityProvi
 import edu.virginia.cs.vmarketplace.model.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.AppUserEnrichStrategy;
 import edu.virginia.cs.vmarketplace.model.CognitoPoolEnrichStrategy;
+import edu.virginia.cs.vmarketplace.model.FacebookEnrichStrategy;
 
 public class MySignInUI implements AWSConfigurable {
 
@@ -124,9 +125,7 @@ public class MySignInUI implements AWSConfigurable {
             AppContextManager.getContextManager().loadCurrentUser(pool.getCurrentUser().getUserId());
             strategy = new CognitoPoolEnrichStrategy();
         }else if(provider instanceof FacebookSignInProvider){
-
-        }else{
-
+            strategy = new FacebookEnrichStrategy();
         }
 
         AppContextManager.getContextManager().getAppContext().enrichUser(strategy);

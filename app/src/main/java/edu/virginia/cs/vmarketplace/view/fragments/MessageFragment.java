@@ -47,7 +47,7 @@ public class MessageFragment extends AbstractFragment implements LoaderManager.L
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ActionBar ab =  ((AppCompatActivity) getActivity()).getSupportActionBar();
 
-        ab.setTitle("");
+        ab.setDisplayShowTitleEnabled(false);
 
 
         final ListView listView = rootView.findViewById(R.id.message_detail_list);

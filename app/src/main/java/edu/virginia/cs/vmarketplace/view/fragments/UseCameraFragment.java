@@ -4,8 +4,11 @@ package edu.virginia.cs.vmarketplace.view.fragments;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.DataSetObserver;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Point;
@@ -21,13 +24,16 @@ import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.CaptureResult;
 import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.media.Image;
 import android.media.ImageReader;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -36,25 +42,52 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import edu.virginia.cs.vmarketplace.R;
+import edu.virginia.cs.vmarketplace.model.AppConstant;
+import edu.virginia.cs.vmarketplace.model.AppContextManager;
+import edu.virginia.cs.vmarketplace.model.PreviewImageItem;
+import edu.virginia.cs.vmarketplace.util.ImageUtil;
 import edu.virginia.cs.vmarketplace.view.AutoFitTextureView;
+import edu.virginia.cs.vmarketplace.view.MainActivity;
+import edu.virginia.cs.vmarketplace.view.MessageDetailActivity;
+import edu.virginia.cs.vmarketplace.view.PublishFormActivity;
+import edu.virginia.cs.vmarketplace.view.loader.PreviewImageItemLoader;
 
 /**
  * Created by cutehuazai on 11/25/17.
  */
 
-public class UseCameraFragment extends AbstractFragment {
+public class UseCameraFragment extends AbstractFragment implements LoaderManager.LoaderCallbacks<List<PreviewImageItem>> {
+
+    private boolean isPaused;
     private static final String TAG = "UseCameraFragment";
     private static final int MY_CAMERA_REQUEST_CODE = 100;
+
+    private int requestCode;
+
+    public static final int REQUEST_FROM_PUBLISH = 1;
+
+    public static final int REQUEST_FROM_MESSAGE = 2;
 
     private static final int MAX_PREVIEW_WIDTH = 1920;
 
@@ -85,9 +118,22 @@ public class UseCameraFragment extends AbstractFragment {
      */
     private static final int STATE_PICTURE_TAKEN = 4;
 
+    private static final int FLASH_OFF = 1;
+
+    private static final int FLASH_AUTO = 2;
+
+    private int flashState = FLASH_OFF;
+
     private ImageReader mImageReader;
 
+    private List<String> mFiles;
+
+    private List<String> mExistingFiles;
+
+    private int picLimit = 10;
+
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
+
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
         ORIENTATIONS.append(Surface.ROTATION_90, 0);
@@ -119,19 +165,19 @@ public class UseCameraFragment extends AbstractFragment {
 
     };
 
-    private String mCameraId;
+    private String cameraId;
 
-    private AutoFitTextureView mTextureView;
+    private AutoFitTextureView textureView;
+
+    private CameraDevice cameraDevice;
+
+    private Size previewSize;
+
+    private CaptureRequest.Builder previewRequestBuilder;
+
+    private CaptureRequest previewRequest;
 
     private CameraCaptureSession mCaptureSession;
-
-    private CameraDevice mCameraDevice;
-
-    private Size mPreviewSize;
-
-    private CaptureRequest.Builder mPreviewRequestBuilder;
-
-    private CaptureRequest mPreviewRequest;
 
     private boolean mFlashSupported;
 
@@ -149,14 +195,49 @@ public class UseCameraFragment extends AbstractFragment {
      */
     private Handler mBackgroundHandler;
 
+    private Button nextBtn;
+
+    private Button captureBtn;
+
+    private Button closeBtn;
+
+    private GridView gridView;
+
+    private LinearLayout linearLayout;
+
+    private ImageViewAdapter adapter;
+
+    private ImageView bigImageView;
+
     private final ImageReader.OnImageAvailableListener mOnImageAvailableListener
             = new ImageReader.OnImageAvailableListener() {
 
         @Override
         public void onImageAvailable(ImageReader reader) {
-            //mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile));
+            mFiles.add(getActivity().getExternalFilesDir(null) + File.separator + AppContextManager.getContextManager().getAppContext().getUser().getUsername() + "_" + new Date() + ".jpg");
+            //mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFiles.get(mFiles.size() - 1)));
+            Image mImage = reader.acquireNextImage();
+            ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
+            byte[] bytes = new byte[buffer.remaining()];
+            buffer.get(bytes);
+            FileOutputStream output = null;
+            try {
+                output = new FileOutputStream(mFiles.get(mFiles.size() - 1));
+                output.write(bytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                mImage.close();
+                if (null != output) {
+                    try {
+                        output.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            getActivity().getSupportLoaderManager().restartLoader(0, null, UseCameraFragment.this).forceLoad();
         }
-
     };
 
 
@@ -166,7 +247,7 @@ public class UseCameraFragment extends AbstractFragment {
         public void onOpened(@NonNull CameraDevice cameraDevice) {
             // This method is called when the camera is opened.  We start camera preview here.
             mCameraOpenCloseLock.release();
-            mCameraDevice = cameraDevice;
+            UseCameraFragment.this.cameraDevice = cameraDevice;
             createCameraPreviewSession();
         }
 
@@ -174,14 +255,14 @@ public class UseCameraFragment extends AbstractFragment {
         public void onDisconnected(@NonNull CameraDevice cameraDevice) {
             mCameraOpenCloseLock.release();
             cameraDevice.close();
-            mCameraDevice = null;
+            UseCameraFragment.this.cameraDevice = null;
         }
 
         @Override
         public void onError(@NonNull CameraDevice cameraDevice, int error) {
             mCameraOpenCloseLock.release();
             cameraDevice.close();
-            mCameraDevice = null;
+            UseCameraFragment.this.cameraDevice = null;
             Activity activity = getActivity();
             if (null != activity) {
                 activity.finish();
@@ -239,6 +320,7 @@ public class UseCameraFragment extends AbstractFragment {
                 }
             }
         }
+
         @Override
         public void onCaptureProgressed(@NonNull CameraCaptureSession session,
                                         @NonNull CaptureRequest request,
@@ -262,18 +344,108 @@ public class UseCameraFragment extends AbstractFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.use_camera, container, false);
-        rootView.findViewById(R.id.picture).setOnClickListener(new View.OnClickListener() {
+        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        final View rootView = inflater.inflate(R.layout.publish_use_camera, container, false);
+        captureBtn = rootView.findViewById(R.id.picture);
+        captureBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                takePicture();
+                if (!isPaused) {
+                    if (mFiles.size() + mExistingFiles.size() < picLimit) {
+                        takePicture();
+                    }
+                } else {
+                    captureBtn.setBackgroundResource(R.drawable.button_record);
+                    if (mFiles.size() != 0) {
+                        captureBtn.setText(String.valueOf(picLimit - mFiles.size() - mExistingFiles.size()));
+                        if ((mFiles.size() + mExistingFiles.size()) == picLimit) {
+                            captureBtn.setTextColor(Color.WHITE);
+                        } else {
+                            captureBtn.setTextColor(Color.BLACK);
+                        }
+                        nextBtn.setVisibility(View.VISIBLE);
+                    } else {
+                        nextBtn.setVisibility(View.INVISIBLE);
+                        captureBtn.setText("");
+                        gridView.setVisibility(View.GONE);
+                    }
+                    doResume();
+                }
             }
         });
-        mTextureView = rootView.findViewById(R.id.texture);
+        nextBtn = rootView.findViewById(R.id.next);
+        //This logic will change afterwards
+        nextBtn.setVisibility(View.INVISIBLE);
+
+        setNextButtonListener();
+
+        textureView = rootView.findViewById(R.id.texture);
+
+        gridView = rootView.findViewById(R.id.gallery);
+        adapter = new ImageViewAdapter(getActivity(), new ArrayList<PreviewImageItem>());
+        gridView.setAdapter(adapter);
+
+        adapter.registerDataSetObserver(new CameraDataSetObserver(this));
+
+        linearLayout = rootView.findViewById(R.id.gallery_container);
+        linearLayout.setAlpha(0);
+
+        bigImageView = rootView.findViewById(R.id.big_image);
+        bigImageView.setVisibility(View.GONE);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                doPause();
+                String item = mFiles.get(position);
+                bigImageView.setImageBitmap(
+                        ImageUtil.decodeSampledBitmapFromFile(item, textureView.getWidth(), textureView.getHeight()));
+                bigImageView.setVisibility(View.VISIBLE);
+                nextBtn.setVisibility(View.INVISIBLE);
+                captureBtn.setBackgroundResource(R.drawable.button_record2);
+                captureBtn.setText("");
+            }
+        });
+
+        closeBtn = rootView.findViewById(R.id.close_btn);
+        setCloseBtnListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        startActivity(intent);
+                    }
+                }
+        );
+
+        final Button flashButton = rootView.findViewById(R.id.flash_btn);
+        flashButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (flashState == FLASH_OFF) {
+                    flashState = FLASH_AUTO;
+                    flashButton.setBackgroundResource(R.drawable.flash_auto);
+                } else {
+                    flashState = FLASH_OFF;
+                    flashButton.setBackgroundResource(R.drawable.flash_off);
+                }
+            }
+        });
+
+        Intent intent = getActivity().getIntent();
+        if(intent.hasExtra(AppConstant.FILE_LIST)){
+            mExistingFiles = intent.getStringArrayListExtra(AppConstant.FILE_LIST);
+        }else{
+            mExistingFiles = new ArrayList<>();
+        }
+
         return rootView;
     }
 
-
+    public void setRequestCode(int requestCode) {
+        this.requestCode = requestCode;
+    }
 
     private void takePicture() {
         lockFocus();
@@ -293,7 +465,7 @@ public class UseCameraFragment extends AbstractFragment {
             if (!mCameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
                 throw new RuntimeException("Time out waiting to lock camera opening.");
             }
-            manager.openCamera(mCameraId, mStateCallback, mBackgroundHandler);
+            manager.openCamera(cameraId, mStateCallback, mBackgroundHandler);
         } catch (CameraAccessException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -311,9 +483,9 @@ public class UseCameraFragment extends AbstractFragment {
                 mCaptureSession.close();
                 mCaptureSession = null;
             }
-            if (null != mCameraDevice) {
-                mCameraDevice.close();
-                mCameraDevice = null;
+            if (null != cameraDevice) {
+                cameraDevice.close();
+                cameraDevice = null;
             }
             if (null != mImageReader) {
                 mImageReader.close();
@@ -354,28 +526,28 @@ public class UseCameraFragment extends AbstractFragment {
      */
     private void createCameraPreviewSession() {
         try {
-            SurfaceTexture texture = mTextureView.getSurfaceTexture();
+            SurfaceTexture texture = textureView.getSurfaceTexture();
             assert texture != null;
 
             // We configure the size of default buffer to be the size of camera preview we want.
-            texture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
+            texture.setDefaultBufferSize(previewSize.getWidth(), previewSize.getHeight());
 
             // This is the output Surface we need to start preview.
             Surface surface = new Surface(texture);
 
             // We set up a CaptureRequest.Builder with the output Surface.
-            mPreviewRequestBuilder
-                    = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
-            mPreviewRequestBuilder.addTarget(surface);
+            previewRequestBuilder
+                    = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+            previewRequestBuilder.addTarget(surface);
 
             // Here, we create a CameraCaptureSession for camera preview.
-            mCameraDevice.createCaptureSession(Arrays.asList(surface, mImageReader.getSurface()),
+            cameraDevice.createCaptureSession(Arrays.asList(surface, mImageReader.getSurface()),
                     new CameraCaptureSession.StateCallback() {
 
                         @Override
                         public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession) {
                             // The camera is already closed
-                            if (null == mCameraDevice) {
+                            if (null == cameraDevice) {
                                 return;
                             }
 
@@ -383,14 +555,14 @@ public class UseCameraFragment extends AbstractFragment {
                             mCaptureSession = cameraCaptureSession;
                             try {
                                 // Auto focus should be continuous for camera preview.
-                                mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
+                                previewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
                                         CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
                                 // Flash is automatically enabled when necessary.
-                                setAutoFlash(mPreviewRequestBuilder);
+                                setAutoFlash(previewRequestBuilder);
 
                                 // Finally, we start displaying the camera preview.
-                                mPreviewRequest = mPreviewRequestBuilder.build();
-                                mCaptureSession.setRepeatingRequest(mPreviewRequest,
+                                previewRequest = previewRequestBuilder.build();
+                                mCaptureSession.setRepeatingRequest(previewRequest,
                                         mCaptureCallback, mBackgroundHandler);
                             } catch (CameraAccessException e) {
                                 e.printStackTrace();
@@ -409,47 +581,47 @@ public class UseCameraFragment extends AbstractFragment {
     }
 
     /**
-     * Configures the necessary {@link android.graphics.Matrix} transformation to `mTextureView`.
+     * Configures the necessary {@link android.graphics.Matrix} transformation to `textureView`.
      * This method should be called after the camera preview size is determined in
-     * setUpCameraOutputs and also the size of `mTextureView` is fixed.
+     * setUpCameraOutputs and also the size of `textureView` is fixed.
      *
-     * @param viewWidth  The width of `mTextureView`
-     * @param viewHeight The height of `mTextureView`
+     * @param viewWidth  The width of `textureView`
+     * @param viewHeight The height of `textureView`
      */
     private void configureTransform(int viewWidth, int viewHeight) {
         Activity activity = getActivity();
-        if (null == mTextureView || null == mPreviewSize || null == activity) {
+        if (null == textureView || null == previewSize || null == activity) {
             return;
         }
         int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
         Matrix matrix = new Matrix();
         RectF viewRect = new RectF(0, 0, viewWidth, viewHeight);
-        RectF bufferRect = new RectF(0, 0, mPreviewSize.getHeight(), mPreviewSize.getWidth());
+        RectF bufferRect = new RectF(0, 0, previewSize.getHeight(), previewSize.getWidth());
         float centerX = viewRect.centerX();
         float centerY = viewRect.centerY();
         if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
             bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY());
             matrix.setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL);
             float scale = Math.max(
-                    (float) viewHeight / mPreviewSize.getHeight(),
-                    (float) viewWidth / mPreviewSize.getWidth());
+                    (float) viewHeight / previewSize.getHeight(),
+                    (float) viewWidth / previewSize.getWidth());
             matrix.postScale(scale, scale, centerX, centerY);
             matrix.postRotate(90 * (rotation - 2), centerX, centerY);
         } else if (Surface.ROTATION_180 == rotation) {
             matrix.postRotate(180, centerX, centerY);
         }
-        mTextureView.setTransform(matrix);
+        textureView.setTransform(matrix);
     }
 
 
     private void lockFocus() {
         try {
             // This is how to tell the camera to lock focus.
-            mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
+            previewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
                     CameraMetadata.CONTROL_AF_TRIGGER_START);
             // Tell #mCaptureCallback to wait for the lock.
             mState = STATE_WAITING_LOCK;
-            mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
+            mCaptureSession.capture(previewRequestBuilder.build(), mCaptureCallback,
                     mBackgroundHandler);
         } catch (CameraAccessException e) {
             e.printStackTrace();
@@ -463,11 +635,11 @@ public class UseCameraFragment extends AbstractFragment {
     private void runPrecaptureSequence() {
         try {
             // This is how to tell the camera to trigger.
-            mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AE_PRECAPTURE_TRIGGER,
+            previewRequestBuilder.set(CaptureRequest.CONTROL_AE_PRECAPTURE_TRIGGER,
                     CaptureRequest.CONTROL_AE_PRECAPTURE_TRIGGER_START);
             // Tell #mCaptureCallback to wait for the precapture sequence to be set.
             mState = STATE_WAITING_PRECAPTURE;
-            mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
+            mCaptureSession.capture(previewRequestBuilder.build(), mCaptureCallback,
                     mBackgroundHandler);
         } catch (CameraAccessException e) {
             e.printStackTrace();
@@ -481,12 +653,12 @@ public class UseCameraFragment extends AbstractFragment {
     private void captureStillPicture() {
         try {
             final Activity activity = getActivity();
-            if (null == activity || null == mCameraDevice) {
+            if (null == activity || null == cameraDevice) {
                 return;
             }
             // This is the CaptureRequest.Builder that we use to take a picture.
             final CaptureRequest.Builder captureBuilder =
-                    mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE);
+                    cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE);
             captureBuilder.addTarget(mImageReader.getSurface());
 
             // Use the same AE and AF modes as the preview.
@@ -531,14 +703,14 @@ public class UseCameraFragment extends AbstractFragment {
     private void unlockFocus() {
         try {
             // Reset the auto-focus trigger
-            mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
+            previewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
                     CameraMetadata.CONTROL_AF_TRIGGER_CANCEL);
-            setAutoFlash(mPreviewRequestBuilder);
-            mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
+            setAutoFlash(previewRequestBuilder);
+            mCaptureSession.capture(previewRequestBuilder.build(), mCaptureCallback,
                     mBackgroundHandler);
             // After this, the camera will go back to the normal state of preview.
             mState = STATE_PREVIEW;
-            mCaptureSession.setRepeatingRequest(mPreviewRequest, mCaptureCallback,
+            mCaptureSession.setRepeatingRequest(previewRequest, mCaptureCallback,
                     mBackgroundHandler);
         } catch (CameraAccessException e) {
             e.printStackTrace();
@@ -547,37 +719,65 @@ public class UseCameraFragment extends AbstractFragment {
 
     private void setAutoFlash(CaptureRequest.Builder requestBuilder) {
         if (mFlashSupported) {
+            if (flashState == FLASH_AUTO) {
+                requestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
+                        CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
+            } else {
+                requestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
+                        CaptureRequest.CONTROL_AE_MODE_OFF);
+            }
+        } else {
             requestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
-                    CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
+                    CaptureRequest.CONTROL_AE_MODE_OFF);
         }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mFiles = new ArrayList<String>();
+        adapter.setmFiles(mFiles);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        doResume();
+    }
+
+    @Override
+    public void onPause() {
+        doPause();
+        super.onPause();
+    }
+
+    private void doPause() {
+        if (!isPaused) {
+            closeCamera();
+            stopBackgroundThread();
+            isPaused = true;
+        }
+    }
+
+    private void doResume() {
         startBackgroundThread();
 
         // When the screen is turned off and turned back on, the SurfaceTexture is already
         // available, and "onSurfaceTextureAvailable" will not be called. In that case, we can open
         // a camera and start preview from here (otherwise, we wait until the surface is ready in
         // the SurfaceTextureListener).
-        if (mTextureView.isAvailable()) {
-            openCamera(mTextureView.getWidth(), mTextureView.getHeight());
+        if (textureView.isAvailable()) {
+            openCamera(textureView.getWidth(), textureView.getHeight());
         } else {
-            mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
+            textureView.setSurfaceTextureListener(mSurfaceTextureListener);
         }
-    }
-
-    @Override
-    public void onPause() {
-        closeCamera();
-        stopBackgroundThread();
-        super.onPause();
+        isPaused = false;
+        bigImageView.setVisibility(View.GONE);
     }
 
     private void requestCameraPermission() {
-        if ( Build.VERSION.SDK_INT >= 23 &&
-                ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA ) != PackageManager.PERMISSION_GRANTED) {
+        if (Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.CAMERA},
                     MY_CAMERA_REQUEST_CODE);
         }
@@ -660,25 +860,25 @@ public class UseCameraFragment extends AbstractFragment {
                 // Danger, W.R.! Attempting to use too large a preview size could  exceed the camera
                 // bus' bandwidth limitation, resulting in gorgeous previews but the storage of
                 // garbage capture data.
-                mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class),
+                previewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class),
                         rotatedPreviewWidth, rotatedPreviewHeight, maxPreviewWidth,
                         maxPreviewHeight, largest);
 
                 // We fit the aspect ratio of TextureView to the size of preview we picked.
                 int orientation = getResources().getConfiguration().orientation;
                 if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    mTextureView.setAspectRatio(
-                            mPreviewSize.getWidth(), mPreviewSize.getHeight());
+                    textureView.setAspectRatio(
+                            previewSize.getWidth(), previewSize.getHeight());
                 } else {
-                    mTextureView.setAspectRatio(
-                            mPreviewSize.getHeight(), mPreviewSize.getWidth());
+                    textureView.setAspectRatio(
+                            previewSize.getHeight(), previewSize.getWidth());
                 }
 
                 // Check if the flash is supported.
                 Boolean available = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
                 mFlashSupported = available == null ? false : available;
 
-                mCameraId = cameraId;
+                this.cameraId = cameraId;
                 return;
             }
         } catch (CameraAccessException e) {
@@ -721,6 +921,86 @@ public class UseCameraFragment extends AbstractFragment {
         }
     }
 
+    @Override
+    public Loader<List<PreviewImageItem>> onCreateLoader(int id, Bundle args) {
+        return new PreviewImageItemLoader(getActivity(), mFiles, 160);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<PreviewImageItem>> loader, List<PreviewImageItem> data) {
+        adapter.clear();
+        adapter.addAll(data);
+        if (data.size() > 0) {
+            linearLayout.setAlpha(0.7f);
+        } else {
+            linearLayout.setAlpha(0);
+        }
+        gridView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<PreviewImageItem>> loader) {
+        adapter.clear();
+        linearLayout.setAlpha(0);
+    }
+
+    public void onDatasetChange() {
+        if (!isPaused) {
+            if (mFiles.size() != 0) {
+                captureBtn.setText(String.valueOf(picLimit - mFiles.size() - mExistingFiles.size()));
+                if ((mFiles.size() + mExistingFiles.size()) == picLimit) {
+                    captureBtn.setTextColor(Color.WHITE);
+                } else {
+                    captureBtn.setTextColor(Color.BLACK);
+                }
+                nextBtn.setVisibility(View.VISIBLE);
+            } else {
+                nextBtn.setVisibility(View.INVISIBLE);
+                captureBtn.setText("");
+                gridView.setVisibility(View.GONE);
+            }
+        }else{
+            if(mFiles.size() == 0){
+                gridView.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    public void setPicLimit(int picLimit) {
+        this.picLimit = picLimit;
+    }
+
+    public void setNextButtonListener() {
+        if(requestCode == REQUEST_FROM_PUBLISH){
+            nextBtn.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), PublishFormActivity.class);
+                    mExistingFiles.addAll(mFiles);
+                    intent.putStringArrayListExtra("image", new ArrayList<String>(mExistingFiles));
+                    startActivity(intent);
+                }
+            });
+        }else {
+            nextBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    doPause();
+                    Intent fromIntent = getActivity().getIntent();
+                    Intent intent = new Intent(getActivity(), MessageDetailActivity.class);
+                    mExistingFiles.addAll(mFiles);
+                    intent.putStringArrayListExtra("image", new ArrayList<String>(mExistingFiles));
+                    intent.putExtra(AppConstant.SELLER_NAME, fromIntent.getStringExtra(AppConstant.SELLER_NAME));
+                    startActivity(intent);
+                }
+            });
+        }
+    }
+
+    public void setCloseBtnListener(View.OnClickListener listener) {
+        closeBtn.setOnClickListener(listener);
+    }
+
     static class CompareSizesByArea implements Comparator<Size> {
 
         @Override
@@ -731,4 +1011,56 @@ public class UseCameraFragment extends AbstractFragment {
         }
     }
 
+    private static class ImageSaver implements Runnable {
+
+        /**
+         * The JPEG image
+         */
+        private final Image mImage;
+        /**
+         * The file we save the image into.
+         */
+        private final File mFile;
+
+        public ImageSaver(Image image, File file) {
+            mImage = image;
+            mFile = file;
+        }
+
+        @Override
+        public void run() {
+            ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
+            byte[] bytes = new byte[buffer.remaining()];
+            buffer.get(bytes);
+            FileOutputStream output = null;
+            try {
+                output = new FileOutputStream(mFile);
+                output.write(bytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                mImage.close();
+                if (null != output) {
+                    try {
+                        output.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+    private static final class CameraDataSetObserver extends DataSetObserver {
+        private UseCameraFragment fragment;
+
+        public CameraDataSetObserver(UseCameraFragment fragment) {
+            this.fragment = fragment;
+        }
+
+        public void onChanged() {
+            fragment.onDatasetChange();
+        }
+    }
 }
+

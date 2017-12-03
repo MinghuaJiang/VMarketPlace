@@ -17,7 +17,7 @@
     <string name="publish">Publish</string>
     <string name="write_post">Post</string>
     <string name="hint_title">Title</string>
-    <string name="post_content">content includes no more than 2000 words</string>
+    <string name="hint_content">Description for your post</string>
     <string name="post_contact_title">Your title</string>
     <string name="post_address">Address(optional)</string>
     <string name="post_phone">Phone Number(optional)</string>
@@ -30,4 +30,9 @@
     <string name="fb_login_protocol_scheme">fb292014607986179</string>
     <string name="add_more_image">Add more Image</string>
     <string name="action_profile">Check Profile</string>
+    <string name="service_not_available">Service Not Available</string>
+    <string name="invalid_lat_long_used">invalid_lat_long_used</string>
+    <string name="no_address_found">No Address Found</string>
+    <string name="address_found">Stress Found</string>
+    <string name="choose_location">Choose Location</string>
 </resources>
