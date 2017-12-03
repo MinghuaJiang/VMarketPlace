@@ -117,7 +117,6 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".view.HomePageActivity" />
         <activity
             android:name=".view.PhotoActivity"
             android:theme="@style/AppTheme.FullScreen" />
