@@ -93,7 +93,7 @@ public class MessageDetailActivity extends AppCompatActivity {
         //AppUser id
         int myId = 0;
         //User name
-        String myName = AppContextManager.getContextManager().getAppContext().getUser().getUsername();
+        String myName = AppContextManager.getContextManager().getAppContext().getUser().getUserName();
         //User icon
         Bitmap myIcon = BitmapFactory.decodeResource(getResources(), R.drawable.place_holder_64p);
 

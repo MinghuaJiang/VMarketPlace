@@ -58,6 +58,7 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
     private Location mLastKnowLocation;
     private Task<Location> locationTask;
     private SwipeRefreshLayout refreshLayout;
+    private String category;
     private static final int MY_LOCATION_REQUEST_CODE = 200;
 
     protected void startIntentService() {
@@ -99,7 +100,7 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
         ab.setDisplayShowTitleEnabled(false);
 
         mFiles = getIntent().getStringArrayListExtra("image");
-        String category = AppContextManager.getContextManager().getAppContext().getCurrentCategory();
+        category = AppContextManager.getContextManager().getAppContext().getCurrentCategory();
 
         gridView = findViewById(R.id.container);
 
@@ -108,7 +109,7 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
         locationView = findViewById(R.id.location);
 
         spinner = findViewById(R.id.category);
-        ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.category_item, getCategory(category));
+        ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.category_item, getSubCategory(category));
         spinner.setAdapter(spinnerAdapter);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -163,7 +164,7 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                 String description = descriptionView.getText().toString();
                 String location = locationView.getText().toString();
                 double price = Double.valueOf(priceView.getText().toString());
-                String category = (String)spinner.getSelectedItem();
+                String subCategory = (String)spinner.getSelectedItem();
                 Intent intent = new Intent(PublishFormActivity.this, PublishSuccessActivity.class);
                 startActivity(intent);
             }
@@ -236,7 +237,7 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
         }
     }
 
-    private List<String> getCategory(String category){
+    private List<String> getSubCategory(String category){
         List<String> result = new ArrayList();
         if(category.equals("Second Hand")) {
             result.add("Appliance");

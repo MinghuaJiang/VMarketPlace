@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.amazonaws.ClientConfiguration;
+import com.amazonaws.Request;
 import com.amazonaws.auth.AWSCognitoIdentityProvider;
 import com.amazonaws.mobile.auth.core.DefaultSignInResultHandler;
 import com.amazonaws.mobile.auth.core.IdentityManager;
@@ -40,11 +41,13 @@ import com.amazonaws.mobile.config.AWSConfigurable;
 import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
 import com.amazonaws.services.cognitoidentityprovider.AmazonCognitoIdentityProvider;
+import com.facebook.Profile;
 
 import edu.virginia.cs.vmarketplace.model.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.AppUserEnrichStrategy;
 import edu.virginia.cs.vmarketplace.model.CognitoPoolEnrichStrategy;
 import edu.virginia.cs.vmarketplace.model.FacebookEnrichStrategy;
+import edu.virginia.cs.vmarketplace.model.GoogleEnrichStrategy;
 
 public class MySignInUI implements AWSConfigurable {
 
@@ -122,10 +125,14 @@ public class MySignInUI implements AWSConfigurable {
         AppUserEnrichStrategy strategy = null;
         if(provider instanceof CognitoUserPoolsSignInProvider) {
             CognitoUserPool pool = new CognitoUserPool(context, identityManager.getConfiguration());
-            AppContextManager.getContextManager().loadCurrentUser(pool.getCurrentUser().getUserId());
-            strategy = new CognitoPoolEnrichStrategy();
+            String userId = pool.getCurrentUser().getUserId();
+            AppContextManager.getContextManager().loadCurrentUser(userId);
+            strategy = new CognitoPoolEnrichStrategy(userId);
         }else if(provider instanceof FacebookSignInProvider){
             strategy = new FacebookEnrichStrategy();
+            AppContextManager.getContextManager().loadCurrentUser(Profile.getCurrentProfile().getId());
+        }else{
+            strategy = new GoogleEnrichStrategy();
         }
 
         AppContextManager.getContextManager().getAppContext().enrichUser(strategy);

@@ -214,7 +214,7 @@ public class UseCameraFragment extends AbstractFragment implements LoaderManager
 
         @Override
         public void onImageAvailable(ImageReader reader) {
-            mFiles.add(getActivity().getExternalFilesDir(null) + File.separator + AppContextManager.getContextManager().getAppContext().getUser().getUsername() + "_" + new Date() + ".jpg");
+            mFiles.add(getActivity().getExternalFilesDir(null) + File.separator + AppContextManager.getContextManager().getAppContext().getUser().getUserName() + "_" + new Date() + ".jpg");
             //mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFiles.get(mFiles.size() - 1)));
             Image mImage = reader.acquireNextImage();
             ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();

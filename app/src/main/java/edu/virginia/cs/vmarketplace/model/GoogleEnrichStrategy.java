@@ -5,13 +5,13 @@ import android.net.Uri;
 import com.facebook.Profile;
 
 /**
- * Created by cutehuazai on 12/2/17.
+ * Created by cutehuazai on 12/3/17.
  */
 
-public class FacebookEnrichStrategy implements AppUserEnrichStrategy {
+public class GoogleEnrichStrategy implements AppUserEnrichStrategy {
     @Override
     public String getUserName(){
-        return Profile.getCurrentProfile().getName();
+        return null;
     }
 
     @Override
@@ -21,7 +21,7 @@ public class FacebookEnrichStrategy implements AppUserEnrichStrategy {
 
     @Override
     public Uri getUserPicUri() {
-        return Profile.getCurrentProfile().getProfilePictureUri(160,160);
+        return null;
     }
 
     @Override

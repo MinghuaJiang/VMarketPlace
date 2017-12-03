@@ -45,7 +45,7 @@ public class ProfileFragment extends AbstractFragment{
                 .getAppContext().getUser();
 
         TextView textView = rootView.findViewById(R.id.user_id);
-        textView.setText(user.getUsername());
+        textView.setText(user.getUserName());
 
         TextView ratingView = rootView.findViewById(R.id.user_rating);
         if(user.getUserRating() == null) {
@@ -54,10 +54,12 @@ public class ProfileFragment extends AbstractFragment{
             ratingView.setText("Rating  "+user.getUserRating());
         }
         CircleImageView imageView = rootView.findViewById(R.id.user_pic);
-        if(user.getUserPic() != null) {
-            Picasso.with(getActivity()).load(user.getUserPic()).fit().placeholder(R.drawable.place_holder_96p).into(imageView);
-        }else{
+        if(user.getUserPic() == null && user.getUserPicUri() == null) {
             imageView.setImageResource(R.drawable.place_holder_96p);
+        }else if(user.getUserPicUri() != null){
+            Picasso.with(getActivity()).load(user.getUserPicUri()).fit().placeholder(R.drawable.place_holder_96p).into(imageView);
+        }else{
+            Picasso.with(getActivity()).load(user.getUserPic()).fit().placeholder(R.drawable.place_holder_96p).into(imageView);
         }
 
 
