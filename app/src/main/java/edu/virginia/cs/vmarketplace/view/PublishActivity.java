@@ -26,7 +26,7 @@ public class PublishActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish);
-
+        final AppContext context = AppContextManager.getContextManager().getAppContext();
         ConstraintLayout layout = findViewById(R.id.container);
         // second hand logic begins here
         ImageView secondHand = findViewById(R.id.second_hand_image);
@@ -34,7 +34,8 @@ public class PublishActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent useCameraIntent = new Intent(PublishActivity.this, PhotoActivity.class);
-                AppContextManager.getContextManager().getAppContext().setCurrentCategory(secondHandIdentifier);
+                context.setCurrentCategory(secondHandIdentifier);
+                context.setPublish(true);
                 startActivity(useCameraIntent);
             }
         });
@@ -45,7 +46,8 @@ public class PublishActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent useCameraIntent = new Intent(PublishActivity.this, PhotoActivity.class);
-                AppContextManager.getContextManager().getAppContext().setCurrentCategory(subleaseIdentifier);
+                context.setCurrentCategory(subleaseIdentifier);
+                context.setPublish(true);
                 startActivity(useCameraIntent);
             }
         });
@@ -56,7 +58,8 @@ public class PublishActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent useCameraIntent = new Intent(PublishActivity.this, PublishFormActivity.class);
-                AppContextManager.getContextManager().getAppContext().setCurrentCategory(ridesIdentifier);
+                context.setCurrentCategory(ridesIdentifier);
+                context.setPublish(true);
                 startActivity(useCameraIntent);
             }
         });
@@ -67,7 +70,8 @@ public class PublishActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent useCameraIntent = new Intent(PublishActivity.this, PhotoActivity.class);
-                AppContextManager.getContextManager().getAppContext().setCurrentCategory(activitiesIdentifier);
+                context.setCurrentCategory(activitiesIdentifier);
+                context.setPublish(true);
                 startActivity(useCameraIntent);
             }
         });

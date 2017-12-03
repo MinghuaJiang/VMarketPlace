@@ -11,6 +11,7 @@ import android.os.ResultReceiver;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,10 +19,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -45,11 +48,16 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
     private GridView gridView;
     private ImageViewAdapter adapter;
     private List<String> mFiles;
+    private MyEditText titleView;
+    private EditText descriptionView;
     private FusedLocationProviderClient mFusedLocationClient;
     private ImageView locationLogo;
     private TextView locationView;
+    private MyEditText priceView;
+    private Spinner spinner;
     private Location mLastKnowLocation;
     private Task<Location> locationTask;
+    private SwipeRefreshLayout refreshLayout;
     private static final int MY_LOCATION_REQUEST_CODE = 200;
 
     protected void startIntentService() {
@@ -77,6 +85,12 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                 startActivity(intent);
             }
         });
+
+        refreshLayout = findViewById(R.id.refresh);
+        refreshLayout.setEnabled(false);
+        titleView = findViewById(R.id.title);
+        descriptionView = findViewById(R.id.description);
+        priceView = findViewById(R.id.price);
         // Get a support ActionBar corresponding to this toolbar
         ActionBar ab = getSupportActionBar();
 
@@ -93,19 +107,26 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
 
         locationView = findViewById(R.id.location);
 
-        Spinner spinner = findViewById(R.id.category);
+        spinner = findViewById(R.id.category);
         ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.category_item, getCategory(category));
         spinner.setAdapter(spinnerAdapter);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        if(mFiles != null) {
-            adapter = new ImageViewAdapter(this, new ArrayList<PreviewImageItem>());
-            gridView.setAdapter(adapter);
-            adapter.setmFiles(mFiles);
-            getSupportLoaderManager().restartLoader(0, null, this).forceLoad();
+        boolean isPublish = AppContextManager.getContextManager().getAppContext().isPublish();
+
+        if(isPublish) {
+            if (mFiles != null) {
+                adapter = new ImageViewAdapter(this, new ArrayList<PreviewImageItem>());
+                gridView.setAdapter(adapter);
+                adapter.setmFiles(mFiles);
+                getSupportLoaderManager().restartLoader(0, null, this).forceLoad();
+            } else {
+                gridView.setVisibility(View.GONE);
+            }
         }else{
-            gridView.setVisibility(View.GONE);
+
         }
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                     MY_LOCATION_REQUEST_CODE);
@@ -123,6 +144,29 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                 }
             });
         }
+
+        Button submitButton = findViewById(R.id.confirm_button);
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(titleView.getText().toString().isEmpty()){
+                    Toast.makeText(getApplicationContext(), getString(R.string.title_not_empty),Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(priceView.getText().toString().isEmpty()){
+                    Toast.makeText(getApplicationContext(), getString(R.string.price_not_empty),Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                refreshLayout.setRefreshing(true);
+                String title = titleView.getText().toString();
+                String description = descriptionView.getText().toString();
+                String location = locationView.getText().toString();
+                double price = Double.valueOf(priceView.getText().toString());
+                String category = (String)spinner.getSelectedItem();
+                
+            }
+        });
     }
 
     @Override

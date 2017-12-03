@@ -35,4 +35,6 @@
     <string name="no_address_found">No Address Found</string>
     <string name="address_found">Stress Found</string>
     <string name="choose_location">Choose Location</string>
+    <string name="title_not_empty">Title can\'t be empty</string>
+    <string name="price_not_empty">Price can\'t be empty</string>
 </resources>

@@ -10,6 +10,7 @@ public class AppContext {
     private AppUser user;
     private IdentityManager manager;
     private String currentCategory;
+    private boolean isPublish;
 
     public AppContext(){
         manager = IdentityManager.getDefaultIdentityManager();
@@ -40,4 +41,11 @@ public class AppContext {
         this.currentCategory = currentCategory;
     }
 
+    public boolean isPublish() {
+        return isPublish;
+    }
+
+    public void setPublish(boolean publish) {
+        isPublish = publish;
+    }
 }

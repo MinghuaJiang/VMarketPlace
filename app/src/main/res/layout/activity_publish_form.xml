@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/refresh"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    tools:context="edu.virginia.cs.vmarketplace.view.PublishFormActivity"
+    android:focusableInTouchMode="true">
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:focusableInTouchMode="true"
-    tools:context="edu.virginia.cs.vmarketplace.view.PublishFormActivity">
+    android:orientation="vertical">
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
@@ -184,6 +189,7 @@
         android:background="@color/tan_background"
         android:orientation="horizontal">
         <Button
+            android:id="@+id/confirm_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/content_padding"
@@ -193,3 +199,4 @@
             android:background="@android:color/holo_red_light"/>
     </LinearLayout>
 </LinearLayout>
+</android.support.v4.widget.SwipeRefreshLayout>
