@@ -136,6 +136,7 @@
             android:theme="@style/AppTheme.FullScreen" />
         <activity android:name=".view.PublishDetailActivity"
             android:theme="@style/AppTheme.FullScreen"></activity>
+
     </application>
 
 </manifest>
