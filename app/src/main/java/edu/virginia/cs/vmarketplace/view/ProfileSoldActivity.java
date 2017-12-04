@@ -34,7 +34,7 @@ public class ProfileSoldActivity extends AppCompatActivity implements LoaderMana
         ActionBar ab = getSupportActionBar();
 
         ab.setDisplayHomeAsUpEnabled(true);
-        ab.setTitle("");
+        ab.setDisplayShowTitleEnabled(false);
 
         TextView titleView = findViewById(R.id.toolbar_title);
         titleView.setText(R.string.sold_by_me);

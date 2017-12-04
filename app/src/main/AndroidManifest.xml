@@ -59,19 +59,19 @@
                 android:value=".view.MainActivity" />
         </activity>
         <activity
-            android:name=".view.BoughtActivity"
+            android:name=".view.ProfileBoughtActivity"
             android:label="@string/bought_by_me"
             android:parentActivityName=".view.MainActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.FullScreen">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.MainActivity" />
         </activity>
         <activity
-            android:name=".view.FavoriteActivity"
+            android:name=".view.ProfileFavoriteActivity"
             android:label="@string/added_to_favorite"
             android:parentActivityName=".view.MainActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.FullScreen">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.MainActivity" />
@@ -80,7 +80,7 @@
             android:name=".view.SoldReviewActivity"
             android:label="@string/review_detail"
             android:parentActivityName=".view.ProfileSoldActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.FullScreen">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.ProfileSoldActivity" />

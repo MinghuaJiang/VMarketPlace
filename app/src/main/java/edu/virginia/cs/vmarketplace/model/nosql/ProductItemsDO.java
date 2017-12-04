@@ -25,6 +25,7 @@ public class ProductItemsDO {
     private List<String> _pics;
     private Double _price;
     private String _subcategory;
+    private Double _subcategoryPosition;
     private String _thumbPic;
     private String _title;
     private Double _viewCount;
@@ -126,6 +127,14 @@ public class ProductItemsDO {
 
     public void setSubcategory(final String _subcategory) {
         this._subcategory = _subcategory;
+    }
+    @DynamoDBAttribute(attributeName = "subcategory_position")
+    public Double getSubcategoryPosition() {
+        return _subcategoryPosition;
+    }
+
+    public void setSubcategoryPosition(final Double _subcategoryPosition) {
+        this._subcategoryPosition = _subcategoryPosition;
     }
     @DynamoDBAttribute(attributeName = "thumb_pic")
     public String getThumbPic() {

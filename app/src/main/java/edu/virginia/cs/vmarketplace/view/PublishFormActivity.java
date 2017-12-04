@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.UUID;
 
 import edu.virginia.cs.vmarketplace.R;
+import edu.virginia.cs.vmarketplace.model.AppContext;
 import edu.virginia.cs.vmarketplace.model.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.LocationConstant;
 import edu.virginia.cs.vmarketplace.model.PreviewImageItem;
@@ -55,7 +56,12 @@ import edu.virginia.cs.vmarketplace.view.fragments.ImageViewAdapter;
 import edu.virginia.cs.vmarketplace.view.loader.PreviewImageItemLoader;
 
 public class PublishFormActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<PreviewImageItem>> {
+    private static final String TITLE_CONTENT = "title";
+    private static final String DESCRIPTION_CONTENT = "description";
+    private static final String PRICE_CONTENT = "price";
+    private static final String CATEGORY_CONTENT = "category";
 
+    private AppContext appContext;
     private AddressResultReceiver mResultReceiver;
     private DynamoDBMapper mapper;
     private GridView gridView;
@@ -74,6 +80,8 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
     private String category;
     private static final int MY_LOCATION_REQUEST_CODE = 200;
 
+    private int count;
+
     protected void startIntentService() {
         Intent intent = new Intent(this, FetchAddressIntentService.class);
         intent.putExtra(LocationConstant.RECEIVER, mResultReceiver);
@@ -86,7 +94,8 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
         super.onCreate(savedInstanceState);
         mResultReceiver = new AddressResultReceiver(new Handler());
         setContentView(R.layout.activity_publish_form);
-
+        count = 0;
+        appContext = AppContextManager.getContextManager().getAppContext();
         Toolbar toolbar =
                 findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
@@ -95,6 +104,7 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                appContext.destroyInstanceState();
                 Intent intent = new Intent(PublishFormActivity.this, MainActivity.class);
                 startActivity(intent);
             }
@@ -113,8 +123,6 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
         ab.setDisplayShowTitleEnabled(false);
 
         mapper = AWSClientFactory.getInstance().getDBMapper();
-        mFiles = getIntent().getStringArrayListExtra("image");
-        category = AppContextManager.getContextManager().getAppContext().getCurrentCategory();
 
         gridView = findViewById(R.id.container);
 
@@ -123,13 +131,11 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
         locationView = findViewById(R.id.location);
 
         spinner = findViewById(R.id.category);
-        ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.category_item, getSubCategory(category));
-        spinner.setAdapter(spinnerAdapter);
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        boolean isPublish = AppContextManager.getContextManager().getAppContext().isPublish();
+        boolean isPublish = appContext.isPublish();
 
         if(isPublish) {
+            mFiles = getIntent().getStringArrayListExtra("image");
             if (mFiles != null) {
                 adapter = new ImageViewAdapter(this, new ArrayList<PreviewImageItem>());
                 gridView.setAdapter(adapter);
@@ -138,10 +144,57 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
             } else {
                 gridView.setVisibility(View.GONE);
             }
-        }else{
 
+            category = appContext.getCurrentCategory();
+            ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.category_item, getSubCategory(category));
+            spinner.setAdapter(spinnerAdapter);
+        }else{
+            ProductItemsDO itemsDO = appContext.getItemsDO();
+            mFiles = itemsDO.getOriginalFiles();
+            titleView.setText(itemsDO.getTitle());
+            descriptionView.setText(itemsDO.getDescription());
+            priceView.setText(String.valueOf(itemsDO.getPrice()));
+
+            category = itemsDO.getCategory();
+            appContext.setCurrentCategory(category);
+            ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.category_item, getSubCategory(category));
+            spinner.setAdapter(spinnerAdapter);
+            spinner.setSelection(itemsDO.getSubcategoryPosition().intValue());
+            if (mFiles != null) {
+                adapter = new ImageViewAdapter(this, new ArrayList<PreviewImageItem>());
+                gridView.setAdapter(adapter);
+                adapter.setmFiles(mFiles);
+                getSupportLoaderManager().restartLoader(0, null, PublishFormActivity.this).forceLoad();
+                final TransferUtility utility = AWSClientFactory.getInstance().getTransferUtility(getApplicationContext());
+                for(int i = 0;i < mFiles.size();i++){
+                    utility.download(itemsDO.getPics().get(i), new File(mFiles.get(i)), new TransferListener(){
+                        @Override
+                        public void onStateChanged(int id, TransferState state) {
+                            if(state == TransferState.COMPLETED){
+                                count++;
+                                if(count == mFiles.size()){
+                                    getSupportLoaderManager().restartLoader(0, null, PublishFormActivity.this).forceLoad();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+
+                        }
+
+                        @Override
+                        public void onError(int id, Exception ex) {
+
+                        }
+                    });
+                }
+            } else {
+                gridView.setVisibility(View.GONE);
+            }
         }
 
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                     MY_LOCATION_REQUEST_CODE);
@@ -158,6 +211,13 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                     }
                 }
             });
+        }
+
+        if(!appContext.getInstanceState().isEmpty()) {
+            titleView.setText(appContext.getInstanceState().getString(TITLE_CONTENT));
+            descriptionView.setText(appContext.getInstanceState().getString(DESCRIPTION_CONTENT));
+            priceView.setText(appContext.getInstanceState().getString(PRICE_CONTENT));
+            spinner.setSelection(appContext.getInstanceState().getInt(CATEGORY_CONTENT));
         }
 
         Button submitButton = findViewById(R.id.confirm_button);
@@ -180,20 +240,26 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                 double price = Double.valueOf(priceView.getText().toString());
                 String subCategory = (String)spinner.getSelectedItem();
 
-                ProductItemsDO productItemsDo = new ProductItemsDO();
+                ProductItemsDO productItemsDo = appContext.getItemsDO();
+                if(productItemsDo == null){
+                    productItemsDo = new ProductItemsDO();
+                    productItemsDo.setItemId(UUID.randomUUID().toString());
+                    productItemsDo.setUserId(AppContextManager.getContextManager().getAppContext().getUser().getUserId());
+                }
+
                 productItemsDo.setCategory(category);
                 productItemsDo.setSubcategory(subCategory);
                 productItemsDo.setPrice(price);
                 productItemsDo.setTitle(title);
+                productItemsDo.setSubcategoryPosition(Double.valueOf(spinner.getSelectedItemPosition()));
                 productItemsDo.setOriginalFiles(mFiles);
-                productItemsDo.setUserId(AppContextManager.getContextManager().getAppContext().getUser().getUserId());
                 productItemsDo.setDescription(description);
                 productItemsDo.setLatitude(mLastKnowLocation.getLatitude());
                 productItemsDo.setLongtitude(mLastKnowLocation.getLongitude());
                 productItemsDo.setLocationName(location);
-                productItemsDo.setItemId(UUID.randomUUID().toString());
                 productItemsDo.setViewCount(0.0);
                 productItemsDo.setModificationTime(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
+                appContext.destroyInstanceState();
                 loadIntoS3(productItemsDo);
             }
         });
@@ -353,4 +419,16 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
             activity.startActivity(intent);
         }
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        // call superclass to save any view hierarchy
+        super.onSaveInstanceState(outState);
+
+        appContext.getInstanceState().putString(TITLE_CONTENT, titleView.getText().toString());
+        appContext.getInstanceState().putString(DESCRIPTION_CONTENT, descriptionView.getText().toString());
+        appContext.getInstanceState().putString(PRICE_CONTENT, priceView.getText().toString());
+        appContext.getInstanceState().putInt(CATEGORY_CONTENT, spinner.getSelectedItemPosition());
+    }
+
 }

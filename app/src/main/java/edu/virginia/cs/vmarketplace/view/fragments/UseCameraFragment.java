@@ -978,6 +978,7 @@ public class UseCameraFragment extends AbstractFragment implements LoaderManager
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), PublishFormActivity.class);
                     mExistingFiles.addAll(mFiles);
+                    AppContextManager.getContextManager().getAppContext().setPublish(true);
                     intent.putStringArrayListExtra("image", new ArrayList<String>(mExistingFiles));
                     startActivity(intent);
                 }

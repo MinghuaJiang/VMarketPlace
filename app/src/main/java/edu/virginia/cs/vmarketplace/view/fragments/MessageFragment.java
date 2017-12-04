@@ -1,10 +1,8 @@
 package edu.virginia.cs.vmarketplace.view.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -69,12 +67,12 @@ public class MessageFragment extends AbstractFragment implements LoaderManager.L
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getActivity().getSupportLoaderManager().restartLoader(0, null, MessageFragment.this).forceLoad();
+                getLoaderManager().restartLoader(0, null, MessageFragment.this).forceLoad();
             }
         });
 
         refreshLayout.setRefreshing(true);
-        getActivity().getSupportLoaderManager().initLoader(0, null, this).forceLoad();
+        getLoaderManager().initLoader(0, null, MessageFragment.this).forceLoad();
         return rootView;
     }
 
@@ -95,4 +93,5 @@ public class MessageFragment extends AbstractFragment implements LoaderManager.L
     public void onLoaderReset(Loader<List<MessageItem>> loader) {
         adapter.clear();
     }
+
 }

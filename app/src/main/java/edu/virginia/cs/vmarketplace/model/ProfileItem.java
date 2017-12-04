@@ -62,4 +62,16 @@ public class ProfileItem {
     public int getCount() {
         return count;
     }
+
+    public void setmProfileTypeImageResourceId(int mProfileTypeImageResourceId) {
+        this.mProfileTypeImageResourceId = mProfileTypeImageResourceId;
+    }
+
+    public void setProfileType(ProfileType profileType) {
+        this.profileType = profileType;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 }

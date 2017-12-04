@@ -39,7 +39,7 @@ public class ProfilePublishActivity extends AppCompatActivity implements LoaderM
         ActionBar ab = getSupportActionBar();
 
         ab.setDisplayHomeAsUpEnabled(true);
-        ab.setTitle("");
+        ab.setDisplayShowTitleEnabled(false);
 
         TextView titleView = findViewById(R.id.toolbar_title);
         titleView.setText(R.string.published_by_me);

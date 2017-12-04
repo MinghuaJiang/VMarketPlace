@@ -1,6 +1,10 @@
 package edu.virginia.cs.vmarketplace.model;
 
+import android.os.Bundle;
+
 import com.amazonaws.mobile.auth.core.IdentityManager;
+
+import edu.virginia.cs.vmarketplace.model.nosql.ProductItemsDO;
 
 /**
  * Created by cutehuazai on 11/27/17.
@@ -11,9 +15,12 @@ public class AppContext {
     private IdentityManager manager;
     private String currentCategory;
     private boolean isPublish;
+    private Bundle instanceState;
+    private ProductItemsDO itemsDO;
 
     public AppContext(){
         manager = IdentityManager.getDefaultIdentityManager();
+        instanceState = new Bundle();
     }
 
     public void loadContext(String userId){
@@ -49,5 +56,21 @@ public class AppContext {
 
     public void setPublish(boolean publish) {
         isPublish = publish;
+    }
+
+    public Bundle getInstanceState(){
+        return instanceState;
+    }
+
+    public void destroyInstanceState(){
+        instanceState.clear();
+    }
+
+    public ProductItemsDO getItemsDO() {
+        return itemsDO;
+    }
+
+    public void setItemsDO(ProductItemsDO itemsDO) {
+        this.itemsDO = itemsDO;
     }
 }

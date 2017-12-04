@@ -2,84 +2,91 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
+    android:layout_height="match_parent"
     android:background="@color/tan_background">
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/image"
-        android:layout_width="@dimen/list_item_height"
-        android:layout_height="@dimen/list_item_height"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/place_holder_96p"
-        />
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimaryDark"
+        android:elevation="4dp"
+        android:theme="@style/AppTheme.Message">
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="?android:textAppearanceMedium" />
+    </android.support.v7.widget.Toolbar>
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_toRightOf="@id/image"
-        android:layout_alignParentBottom="true"
+        android:layout_height="@dimen/list_item_height_large"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true">
-    <LinearLayout
-        android:id="@+id/text_container"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        >
-        <TextView
-            android:id="@+id/user_id"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Ben"
-            android:textColor="@color/count"
-            />
+        android:layout_below="@id/my_toolbar">
 
-        <TextView
-            android:id="@+id/review"
-            android:gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="The Seller is So Good"
-            android:textColor="@android:color/black"
-            />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image"
+            android:layout_width="@dimen/list_item_height"
+            android:layout_height="@dimen/list_item_height"
+            android:layout_centerVertical="true"
+            android:background="@drawable/place_holder_96p" />
+
+        <LinearLayout
+            android:id="@+id/text_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@id/image"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:id="@+id/user_id"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Ben"
+                android:textColor="@color/count" />
+
+            <TextView
+                android:id="@+id/review"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="The Seller is So Good"
+                android:textColor="@android:color/black" />
+
+            <ImageView
+                android:id="@+id/rating_star"
+                android:layout_width="120dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/five_star"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="2017-09-30 11:50:20"
+                android:textColor="@color/count" />
+        </LinearLayout>
 
         <ImageView
-            android:id="@+id/rating_star"
-            android:gravity="center"
-            android:layout_width="120dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@drawable/five_star"/>
-
-        <TextView
-            android:id="@+id/time"
-            android:gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="2017-09-30 11:50:20"
-            android:textColor="@color/count"
-            />
-    </LinearLayout>
-    <ImageView
-        android:id="@+id/product_pic"
-        android:layout_width="@dimen/list_item_height_medium"
-        android:layout_height="@dimen/list_item_height_medium"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:src="@drawable/product_placeholder_96dp"
-        />
+            android:id="@+id/product_pic"
+            android:layout_width="@dimen/list_item_height_medium"
+            android:layout_height="@dimen/list_item_height_medium"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:src="@drawable/product_placeholder_96dp" />
     </RelativeLayout>
 </RelativeLayout>

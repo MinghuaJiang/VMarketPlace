@@ -2,6 +2,8 @@ package edu.virginia.cs.vmarketplace.view.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,17 +22,20 @@ import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.AppUser;
 import edu.virginia.cs.vmarketplace.model.ProfileItem;
-import edu.virginia.cs.vmarketplace.view.BoughtActivity;
-import edu.virginia.cs.vmarketplace.view.FavoriteActivity;
+import edu.virginia.cs.vmarketplace.view.ProfileBoughtActivity;
+import edu.virginia.cs.vmarketplace.view.ProfileFavoriteActivity;
 import edu.virginia.cs.vmarketplace.view.ProfilePublishActivity;
 import edu.virginia.cs.vmarketplace.view.ProfileSoldActivity;
+import edu.virginia.cs.vmarketplace.view.loader.ProfileItemLoader;
 import edu.virginia.cs.vmarketplace.view.login.AWSLoginActivity;
 
 /**
  * Created by cutehuazai on 11/23/17.
  */
 
-public class ProfileFragment extends AbstractFragment{
+public class ProfileFragment extends AbstractFragment implements LoaderManager.LoaderCallbacks<List<ProfileItem>>{
+
+    private ProfileItemAdapter adapter;
 
     public ProfileFragment(){
         super("profile", R.drawable.user_24p);
@@ -64,13 +69,12 @@ public class ProfileFragment extends AbstractFragment{
 
 
         List<ProfileItem> list = new ArrayList<ProfileItem>();
-        list.add(new ProfileItem(R.drawable.publish_24p, ProfileItem.ProfileType.PUBLISH_BY_ME, 5));
-        list.add(new ProfileItem(R.drawable.sold_24p, ProfileItem.ProfileType.SOLD_BY_ME, 3));
-        list.add(new ProfileItem(R.drawable.bought_24p, ProfileItem.ProfileType.BOUGHT_BY_ME, 10));
-        list.add(new ProfileItem(R.drawable.star_24p, ProfileItem.ProfileType.ADDED_TO_FAVIORITE, 5));
-        ProfileItemAdapter adapter = new ProfileItemAdapter(getActivity(), list);
+        //add loader
+        adapter = new ProfileItemAdapter(getActivity(), list);
         ListView listView = rootView.findViewById(R.id.profile_container);
         listView.setAdapter(adapter);
+
+        getLoaderManager().initLoader(0 ,null, this).forceLoad();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -90,8 +94,8 @@ public class ProfileFragment extends AbstractFragment{
         ListView settingView =  rootView.findViewById(R.id.settings_container);
         list = new ArrayList<ProfileItem>();
         list.add(new ProfileItem(R.drawable.settings_24p, ProfileItem.ProfileType.SETTING, -1));
-        adapter = new ProfileItemAdapter(getActivity(), list);
-        settingView.setAdapter(adapter);
+        ProfileItemAdapter settingAdapter = new ProfileItemAdapter(getActivity(), list);
+        settingView.setAdapter(settingAdapter);
         Button button = rootView.findViewById(R.id.logout);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,13 +120,28 @@ public class ProfileFragment extends AbstractFragment{
     }
 
     private void handleBought(){
-        Intent intent = new Intent(getActivity(), BoughtActivity.class);
+        Intent intent = new Intent(getActivity(), ProfileBoughtActivity.class);
         startActivity(intent);
     }
 
     private void handleFavorite(){
-        Intent intent = new Intent(getActivity(), FavoriteActivity.class);
+        Intent intent = new Intent(getActivity(), ProfileFavoriteActivity.class);
         startActivity(intent);
     }
 
+    @Override
+    public Loader<List<ProfileItem>> onCreateLoader(int id, Bundle args) {
+        return new ProfileItemLoader(getActivity());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<ProfileItem>> loader, List<ProfileItem> data) {
+        adapter.clear();
+        adapter.addAll(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<ProfileItem>> loader) {
+        adapter.clear();
+    }
 }
