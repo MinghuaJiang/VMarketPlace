@@ -1,71 +1,46 @@
 package edu.virginia.cs.vmarketplace.model;
 
+import edu.virginia.cs.vmarketplace.model.nosql.ProductItemsDO;
+
 /**
  * Created by cutehuazai on 11/24/17.
  */
 
 public class PublishItem {
-    private long id;
-    private String productType;
-    private double price;
-    private String image;
-    private String title;
-    private int replyCount;
-    private int viewCount;
-
-    public String getProductType() {
-        return productType;
+    private ProductItemsDO itemsDO;
+    public PublishItem(ProductItemsDO itemsDO){
+        this.itemsDO = itemsDO;
     }
 
-    public long getId() {
-        return id;
+    public String getProductType() {
+        return itemsDO.getCategory() + " - " + itemsDO.getSubcategory();
+    }
+
+    public String getId() {
+        return itemsDO.getItemId();
     }
 
     public double getPrice() {
-        return price;
+        return itemsDO.getPrice();
     }
 
     public String getImage() {
-        return image;
+        return itemsDO.getThumbPic();
     }
 
     public String getTitle() {
-        return title;
+        return itemsDO.getTitle();
     }
 
     public int getReplyCount() {
-        return replyCount;
+        return 0;
     }
 
     public int getViewCount() {
-        return viewCount;
+        return itemsDO.getViewCount().intValue();
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setReplyCount(int replyCount) {
-        this.replyCount = replyCount;
-    }
-
-    public void setViewCount(int viewCount) {
-        this.viewCount = viewCount;
-    }
-
-    public void setProductType(String productType) {
-        this.productType = productType;
+    public ProductItemsDO getItemsDO() {
+        return itemsDO;
     }
 }

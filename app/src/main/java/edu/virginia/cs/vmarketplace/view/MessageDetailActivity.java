@@ -186,7 +186,6 @@ public class MessageDetailActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     public Intent getSupportParentActivityIntent() { // getParentActivityIntent() if you are not using the Support Library
         Intent intent = getIntent();

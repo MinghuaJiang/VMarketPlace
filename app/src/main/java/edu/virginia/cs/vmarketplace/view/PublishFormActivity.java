@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.support.v4.app.ActivityCompat;
@@ -26,25 +27,37 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.LocationConstant;
 import edu.virginia.cs.vmarketplace.model.PreviewImageItem;
+import edu.virginia.cs.vmarketplace.model.nosql.ProductItemsDO;
 import edu.virginia.cs.vmarketplace.service.FetchAddressIntentService;
+import edu.virginia.cs.vmarketplace.util.AWSClientFactory;
 import edu.virginia.cs.vmarketplace.view.fragments.ImageViewAdapter;
 import edu.virginia.cs.vmarketplace.view.loader.PreviewImageItemLoader;
 
 public class PublishFormActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<PreviewImageItem>> {
 
     private AddressResultReceiver mResultReceiver;
+    private DynamoDBMapper mapper;
     private GridView gridView;
     private ImageViewAdapter adapter;
     private List<String> mFiles;
@@ -73,10 +86,10 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
         super.onCreate(savedInstanceState);
         mResultReceiver = new AddressResultReceiver(new Handler());
         setContentView(R.layout.activity_publish_form);
+
         Toolbar toolbar =
                 findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
-
         Button closeBtn = findViewById(R.id.close_btn);
 
         closeBtn.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +112,7 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
         ab.setDisplayHomeAsUpEnabled(false);
         ab.setDisplayShowTitleEnabled(false);
 
+        mapper = AWSClientFactory.getInstance().getDBMapper();
         mFiles = getIntent().getStringArrayListExtra("image");
         category = AppContextManager.getContextManager().getAppContext().getCurrentCategory();
 
@@ -161,12 +175,26 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
 
                 refreshLayout.setRefreshing(true);
                 String title = titleView.getText().toString();
-                String description = descriptionView.getText().toString();
                 String location = locationView.getText().toString();
+                String description = descriptionView.getText().toString();
                 double price = Double.valueOf(priceView.getText().toString());
                 String subCategory = (String)spinner.getSelectedItem();
-                Intent intent = new Intent(PublishFormActivity.this, PublishSuccessActivity.class);
-                startActivity(intent);
+
+                ProductItemsDO productItemsDo = new ProductItemsDO();
+                productItemsDo.setCategory(category);
+                productItemsDo.setSubcategory(subCategory);
+                productItemsDo.setPrice(price);
+                productItemsDo.setTitle(title);
+                productItemsDo.setOriginalFiles(mFiles);
+                productItemsDo.setUserId(AppContextManager.getContextManager().getAppContext().getUser().getUserId());
+                productItemsDo.setDescription(description);
+                productItemsDo.setLatitude(mLastKnowLocation.getLatitude());
+                productItemsDo.setLongtitude(mLastKnowLocation.getLongitude());
+                productItemsDo.setLocationName(location);
+                productItemsDo.setItemId(UUID.randomUUID().toString());
+                productItemsDo.setViewCount(0.0);
+                productItemsDo.setModificationTime(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
+                loadIntoS3(productItemsDo);
             }
         });
     }
@@ -209,6 +237,47 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                 locationView.setText("Choose one location");
             }
         }
+    }
+
+    private void loadIntoS3(final ProductItemsDO itemDo){
+        final List<String> result = new ArrayList<>();
+        final TransferUtility utility = AWSClientFactory.getInstance().getTransferUtility(getApplicationContext());
+        final List<String> count = new ArrayList<>();
+        for(String each: mFiles){
+            final File file = new File(each);
+            final String key = "public" + "/" + file.getName();
+            result.add(key);
+
+            TransferObserver observer = utility.upload(key, file);
+            observer.setTransferListener(new TransferListener() {
+                @Override
+                public void onStateChanged(int id, TransferState state) {
+                    if(state == TransferState.COMPLETED){
+                        file.delete();
+                        count.add(key);
+                        if(count.size() == mFiles.size()){
+                            itemDo.setPics(result);
+                            itemDo.setThumbPic(result.get(0));
+                            insertToDB(itemDo);
+                        }
+                    }
+                }
+
+                @Override
+                public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+
+                }
+
+                @Override
+                public void onError(int id, Exception ex) {
+
+                }
+            });
+        }
+    }
+
+    private void insertToDB(ProductItemsDO productItemsDO){
+        new ProductItemInsertTask(refreshLayout, mapper, this).execute(productItemsDO);
     }
 
     @SuppressLint("MissingPermission")
@@ -259,5 +328,29 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
         }
 
         return result;
+    }
+
+    static class ProductItemInsertTask extends AsyncTask<ProductItemsDO,Void, Void>{
+        private SwipeRefreshLayout refreshLayout;
+        private DynamoDBMapper mapper;
+        private PublishFormActivity activity;
+
+        public ProductItemInsertTask(SwipeRefreshLayout refreshLayout, DynamoDBMapper mapper, PublishFormActivity activity){
+            this.refreshLayout = refreshLayout;
+            this.mapper = mapper;
+            this.activity = activity;
+        }
+        @Override
+        protected Void doInBackground(ProductItemsDO... productItemsDOS) {
+            mapper.save(productItemsDOS[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            refreshLayout.setRefreshing(false);
+            Intent intent = new Intent(activity, PublishSuccessActivity.class);
+            activity.startActivity(intent);
+        }
     }
 }

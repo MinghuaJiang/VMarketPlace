@@ -9,21 +9,28 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.List;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.ProfileItem;
 import edu.virginia.cs.vmarketplace.model.PublishItem;
+import edu.virginia.cs.vmarketplace.util.AWSClientFactory;
 
 /**
  * Created by cutehuazai on 11/24/17.
  */
 
 public class ProfilePublishItemAdapter extends ArrayAdapter<PublishItem> {
+    private TransferUtility utility;
     public ProfilePublishItemAdapter(@NonNull Context context, @NonNull List<PublishItem> objects) {
         super(context, 0, objects);
+        utility = AWSClientFactory.getInstance().getTransferUtility(context);
     }
 
     @Override
@@ -34,14 +41,34 @@ public class ProfilePublishItemAdapter extends ArrayAdapter<PublishItem> {
                     ,false);
         }
 
-        PublishItem currentItem = getItem(position);
+        final PublishItem currentItem = getItem(position);
 
-        ImageView imageView = listView.findViewById(R.id.image);
+        final ImageView imageView = listView.findViewById(R.id.image);
         if(currentItem.getImage() == null){
-            imageView.setImageResource(R.drawable.ride_96dp);
+            imageView.setImageResource(R.drawable.product_placeholder_96dp);
         }else{
-            Picasso.with(getContext()).load(currentItem.getImage()).
-                    placeholder(R.drawable.product_placeholder_96dp).into(imageView);
+            imageView.setImageResource(R.drawable.product_placeholder_96dp);
+            final File file = new File(currentItem.getItemsDO().getOriginalFiles().get(0));
+            utility.download(currentItem.getImage(),
+                    file,
+                    new TransferListener() {
+                        @Override
+                        public void onStateChanged(int id, TransferState state) {
+                            if(state == TransferState.COMPLETED){
+                                Picasso.with(getContext()).load(file).
+                                        placeholder(R.drawable.product_placeholder_96dp).into(imageView);
+                            }
+                        }
+
+                        @Override
+                        public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                        }
+
+                        @Override
+                        public void onError(int id, Exception ex) {
+                            imageView.setImageResource(R.drawable.product_placeholder_96dp);
+                        }
+                    });
         }
 
         TextView titleView = listView.findViewById(R.id.title);

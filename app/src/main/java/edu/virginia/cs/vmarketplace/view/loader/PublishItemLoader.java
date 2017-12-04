@@ -3,55 +3,48 @@ package edu.virginia.cs.vmarketplace.view.loader;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExpression;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.virginia.cs.vmarketplace.model.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.PublishItem;
+import edu.virginia.cs.vmarketplace.model.nosql.ProductItemsDO;
+import edu.virginia.cs.vmarketplace.util.AWSClientFactory;
 
 /**
  * Created by cutehuazai on 11/29/17.
  */
 
 public class PublishItemLoader extends AsyncTaskLoader<List<PublishItem>> {
+    private DynamoDBMapper mapper;
     public PublishItemLoader(Context context) {
         super(context);
+        mapper = AWSClientFactory.getInstance().getDBMapper();
     }
 
     @Override
     public List<PublishItem> loadInBackground() {
-        List<PublishItem> list = new ArrayList<PublishItem>();
-        PublishItem item = new PublishItem();
-        item.setId(1);
-        item.setTitle("Women HandBag");
-        item.setPrice(100.0);
-        item.setReplyCount(5);
-        item.setViewCount(200);
-        item.setProductType("Second Hand");
-        item.setImage("https://s3.amazonaws.com/vmarketplace/product/bag.png");
-        list.add(item);
-        item = new PublishItem();
-        item.setId(2);
-        item.setTitle("A Ride to IAD");
-        item.setPrice(200.0);
-        item.setReplyCount(3);
-        item.setViewCount(100);
-        item.setProductType("Ride");
-        list.add(item);
+        ProductItemsDO itemsDO = new ProductItemsDO();
+        itemsDO.setUserId(AppContextManager.getContextManager().getAppContext().getUser().getUserId());
 
-        item = new PublishItem();
-        item.setId(3);
-        item.setTitle("Apartment Sublease");
-        item.setPrice(500.0);
-        item.setReplyCount(3);
-        item.setViewCount(100);
-        item.setProductType("Sublease");
-        item.setImage("https://s3.amazonaws.com/vmarketplace/product/Apartment.png");
-        list.add(item);
-        try {
-            Thread.currentThread().sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        DynamoDBQueryExpression<ProductItemsDO> dynamoDBQueryExpression = new DynamoDBQueryExpression<ProductItemsDO>()
+                .withIndexName("SORT_BY_TIME")
+                .withHashKeyValues(itemsDO)
+                .withScanIndexForward(false)
+                .withConsistentRead(false);
+
+        List<ProductItemsDO> productMeta = mapper.query(ProductItemsDO.class,dynamoDBQueryExpression);
+
+        List<PublishItem> list = new ArrayList<PublishItem>();
+
+        for(ProductItemsDO itemDo : productMeta){
+            PublishItem item = new PublishItem(itemDo);
+            list.add(item);
         }
+
         return list;
     }
 }

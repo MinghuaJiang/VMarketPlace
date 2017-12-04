@@ -59,6 +59,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
@@ -214,7 +215,7 @@ public class UseCameraFragment extends AbstractFragment implements LoaderManager
 
         @Override
         public void onImageAvailable(ImageReader reader) {
-            mFiles.add(getActivity().getExternalFilesDir(null) + File.separator + AppContextManager.getContextManager().getAppContext().getUser().getUserName() + "_" + new Date() + ".jpg");
+            mFiles.add(getActivity().getExternalFilesDir(null) + File.separator + AppContextManager.getContextManager().getAppContext().getUser().getUserId() + "_" + UUID.randomUUID() + ".png");
             //mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFiles.get(mFiles.size() - 1)));
             Image mImage = reader.acquireNextImage();
             ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();

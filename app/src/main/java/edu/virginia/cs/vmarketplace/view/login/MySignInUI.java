@@ -27,8 +27,6 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.amazonaws.ClientConfiguration;
-import com.amazonaws.Request;
-import com.amazonaws.auth.AWSCognitoIdentityProvider;
 import com.amazonaws.mobile.auth.core.DefaultSignInResultHandler;
 import com.amazonaws.mobile.auth.core.IdentityManager;
 import com.amazonaws.mobile.auth.core.IdentityProvider;
@@ -40,7 +38,6 @@ import com.amazonaws.mobile.auth.userpools.CognitoUserPoolsSignInProvider;
 import com.amazonaws.mobile.config.AWSConfigurable;
 import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
-import com.amazonaws.services.cognitoidentityprovider.AmazonCognitoIdentityProvider;
 import com.facebook.Profile;
 
 import edu.virginia.cs.vmarketplace.model.AppContextManager;
@@ -150,8 +147,7 @@ public class MySignInUI implements AWSConfigurable {
             }
             final IdentityManager identityManager = IdentityManager.getDefaultIdentityManager();
             if (identityManager.isUserSignedIn()) {
-                CognitoUserPool pool = new CognitoUserPool(context, identityManager.getConfiguration());
-                AppContextManager.getContextManager().loadCurrentUser(pool.getCurrentUser().getUserId());
+                initAppContext(identityManager, identityManager.getCurrentIdentityProvider());
                 Log.d(LOG_TAG, "User is already signed-in. Moving to the next activity.");
                 startNextActivity(this.loginCallingActivity, this.loginNextActivity);
             } else {

@@ -8,9 +8,13 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.mobileconnectors.pinpoint.PinpointConfiguration;
 import com.amazonaws.mobileconnectors.pinpoint.PinpointManager;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
+import com.amazonaws.regions.Region;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import edu.virginia.cs.vmarketplace.view.login.MySignInUI;
 
@@ -49,6 +53,7 @@ public class AWSClientFactory {
                         .context(context)
                         .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
                         .build();
+
         return transferUtility;
     }
 
