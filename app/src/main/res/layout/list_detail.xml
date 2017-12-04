@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@color/separator"
-            android:dividerHeight="@dimen/seperator_height"
+            android:dividerHeight="@dimen/separator_height"
             android:orientation="vertical" />
     </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>

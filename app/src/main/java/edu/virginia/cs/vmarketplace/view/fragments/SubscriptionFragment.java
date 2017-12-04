@@ -11,9 +11,9 @@ import edu.virginia.cs.vmarketplace.R;
  * Created by cutehuazai on 11/23/17.
  */
 
-public class PlaceFragment extends AbstractFragment {
-    public PlaceFragment(){
-        super("place", R.drawable.subscribe_24p);
+public class SubscriptionFragment extends AbstractFragment {
+    public SubscriptionFragment(){
+        super("subscription", R.drawable.subscribe_24p);
     }
 
     @Override

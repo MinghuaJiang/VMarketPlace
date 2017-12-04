@@ -1,6 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:theme="@style/AppTheme.Home">
 
-</android.support.constraint.ConstraintLayout>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/home_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="4dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/button_margin_large"
+            android:layout_marginRight="@dimen/button_margin_large">
+
+            <android.support.v7.widget.SearchView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/default_left_bubble_color"
+                android:gravity="center_vertical"
+                android:layout_marginTop="@dimen/button_margin">
+            </android.support.v7.widget.SearchView>
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/home_poster_image"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:src="@drawable/uva_rotunda"
+                android:contentDescription="@string/home_page_poster"/>
+
+            <GridLayout
+                android:id="@+id/home_navigator"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/home_poster_image"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:columnCount="4"
+                android:rowCount="1"
+                >
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_column="0"
+                    android:layout_row="0"
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1"
+                    android:layout_gravity="center_horizontal"
+                    >
+
+                    <ImageView
+                        android:id="@+id/home_second_hand_image"
+                        android:layout_width="@dimen/list_item_height_small"
+                        android:layout_height="@dimen/list_item_height_small"
+                        android:clickable="true"
+                        android:contentDescription="@string/second_hand"
+                        android:focusable="true"
+                        app:srcCompat="@drawable/second_hand_logo"
+                        />
+                    <TextView
+                        android:id="@+id/home_second_hand"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/second_hand"
+                        android:layout_marginTop="8dp"
+                        android:textSize="10sp"
+                        android:layout_gravity="center_horizontal"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_column="1"
+                    android:layout_row="0"
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1"
+                    android:layout_gravity="center_horizontal"
+                    >
+
+                    <ImageView
+                        android:id="@+id/home_rides_image"
+                        android:layout_width="@dimen/list_item_height_small"
+                        android:layout_height="@dimen/list_item_height_small"
+                        android:clickable="true"
+                        android:contentDescription="@string/rides"
+                        android:focusable="true"
+                        app:srcCompat="@drawable/ride_96dp"
+                        />
+                    <TextView
+                        android:id="@+id/home_rides"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rides"
+                        android:layout_marginTop="8dp"
+                        android:textSize="10sp"
+                        android:layout_gravity="center_horizontal"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_column="2"
+                    android:layout_row="0"
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1"
+                    android:layout_gravity="center_horizontal"
+                    >
+
+                    <ImageView
+                        android:id="@+id/home_sublease_image"
+                        android:clickable="true"
+                        android:contentDescription="@string/sublease"
+                        android:focusable="true"
+                        app:srcCompat="@drawable/sublease_logo"
+                        android:layout_width="@dimen/list_item_height_small"
+                        android:layout_height="@dimen/list_item_height_small"
+                        />
+                    <TextView
+                        android:id="@+id/home_sublease"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sublease"
+                        android:layout_marginTop="8dp"
+                        android:textSize="10sp"
+                        android:layout_gravity="center_horizontal"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_column="3"
+                    android:layout_row="0"
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1"
+                    android:layout_gravity="center_horizontal"
+                    >
+
+                    <ImageView
+                        android:id="@+id/home_activity_image"
+                        android:layout_width="@dimen/list_item_height_small"
+                        android:layout_height="@dimen/list_item_height_small"
+                        android:clickable="true"
+                        android:contentDescription="@string/activities"
+                        android:focusable="true"
+                        app:srcCompat="@drawable/activity_logo"
+                        />
+                    <TextView
+                        android:id="@+id/home_activity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/activities"
+                        android:layout_marginTop="8dp"
+                        android:textSize="10sp"
+                        android:layout_gravity="center_horizontal"
+                        />
+                </LinearLayout>
+            </GridLayout>
+
+            <TextView
+                android:id="@+id/separator_above_tab"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/separator_height"
+                android:background="@color/separator"
+                android:layout_marginTop="8dp"
+                android:layout_below="@+id/home_navigator"
+                >
+            </TextView>
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/home_tab"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/separator_above_tab"
+                app:tabMode="fixed"
+                app:tabTextAppearance="@style/CustomTabText"
+                />
+
+            <edu.virginia.cs.vmarketplace.view.NonSwipeableViewPager
+                android:id="@+id/home_tab_viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>
