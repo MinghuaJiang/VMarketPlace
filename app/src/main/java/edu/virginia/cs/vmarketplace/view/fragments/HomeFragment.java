@@ -2,7 +2,6 @@ package edu.virginia.cs.vmarketplace.view.fragments;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -35,18 +34,20 @@ public class HomeFragment extends AbstractFragment {
 
         ab.setDisplayShowTitleEnabled(false);
 
+        // set up list items
+
+
         // setup view pager for tabs
         initFragments();
         ViewPager viewPager = rootView.findViewById(R.id.home_tab_viewpager);
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(
                 getActivity().getSupportFragmentManager(), fragments);
         viewPager.setAdapter(viewPagerAdapter);
-        TabLayout tabLayout = rootView.findViewById(R.id.home_tab);
+        TabLayout tabLayout = rootView.findViewById(R.id.tab);
         tabLayout.setupWithViewPager(viewPager);
 
         for(int i = 0; i < fragments.length;i++){
             tabLayout.getTabAt(i).setIcon(fragments[i].getIconResourceId());
-            tabLayout.getTabAt(i).setText(fragments[i].getTabName());
         }
         return rootView;
     }

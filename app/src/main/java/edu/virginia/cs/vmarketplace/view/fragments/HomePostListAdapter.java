@@ -2,28 +2,21 @@ package edu.virginia.cs.vmarketplace.view.fragments;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
-import com.github.bassaer.chatmessageview.model.User;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,20 +34,22 @@ public class HomePostListAdapter extends ArrayAdapter<ProductItemsDO> {
     private List<File> images;
     private TransferUtility transferUtility;
     private int imageCounter;
+    private LayoutInflater layoutInflater;
 
-    public HomePostListAdapter(@NonNull Context context, @NonNull ProductItemsDO[] objects) {
+    public HomePostListAdapter(Context context, List<ProductItemsDO> objects) {
         super(context, 0, objects);
         this.images = new ArrayList<>();
         this.transferUtility = AWSClientFactory.getInstance().getTransferUtility(context);
         this.imageCounter = 0;
+        this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
+
         View listView = convertView;
         if(listView == null){
-            listView = LayoutInflater.from(getContext()).inflate(R.layout.home_tab, parent
+            listView = layoutInflater.from(getContext()).inflate(R.layout.home_tab, parent
                     ,false);
         }
         ProductItemsDO productItemsDO = getItem(position);
@@ -104,8 +99,9 @@ public class HomePostListAdapter extends ArrayAdapter<ProductItemsDO> {
 
         // add thumb up
         TextView postThumbUp = listView.findViewById(R.id.home_post_thumbup);
-        postLocale.setText("" + 5);
-
+        postThumbUp.setText("" + 5);
+        System.out.println("ListItem created");
+        System.out.println("number of Images in images" + images.size() + " : " + imageCounter);
         return listView;
     }
 
@@ -139,5 +135,10 @@ public class HomePostListAdapter extends ArrayAdapter<ProductItemsDO> {
             TextView userDep = rootView.findViewById(R.id.home_post_user_dep);
             userDep.setText(userProfileDO.getDepartment());
         }
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 }
