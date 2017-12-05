@@ -17,6 +17,7 @@ import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.AppConstant;
 import edu.virginia.cs.vmarketplace.model.PreviewImageItem;
 import edu.virginia.cs.vmarketplace.view.PhotoActivity;
+import edu.virginia.cs.vmarketplace.view.PublishFormActivity;
 
 /**
  * Created by cutehuazai on 11/30/17.
@@ -55,6 +56,9 @@ public class ImageViewAdapter extends ArrayAdapter<PreviewImageItem> {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(getContext() instanceof PublishFormActivity){
+                        ((PublishFormActivity) getContext()).saveState();
+                    }
                     Intent intent = new Intent(getContext(), PhotoActivity.class);
                     intent.putStringArrayListExtra(AppConstant.FILE_LIST, new ArrayList<String>(mFiles));
                     getContext().startActivity(intent);

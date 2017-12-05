@@ -20,4 +20,6 @@ public class AppConstant {
     public static final int PUBLISH_BY_ME = 7;
 
     public static final int HOME_PAGE = 8;
+
+    public static final int PHOTO_ACTIVITY = 9;
 }

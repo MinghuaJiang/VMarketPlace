@@ -114,6 +114,7 @@ public class ProfilePublishItemAdapter extends ArrayAdapter<PublishItem> {
                         AppContextManager.getContextManager().getAppContext().setPublish(false);
                         AppContextManager.getContextManager().getAppContext().setItemsDO(currentItem.getItemsDO());
                         Intent intent = new Intent(getContext(), PublishFormActivity.class);
+                        intent.putExtra(AppConstant.JUMP_FROM, AppConstant.PUBLISH_BY_ME);
                         getContext().startActivity(intent);
                     }
                 }

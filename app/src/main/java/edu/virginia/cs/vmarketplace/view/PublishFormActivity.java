@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.UUID;
 
 import edu.virginia.cs.vmarketplace.R;
+import edu.virginia.cs.vmarketplace.model.AppConstant;
 import edu.virginia.cs.vmarketplace.model.AppContext;
 import edu.virginia.cs.vmarketplace.model.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.LocationConstant;
@@ -105,8 +106,17 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
             @Override
             public void onClick(View v) {
                 appContext.destroyInstanceState();
-                Intent intent = new Intent(PublishFormActivity.this, MainActivity.class);
-                startActivity(intent);
+                appContext.setItemsDO(null);
+                Intent fromIntent = getIntent();
+                int jump_from = fromIntent.getIntExtra(AppConstant.JUMP_FROM, 0);
+                if(jump_from == AppConstant.PUBLISH_BY_ME){
+                    Intent intent = new Intent(PublishFormActivity.this, ProfilePublishActivity.class);
+                    startActivity(intent);
+                }else if(jump_from == AppConstant.PHOTO_ACTIVITY){
+                    Intent intent = new Intent(PublishFormActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+
             }
         });
 
@@ -260,6 +270,7 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                 productItemsDo.setViewCount(0.0);
                 productItemsDo.setModificationTime(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
                 appContext.destroyInstanceState();
+                appContext.setItemsDO(null);
                 loadIntoS3(productItemsDo);
             }
         });
@@ -276,6 +287,13 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
         adapter.addAll(data);
         PreviewImageItem dummyItem = new PreviewImageItem(null, null);
         adapter.add(dummyItem);
+    }
+
+    public void saveState(){
+        appContext.getInstanceState().putString(TITLE_CONTENT, titleView.getText().toString());
+        appContext.getInstanceState().putString(DESCRIPTION_CONTENT, descriptionView.getText().toString());
+        appContext.getInstanceState().putString(PRICE_CONTENT, priceView.getText().toString());
+        appContext.getInstanceState().putInt(CATEGORY_CONTENT, spinner.getSelectedItemPosition());
     }
 
     @Override
@@ -419,16 +437,4 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
             activity.startActivity(intent);
         }
     }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        // call superclass to save any view hierarchy
-        super.onSaveInstanceState(outState);
-
-        appContext.getInstanceState().putString(TITLE_CONTENT, titleView.getText().toString());
-        appContext.getInstanceState().putString(DESCRIPTION_CONTENT, descriptionView.getText().toString());
-        appContext.getInstanceState().putString(PRICE_CONTENT, priceView.getText().toString());
-        appContext.getInstanceState().putInt(CATEGORY_CONTENT, spinner.getSelectedItemPosition());
-    }
-
 }

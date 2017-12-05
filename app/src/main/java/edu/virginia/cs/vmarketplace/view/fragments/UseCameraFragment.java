@@ -65,6 +65,7 @@ import java.util.concurrent.TimeUnit;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.AppConstant;
+import edu.virginia.cs.vmarketplace.model.AppContext;
 import edu.virginia.cs.vmarketplace.model.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.PreviewImageItem;
 import edu.virginia.cs.vmarketplace.util.ImageUtil;
@@ -980,6 +981,7 @@ public class UseCameraFragment extends AbstractFragment implements LoaderManager
                     mExistingFiles.addAll(mFiles);
                     AppContextManager.getContextManager().getAppContext().setPublish(true);
                     intent.putStringArrayListExtra("image", new ArrayList<String>(mExistingFiles));
+                    intent.putExtra(AppConstant.JUMP_FROM, AppConstant.PHOTO_ACTIVITY);
                     startActivity(intent);
                 }
             });
