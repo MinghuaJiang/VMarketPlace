@@ -176,12 +176,31 @@
             </GridLayout>
 
             <TextView
-                android:id="@+id/separator_above_tab"
+                android:id="@+id/separator_below_category"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/separator_height"
                 android:background="@color/separator"
                 android:layout_marginTop="8dp"
                 android:layout_below="@+id/home_navigator"
+                >
+            </TextView>
+
+            <ListView
+                android:id="@+id/home_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@color/separator"
+                android:dividerHeight="@dimen/separator_height"
+                android:layout_below="@+id/separator_below_category"
+                />
+
+            <TextView
+                android:id="@+id/separator_above_tab"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/separator_height"
+                android:background="@color/separator"
+                android:layout_marginTop="8dp"
+                android:layout_below="@+id/home_list"
                 >
             </TextView>
 

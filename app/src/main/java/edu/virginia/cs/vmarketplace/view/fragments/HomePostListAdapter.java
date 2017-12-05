@@ -57,32 +57,35 @@ public class HomePostListAdapter extends ArrayAdapter<ProductItemsDO> {
         }
 
         // download images from S3 to list item
-        final int picsTotalCount = productItemsDO.getPics().size();
-        GridView gridView = listView.findViewById(R.id.home_post_image_gallery);
-        for(int i=0; i<picsTotalCount; i++) {
-            File img = new File(getContext().getExternalFilesDir(null)
-                    + File.separator + i + ".jpg");
-            transferUtility.download(productItemsDO.getPics().get(i), img, new TransferListener() {
-                @Override
-                public void onStateChanged(int id, TransferState state) {
-                    if (imageCounter == picsTotalCount) {
-                        // initialize GridView
+        if (productItemsDO.getPics() != null) {
+            final int picsTotalCount = productItemsDO.getPics().size();
+            GridView gridView = listView.findViewById(R.id.home_post_image_gallery);
+            for(int i=0; i<picsTotalCount; i++) {
+                File img = new File(getContext().getExternalFilesDir(null)
+                        + File.separator + i + ".jpg");
+                transferUtility.download(productItemsDO.getPics().get(i), img, new TransferListener() {
+                    @Override
+                    public void onStateChanged(int id, TransferState state) {
+                        if (imageCounter == picsTotalCount) {
+                            // initialize GridView
+                        }
                     }
-                }
 
-                @Override
-                public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                    @Override
+                    public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
 
-                }
+                    }
 
-                @Override
-                public void onError(int id, Exception ex) {
+                    @Override
+                    public void onError(int id, Exception ex) {
 
-                }
-            });
-            imageCounter++;
-            images.add(img);
+                    }
+                });
+                imageCounter++;
+                images.add(img);
+            }
         }
+
 
         // add post title
         TextView postTitle = listView.findViewById(R.id.home_post_title);

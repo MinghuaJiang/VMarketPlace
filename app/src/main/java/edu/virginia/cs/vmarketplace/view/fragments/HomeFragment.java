@@ -2,6 +2,8 @@ package edu.virginia.cs.vmarketplace.view.fragments;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,15 +11,25 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.virginia.cs.vmarketplace.R;
+import edu.virginia.cs.vmarketplace.model.nosql.ProductItemsDO;
+import edu.virginia.cs.vmarketplace.view.loader.HomeHotTabLoader;
+import edu.virginia.cs.vmarketplace.view.loader.ProductItemDOLoader;
 
 /**
  * Created by cutehuazai on 11/23/17.
  */
 
-public class HomeFragment extends AbstractFragment {
+public class HomeFragment extends AbstractFragment implements
+        LoaderManager.LoaderCallbacks<List<ProductItemsDO>>{
+
     private AbstractFragment[] fragments;
+    private HomePostListAdapter homePostListAdapter;
 
     public HomeFragment() {
         super("home", R.drawable.home_24p);
@@ -35,7 +47,15 @@ public class HomeFragment extends AbstractFragment {
         ab.setDisplayShowTitleEnabled(false);
 
         // set up list items
-
+        ListView listView = rootView.findViewById(R.id.home_list);
+        List<ProductItemsDO> test = new ArrayList<>();
+        test.add(ProductItemsDO.getInstance());
+        System.out.println(ProductItemsDO.getInstance().toString());
+        homePostListAdapter = new HomePostListAdapter(getActivity(),
+                new ArrayList<ProductItemsDO>());
+        listView.setAdapter(homePostListAdapter);
+        getLoaderManager().restartLoader(0, null, this).forceLoad();
+        System.out.println("HomeTabHotFragment called");
 
         // setup view pager for tabs
         initFragments();
@@ -61,5 +81,22 @@ public class HomeFragment extends AbstractFragment {
         fragments = new AbstractFragment[2];
         fragments[0] = new HomeTabNewFragment();
         fragments[1] = new HomeTabHotFragment();
+    }
+
+    @Override
+    public Loader<List<ProductItemsDO>> onCreateLoader(int id, Bundle args) {
+        return new ProductItemDOLoader(getContext(), new HomeHotTabLoader());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<ProductItemsDO>> loader, List<ProductItemsDO> data) {
+        homePostListAdapter.clear();
+        homePostListAdapter.addAll(data);
+        System.out.println("onLoadFinished called in " + HomeFragment.class);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<ProductItemsDO>> loader) {
+        homePostListAdapter.clear();
     }
 }
