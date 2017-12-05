@@ -74,8 +74,10 @@
                 android:id="@+id/seperator"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
+                android:layout_marginTop="4dp"
                 android:background="@color/separator"
                 android:layout_below="@id/user_container"/>
+
         </RelativeLayout>
     </ScrollView>
 
