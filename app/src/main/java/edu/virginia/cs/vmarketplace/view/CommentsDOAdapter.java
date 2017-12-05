@@ -38,8 +38,12 @@ public class CommentsDOAdapter extends ArrayAdapter<CommentsDO> {
         }
         CommentsDO commentsDO = getItem(position);
         ImageView picView = listView.findViewById(R.id.user_pic);
-        Picasso.with(getContext()).load(Profile.getCurrentProfile().
-                getProfilePictureUri(160,160)).fit().into(picView);
+        if(Profile.getCurrentProfile() != null) {
+            Picasso.with(getContext()).load(Profile.getCurrentProfile().
+                    getProfilePictureUri(160, 160)).fit().into(picView);
+        }else{
+            picView.setImageResource(R.drawable.place_holder_96p);
+        }
         //picView.setImageResource(R.drawable.place_holder_96p);
         TextView userName = listView.findViewById(R.id.user_name);
         userName.setText(commentsDO.getCommentBy());

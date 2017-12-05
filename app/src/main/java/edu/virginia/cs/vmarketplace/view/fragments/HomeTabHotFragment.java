@@ -37,8 +37,6 @@ public class HomeTabHotFragment extends AbstractFragment
         View rootView = inflater.inflate(R.layout.home_tab_list, container, false);
         ListView listView = rootView.findViewById(R.id.home_tab_list);
         List<ProductItemsDO> test = new ArrayList<>();
-        test.add(ProductItemsDO.getInstance());
-        System.out.println(ProductItemsDO.getInstance().toString());
         homePostListAdapter = new HomePostListAdapter(getActivity(),
                 test);
         listView.setAdapter(homePostListAdapter);

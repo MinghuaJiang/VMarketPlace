@@ -35,10 +35,8 @@ public class HomeTabNewFragment extends AbstractFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.home_tab_list, container, false);
         ListView listView = rootView.findViewById(R.id.home_tab_list);
-        List<ProductItemsDO> test = new ArrayList<>();
-        test.add(ProductItemsDO.getInstance());
         homePostListAdapter = new HomePostListAdapter(getActivity(),
-                test);
+                new ArrayList<ProductItemsDO>());
         listView.setAdapter(homePostListAdapter);
         getLoaderManager().restartLoader(0, null, this).forceLoad();
         System.out.println("HomeTabNewFragment called");

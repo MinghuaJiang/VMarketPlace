@@ -254,6 +254,8 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                     productItemsDo = new ProductItemsDO();
                     productItemsDo.setItemId(UUID.randomUUID().toString());
                     productItemsDo.setUserId(AppContextManager.getContextManager().getAppContext().getUser().getUserId());
+                    productItemsDo.setViewCount(0.0);
+                    productItemsDo.setReplyCount(0.0);
                 }
 
                 productItemsDo.setCategory(category);
@@ -266,8 +268,6 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                 productItemsDo.setLatitude(mLastKnowLocation.getLatitude());
                 productItemsDo.setLongtitude(mLastKnowLocation.getLongitude());
                 productItemsDo.setLocationName(location);
-                productItemsDo.setViewCount(0.0);
-                productItemsDo.setReplyCount(0.0);
                 productItemsDo.setModificationTime(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
                 appContext.destroyInstanceState();
                 appContext.setItemsDO(null);
