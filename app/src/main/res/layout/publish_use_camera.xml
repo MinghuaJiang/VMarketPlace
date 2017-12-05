@@ -54,6 +54,7 @@
         android:layout_height="wrap_content"
         android:background="@color/cameraBackground"
         android:orientation="horizontal">
+
         <GridView
             android:id="@+id/gallery"
             android:layout_width="600dp"
@@ -63,7 +64,7 @@
             android:paddingBottom="@dimen/content_padding"
             android:paddingLeft="@dimen/content_padding"
             android:paddingRight="@dimen/content_padding"
-            android:paddingTop="@dimen/content_padding"></GridView>
+            android:paddingTop="@dimen/content_padding" />
     </LinearLayout>
     </HorizontalScrollView>
     <FrameLayout

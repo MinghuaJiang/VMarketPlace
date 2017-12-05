@@ -44,7 +44,10 @@ public class HomeFragment extends AbstractFragment {
         TabLayout tabLayout = rootView.findViewById(R.id.home_tab);
         tabLayout.setupWithViewPager(viewPager);
 
-
+        for(int i = 0; i < fragments.length;i++){
+            tabLayout.getTabAt(i).setIcon(fragments[i].getIconResourceId());
+            tabLayout.getTabAt(i).setText(fragments[i].getTabName());
+        }
         return rootView;
     }
 
