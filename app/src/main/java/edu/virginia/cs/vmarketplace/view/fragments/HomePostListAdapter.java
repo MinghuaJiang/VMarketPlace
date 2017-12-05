@@ -123,6 +123,7 @@ public class HomePostListAdapter extends ArrayAdapter<ProductItemsDO> {
 
         @Override
         protected void onPostExecute(UserProfileDO userProfileDO) {
+            System.out.println("user : " + userProfileDO.toString());
             CircleImageView userAvatar = rootView.findViewById(R.id.home_post_avatar);
             if(userProfileDO.getAvatar() == null) {
                 userAvatar.setImageResource(R.drawable.user_24p);
