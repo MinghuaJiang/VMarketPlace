@@ -8,10 +8,5 @@ import android.net.Uri;
 
 public interface AppUserEnrichStrategy {
     public String getUserName();
-
-    public String getUserPic();
-
     public Uri getUserPicUri();
-
-    public String getUserRating();
 }

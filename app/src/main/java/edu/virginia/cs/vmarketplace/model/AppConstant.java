@@ -8,7 +8,7 @@ public class AppConstant {
     public static final String SWITCH_TAB = "switch_tab";
     public static final String PREVIOUS_TAB = "previous_tab";
     public static final String JUMP_FROM = "jump_from";
-    public static final String SELLER_NAME = "sellername";
+    public static final String BUYER_NAME = "buyername";
     public static final String MESSAGE_ID = "messageid";
     public static final String FILE_LIST = "file_list";
 
@@ -22,4 +22,6 @@ public class AppConstant {
     public static final int HOME_PAGE = 8;
 
     public static final int PHOTO_ACTIVITY = 9;
+
+    public static final int PUBLISH_DETAIL = 10;
 }

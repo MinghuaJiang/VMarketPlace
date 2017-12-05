@@ -33,7 +33,7 @@ public class PublishItem {
     }
 
     public int getReplyCount() {
-        return 0;
+        return itemsDO.getReplyCount().intValue();
     }
 
     public int getViewCount() {

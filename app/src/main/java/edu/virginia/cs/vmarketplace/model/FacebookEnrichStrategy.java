@@ -15,17 +15,7 @@ public class FacebookEnrichStrategy implements AppUserEnrichStrategy {
     }
 
     @Override
-    public String getUserPic() {
-        return null;
-    }
-
-    @Override
     public Uri getUserPicUri() {
         return Profile.getCurrentProfile().getProfilePictureUri(160,160);
-    }
-
-    @Override
-    public String getUserRating() {
-        return null;
     }
 }

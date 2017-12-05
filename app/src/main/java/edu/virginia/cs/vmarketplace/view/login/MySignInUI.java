@@ -122,9 +122,10 @@ public class MySignInUI implements AWSConfigurable {
         AppUserEnrichStrategy strategy = null;
         if(provider instanceof CognitoUserPoolsSignInProvider) {
             CognitoUserPool pool = new CognitoUserPool(context, identityManager.getConfiguration());
-            String userId = pool.getCurrentUser().getUserId();
+            String userName = pool.getCurrentUser().getUserId();
+            String userId = identityManager.getCachedUserID();
             AppContextManager.getContextManager().loadCurrentUser(userId);
-            strategy = new CognitoPoolEnrichStrategy(userId);
+            strategy = new CognitoPoolEnrichStrategy(userId, userName);
         }else if(provider instanceof FacebookSignInProvider){
             strategy = new FacebookEnrichStrategy();
             AppContextManager.getContextManager().loadCurrentUser(Profile.getCurrentProfile().getId());

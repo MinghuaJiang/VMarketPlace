@@ -8,23 +8,15 @@ import android.net.Uri;
 
 public class CognitoPoolEnrichStrategy implements AppUserEnrichStrategy {
     private String userId;
-    public CognitoPoolEnrichStrategy(String userId){
+    private String userName;
+    public CognitoPoolEnrichStrategy(String userId, String userName){
         this.userId = userId;
+        this.userName = userName;
     }
 
     @Override
     public String getUserName(){
-        return userId;
-    }
-
-    @Override
-    public String getUserPic() {
-        return null;
-    }
-
-    @Override
-    public String getUserRating() {
-        return null;
+        return userName;
     }
 
     @Override

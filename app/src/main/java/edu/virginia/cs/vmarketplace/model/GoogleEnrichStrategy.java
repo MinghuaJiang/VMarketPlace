@@ -15,17 +15,8 @@ public class GoogleEnrichStrategy implements AppUserEnrichStrategy {
     }
 
     @Override
-    public String getUserPic() {
-        return null;
-    }
-
-    @Override
     public Uri getUserPicUri() {
         return null;
     }
 
-    @Override
-    public String getUserRating() {
-        return null;
-    }
 }

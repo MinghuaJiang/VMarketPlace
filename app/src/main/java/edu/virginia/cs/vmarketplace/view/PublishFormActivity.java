@@ -116,7 +116,6 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                     Intent intent = new Intent(PublishFormActivity.this, MainActivity.class);
                     startActivity(intent);
                 }
-
             }
         });
 
@@ -268,6 +267,7 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                 productItemsDo.setLongtitude(mLastKnowLocation.getLongitude());
                 productItemsDo.setLocationName(location);
                 productItemsDo.setViewCount(0.0);
+                productItemsDo.setReplyCount(0.0);
                 productItemsDo.setModificationTime(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
                 appContext.destroyInstanceState();
                 appContext.setItemsDO(null);

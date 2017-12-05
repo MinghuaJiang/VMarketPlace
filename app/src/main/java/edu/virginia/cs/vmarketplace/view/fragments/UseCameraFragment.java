@@ -57,7 +57,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Semaphore;
@@ -65,7 +64,6 @@ import java.util.concurrent.TimeUnit;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.AppConstant;
-import edu.virginia.cs.vmarketplace.model.AppContext;
 import edu.virginia.cs.vmarketplace.model.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.PreviewImageItem;
 import edu.virginia.cs.vmarketplace.util.ImageUtil;
@@ -994,7 +992,7 @@ public class UseCameraFragment extends AbstractFragment implements LoaderManager
                     Intent intent = new Intent(getActivity(), MessageDetailActivity.class);
                     mExistingFiles.addAll(mFiles);
                     intent.putStringArrayListExtra("image", new ArrayList<String>(mExistingFiles));
-                    intent.putExtra(AppConstant.SELLER_NAME, fromIntent.getStringExtra(AppConstant.SELLER_NAME));
+                    intent.putExtra(AppConstant.BUYER_NAME, fromIntent.getStringExtra(AppConstant.BUYER_NAME));
                     startActivity(intent);
                 }
             });

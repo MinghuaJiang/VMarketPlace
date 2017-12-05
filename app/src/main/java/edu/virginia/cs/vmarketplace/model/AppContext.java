@@ -28,9 +28,7 @@ public class AppContext {
     }
 
     public void enrichUser(AppUserEnrichStrategy strategy){
-        user.setUserPic(strategy.getUserPic());
         user.setUserName(strategy.getUserName());
-        user.setUserRating(strategy.getUserRating());
         user.setUserPicUri(strategy.getUserPicUri());
     }
 

@@ -165,6 +165,7 @@
                 android:padding="@dimen/activity_horizontal_margin">
 
                 <TextView
+                    android:id="@+id/comment_tab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Comments"
@@ -194,6 +195,7 @@
         android:theme="@style/AppTheme.Message">
 
         <RelativeLayout
+            android:id="@+id/before_chat"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -221,7 +223,60 @@
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_toRightOf="@id/comment"
                 android:background="@drawable/favorite_24dp" />
+
+            <Button
+                android:id="@+id/buy"
+                android:layout_width="@dimen/list_item_height_medium"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_centerVertical="true"
+                android:background="@android:color/holo_red_light"
+                android:textColor="@android:color/white"
+                android:text="Chat"/>
         </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/after_chat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/keyboard_down"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/keyboard_24dp"/>
+
+            <EditText
+                android:id="@+id/input"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:hint="Type your comment"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@id/keyboard_down"
+                android:layout_toLeftOf="@id/send"
+                android:layout_gravity="bottom"
+                />
+
+            <Button
+                android:id="@+id/send"
+                android:layout_width="@dimen/list_item_height_medium"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:background="@android:color/holo_red_light"
+                android:textColor="@android:color/white"
+                android:text="Send"
+                />
+        </RelativeLayout>
+
     </android.support.v7.widget.Toolbar>
 
 </RelativeLayout>

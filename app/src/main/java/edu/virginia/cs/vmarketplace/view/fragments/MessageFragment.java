@@ -57,7 +57,7 @@ public class MessageFragment extends AbstractFragment implements LoaderManager.L
                 MessageItem item = list.get(position);
                 Intent intent = new Intent(getActivity(), MessageDetailActivity.class);
                 intent.putExtra(AppConstant.JUMP_FROM, AppConstant.MAIN_ACTIVITY);
-                intent.putExtra(AppConstant.SELLER_NAME, item.getSellerName());
+                intent.putExtra(AppConstant.BUYER_NAME, item.getSellerName());
                 intent.putExtra(AppConstant.MESSAGE_ID, item.getId());
                 startActivity(intent);
             }

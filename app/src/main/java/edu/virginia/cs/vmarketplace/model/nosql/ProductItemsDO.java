@@ -24,6 +24,7 @@ public class ProductItemsDO {
     private List<String> _originalFiles;
     private List<String> _pics;
     private Double _price;
+    private Double _replyCount;
     private String _subcategory;
     private Double _subcategoryPosition;
     private String _thumbPic;
@@ -119,6 +120,14 @@ public class ProductItemsDO {
 
     public void setPrice(final Double _price) {
         this._price = _price;
+    }
+    @DynamoDBAttribute(attributeName = "reply_count")
+    public Double getReplyCount() {
+        return _replyCount;
+    }
+
+    public void setReplyCount(final Double _replyCount) {
+        this._replyCount = _replyCount;
     }
     @DynamoDBAttribute(attributeName = "subcategory")
     public String getSubcategory() {

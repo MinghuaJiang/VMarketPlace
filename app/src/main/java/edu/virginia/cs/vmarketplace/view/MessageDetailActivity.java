@@ -31,8 +31,8 @@ import java.util.Random;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.AppConstant;
-import edu.virginia.cs.vmarketplace.model.AppContext;
 import edu.virginia.cs.vmarketplace.model.AppContextManager;
+import edu.virginia.cs.vmarketplace.model.nosql.ProductItemsDO;
 import edu.virginia.cs.vmarketplace.util.AWSClientFactory;
 import edu.virginia.cs.vmarketplace.util.ImageUtil;
 import edu.virginia.cs.vmarketplace.util.IntentUtil;
@@ -68,14 +68,21 @@ public class MessageDetailActivity extends AppCompatActivity {
         ab.setDisplayShowTitleEnabled(false);
         inputIntent = getIntent();
         textView = findViewById(R.id.toolbar_title);
-        textView.setText(inputIntent.getStringExtra(AppConstant.SELLER_NAME));
-
+        if(inputIntent.hasExtra(AppConstant.JUMP_FROM)) {
+            if(inputIntent.getIntExtra(AppConstant.JUMP_FROM, 0)
+                    == AppConstant.PUBLISH_DETAIL){
+                ProductItemsDO itemsDO = AppContextManager.getContextManager().getAppContext().getItemsDO();
+                textView.setText(itemsDO.getUserId());
+            }
+        }else{
+            textView.setText(inputIntent.getStringExtra(AppConstant.BUYER_NAME));
+        }
         Button cameraButton = findViewById(R.id.camera);
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MessageDetailActivity.this, MessageCameraActivity.class);
-                intent.putExtra(AppConstant.SELLER_NAME, textView.getText());
+                intent.putExtra(AppConstant.BUYER_NAME, textView.getText());
                 startActivityForResult(intent, UseCameraFragment.REQUEST_FROM_MESSAGE);
             }
         });
@@ -98,7 +105,7 @@ public class MessageDetailActivity extends AppCompatActivity {
         Bitmap myIcon = BitmapFactory.decodeResource(getResources(), R.drawable.place_holder_64p);
 
         int yourId = 1;
-        String yourName = inputIntent.getStringExtra(AppConstant.SELLER_NAME);
+        String yourName = inputIntent.getStringExtra(AppConstant.BUYER_NAME);
         Bitmap yourIcon = BitmapFactory.decodeResource(getResources(), R.drawable.face_1);
 
         me = new User(myId, myName, myIcon);
