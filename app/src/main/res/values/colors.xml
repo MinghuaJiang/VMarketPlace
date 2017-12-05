@@ -3,6 +3,7 @@
     <color name="colorPrimary">#ffa500</color>
     <color name="colorPrimaryDark">#f9f9f9</color>
     <color name="colorAccent">#ffa500</color>
+    <color name="windowBackground">#e0e0e0</color>
     <color name="colorOverlay">@android:color/transparent</color>
     <color name="splashBackground">#ffa500</color>
     <color name="hint_color">#bcbcbc</color>

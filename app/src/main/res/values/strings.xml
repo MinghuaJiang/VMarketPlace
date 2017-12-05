@@ -38,5 +38,8 @@
     <string name="choose_location">Choose Location</string>
     <string name="title_not_empty">Title can\'t be empty</string>
     <string name="price_not_empty">Price can\'t be empty</string>
-    <string name="publish_succuess">Published Sucessfully</string>
+    <string name="publish_succuess">Published Successfully</string>
+    <string name="home_toolbar_title">Home Page</string>
+    <string name="search_title">Begin your search here</string>
+    <string name="home_page_poster">Home page poster</string>
 </resources>

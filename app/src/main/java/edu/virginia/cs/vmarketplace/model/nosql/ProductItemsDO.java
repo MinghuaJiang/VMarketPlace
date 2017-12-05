@@ -30,6 +30,68 @@ public class ProductItemsDO {
     private String _thumbPic;
     private String _title;
     private Double _viewCount;
+    private static ProductItemsDO default_single_productItemDO;
+
+    public ProductItemsDO() {
+
+    }
+
+    public static ProductItemsDO getInstance()
+    {
+        if(default_single_productItemDO == null) {
+            default_single_productItemDO = new ProductItemsDO("0000", "000000",
+                    "testCategory", "This is test", 1.0,
+                    "no place", 1.0, null, null,
+                    null, 999.99, "test sub", 1.0,
+                    null, null, 1.0);
+        }
+        return default_single_productItemDO;
+    }
+
+    public ProductItemsDO(String _userId, String _itemId, String _category, String _description,
+                          Double _latitude, String _locationName, Double _longtitude,
+                          String _modificationTime, List<String> _originalFiles, List<String> _pics,
+                          Double _price, String _subcategory, Double _subcategoryPosition,
+                          String _thumbPic, String _title, Double _viewCount) {
+        this._userId = _userId;
+        this._itemId = _itemId;
+        this._category = _category;
+        this._description = _description;
+        this._latitude = _latitude;
+        this._locationName = _locationName;
+        this._longtitude = _longtitude;
+        this._modificationTime = _modificationTime;
+        this._originalFiles = _originalFiles;
+        this._pics = _pics;
+        this._price = _price;
+        this._subcategory = _subcategory;
+        this._subcategoryPosition = _subcategoryPosition;
+        this._thumbPic = _thumbPic;
+        this._title = _title;
+        this._viewCount = _viewCount;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductItemsDO{" +
+                "_userId='" + _userId + '\'' +
+                ", _itemId='" + _itemId + '\'' +
+                ", _category='" + _category + '\'' +
+                ", _description='" + _description + '\'' +
+                ", _latitude=" + _latitude +
+                ", _locationName='" + _locationName + '\'' +
+                ", _longtitude=" + _longtitude +
+                ", _modificationTime='" + _modificationTime + '\'' +
+                ", _originalFiles=" + _originalFiles +
+                ", _pics=" + _pics +
+                ", _price=" + _price +
+                ", _subcategory='" + _subcategory + '\'' +
+                ", _subcategoryPosition=" + _subcategoryPosition +
+                ", _thumbPic='" + _thumbPic + '\'' +
+                ", _title='" + _title + '\'' +
+                ", _viewCount=" + _viewCount +
+                '}';
+    }
 
     @DynamoDBHashKey(attributeName = "userId")
     @DynamoDBIndexHashKey(attributeName = "userId", globalSecondaryIndexName = "SORT_BY_TIME")
