@@ -5,6 +5,7 @@
     <string name="bought_by_me">Bought By Me</string>
     <string name="added_to_favorite">Added To Favorite</string>
     <string name="review_detail">Review Detail</string>
+    <string name="publish_detail">Publish Detail</string>
     <string name="settings">Settings</string>
     <string name="hint_username">Username or Email</string>
     <string name="confirm_button">Log in</string>

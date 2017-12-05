@@ -17,6 +17,7 @@ public class AppConstant {
     public static final int MAIN_ACTIVITY = 5;
     public static final int SOLD_ACTIVITY = 6;
 
-    public static final int PUBLISH_FORM = 7;
+    public static final int PUBLISH_BY_ME = 7;
 
+    public static final int HOME_PAGE = 8;
 }

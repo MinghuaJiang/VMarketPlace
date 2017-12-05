@@ -24,6 +24,7 @@ import java.io.File;
 import java.util.List;
 
 import edu.virginia.cs.vmarketplace.R;
+import edu.virginia.cs.vmarketplace.model.AppConstant;
 import edu.virginia.cs.vmarketplace.model.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.ProfileItem;
 import edu.virginia.cs.vmarketplace.model.PublishItem;
@@ -81,6 +82,16 @@ public class ProfilePublishItemAdapter extends ArrayAdapter<PublishItem> {
                         }
                     });
         }
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppContextManager.getContextManager().getAppContext().setItemsDO(currentItem.getItemsDO());
+                Intent intent = new Intent(getContext(), PublishDetailActivity.class);
+                intent.putExtra(AppConstant.JUMP_FROM, AppConstant.PUBLISH_BY_ME);
+                getContext().startActivity(intent);
+            }
+        });
 
         TextView titleView = listView.findViewById(R.id.title);
         titleView.setText(currentItem.getTitle());
