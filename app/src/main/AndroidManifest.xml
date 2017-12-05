@@ -134,7 +134,7 @@
             android:name=".view.PublishSuccessActivity"
             android:theme="@style/AppTheme.FullScreen" />
         <activity android:name=".view.PublishDetailActivity"
-            android:theme="@style/AppTheme.FullScreen"></activity>
+            android:theme="@style/AppTheme.FullScreen"/>
 
     </application>
 
