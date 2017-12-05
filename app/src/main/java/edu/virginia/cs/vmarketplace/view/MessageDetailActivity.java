@@ -177,13 +177,13 @@ public class MessageDetailActivity extends AppCompatActivity {
 
                     // This is a demo bot
                     // Return within 3 seconds
-                    int sendDelay = (new Random().nextInt(4) + 1) * 1000;
+                   /* int sendDelay = (new Random().nextInt(4) + 1) * 1000;
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             mChatView.receive(receivedMessage);
                         }
-                    }, sendDelay);
+                    }, sendDelay);*/
                 }
             }
         });

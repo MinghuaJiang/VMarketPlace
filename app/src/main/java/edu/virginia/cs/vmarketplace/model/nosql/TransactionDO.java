@@ -1,5 +1,9 @@
 package edu.virginia.cs.vmarketplace.model.nosql;
 
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBAttribute;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBHashKey;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
+
 /**
  * Created by cutehuazai on 12/5/17.
  */

@@ -2,6 +2,8 @@ package edu.virginia.cs.vmarketplace.model.nosql;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBAttribute;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBHashKey;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBIndexHashKey;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBIndexRangeKey;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBRangeKey;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
 
@@ -19,7 +21,7 @@ public class CommentsDO {
     private String _responseId;
 
     @DynamoDBHashKey(attributeName = "itemId")
-    @DynamoDBAttribute(attributeName = "itemId")
+    @DynamoDBIndexHashKey(attributeName = "itemId", globalSecondaryIndexName = "TIME")
     public String getItemId() {
         return _itemId;
     }
@@ -52,7 +54,7 @@ public class CommentsDO {
     public void setCommentBy(final String _commentBy) {
         this._commentBy = _commentBy;
     }
-    @DynamoDBAttribute(attributeName = "commentTime")
+    @DynamoDBIndexRangeKey(attributeName = "commentTime", globalSecondaryIndexName = "TIME")
     public String getCommentTime() {
         return _commentTime;
     }
@@ -68,4 +70,5 @@ public class CommentsDO {
     public void setResponseId(final String _responseId) {
         this._responseId = _responseId;
     }
+
 }

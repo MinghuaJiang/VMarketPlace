@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="edu.virginia.cs.vmarketplace.view.PublishDetailActivity">
 
     <android.support.v7.widget.Toolbar
@@ -26,12 +27,15 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="460dp"
+        android:scrollbars="vertical"
+        android:fillViewport="true"
         android:layout_below="@id/my_toolbar">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            >
 
             <RelativeLayout
                 android:id="@+id/user_container"
@@ -130,7 +134,9 @@
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:numColumns="1"
-                android:verticalSpacing="@dimen/button_margin"></edu.virginia.cs.vmarketplace.view.NonScrollGridView>
+                android:verticalSpacing="@dimen/button_margin">
+
+            </edu.virginia.cs.vmarketplace.view.NonScrollGridView>
 
             <RelativeLayout
                 android:id="@+id/view_container"
@@ -160,7 +166,7 @@
             <RelativeLayout
                 android:id="@+id/comments_tag"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/list_item_height"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/seperator2"
                 android:padding="@dimen/activity_horizontal_margin">
 
@@ -180,6 +186,17 @@
                 android:layout_below="@id/comments_tag"
                 android:layout_marginTop="4dp"
                 android:background="@color/separator" />
+
+            <edu.virginia.cs.vmarketplace.view.NonScrollGridView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:numColumns="1"
+                android:layout_below="@id/seperator3"
+                android:layout_marginTop="4dp"
+                android:id="@+id/user_comment"
+                >
+
+            </edu.virginia.cs.vmarketplace.view.NonScrollGridView>
         </RelativeLayout>
     </ScrollView>
 
@@ -279,4 +296,4 @@
 
     </android.support.v7.widget.Toolbar>
 
-</RelativeLayout>
+</LinearLayout>

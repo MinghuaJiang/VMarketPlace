@@ -3,12 +3,13 @@ package edu.virginia.cs.vmarketplace.view;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -23,6 +24,7 @@ import com.squareup.picasso.Picasso;
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -37,17 +39,22 @@ import edu.virginia.cs.vmarketplace.model.nosql.CommentsDO;
 import edu.virginia.cs.vmarketplace.model.nosql.ProductItemsDO;
 import edu.virginia.cs.vmarketplace.util.AWSClientFactory;
 import edu.virginia.cs.vmarketplace.util.IntentUtil;
+import edu.virginia.cs.vmarketplace.view.loader.CommentsDOLoader;
 
-public class PublishDetailActivity extends AppCompatActivity {
+public class PublishDetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<CommentsDO>>{
     private AppContext context;
     private TextView username;
     private CircleImageView userpic;
     private NonScrollGridView gridView;
+    private NonScrollGridView commentView;
     private ImageView thumbup;
     private ImageView comment;
     private ImageView favorite;
     private DetailImageAdapter adapter;
+    private CommentsDOAdapter commentsDOAdapter;
     private String respondId;
+    private TextView replyCount;
+    private ProductItemsDO itemsDO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +72,7 @@ public class PublishDetailActivity extends AppCompatActivity {
         titleView.setText(R.string.publish_detail);
 
         context = AppContextManager.getContextManager().getAppContext();
-        final ProductItemsDO itemsDO = context.getItemsDO();
+        itemsDO = context.getItemsDO();
         username = findViewById(R.id.username);
         userpic = findViewById(R.id.user_pic);
 
@@ -127,6 +134,7 @@ public class PublishDetailActivity extends AppCompatActivity {
         }
         final EditText editText = findViewById(R.id.input);
         final Button sendButton = findViewById(R.id.send);
+        replyCount = findViewById(R.id.comment_tab);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,10 +181,13 @@ public class PublishDetailActivity extends AppCompatActivity {
         adapter = new DetailImageAdapter(this, itemsDO.getPics(),itemsDO.getOriginalFiles());
         gridView.setAdapter(adapter);
 
+        commentView = findViewById(R.id.user_comment);
+        commentsDOAdapter = new CommentsDOAdapter(this, new ArrayList<CommentsDO>());
+        commentView.setAdapter(commentsDOAdapter);
+        getSupportLoaderManager().restartLoader(0, null, this).forceLoad();
+
         TextView viewCount = findViewById(R.id.view);
         viewCount.setText("view "+ itemsDO.getViewCount().intValue());
-
-        TextView replyCount = findViewById(R.id.comment_tab);
 
         if(itemsDO.getReplyCount().intValue() > 0){
             replyCount.setText("Comments " + itemsDO.getReplyCount().intValue());
@@ -201,6 +212,22 @@ public class PublishDetailActivity extends AppCompatActivity {
         return intent;
     }
 
+    @Override
+    public Loader<List<CommentsDO>> onCreateLoader(int id, Bundle args) {
+        return new CommentsDOLoader(this, itemsDO.getItemId());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<CommentsDO>> loader, List<CommentsDO> data) {
+        commentsDOAdapter.clear();
+        commentsDOAdapter.addAll(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<CommentsDO>> loader) {
+        commentsDOAdapter.clear();
+    }
+
     class ViewCountUpdateTask extends AsyncTask<ProductItemsDO, Void, Void> {
         private DynamoDBMapper mapper;
         public ViewCountUpdateTask(){
@@ -214,7 +241,7 @@ public class PublishDetailActivity extends AppCompatActivity {
         }
     }
 
-    class CommentsUpdateTask extends AsyncTask<CommentsDO, Void, Void>{
+    class CommentsUpdateTask extends AsyncTask<CommentsDO, Void, ProductItemsDO>{
         private DynamoDBMapper mapper;
         private Context context;
         private ProductItemsDO itemDo;
@@ -225,16 +252,20 @@ public class PublishDetailActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Void doInBackground(CommentsDO... commentsDOS) {
+        protected ProductItemsDO doInBackground(CommentsDO... commentsDOS) {
             mapper.save(commentsDOS[0]);
             itemDo.setReplyCount(itemDo.getReplyCount() + 1);
             mapper.save(itemDo);
-            return null;
+            return itemDo;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
+        protected void onPostExecute(ProductItemsDO itemsDO) {
             Toast.makeText(PublishDetailActivity.this, "Comments added successfully", Toast.LENGTH_SHORT).show();
+            if(itemsDO.getReplyCount().intValue() > 0){
+                replyCount.setText("Comments " + itemsDO.getReplyCount().intValue());
+            }
+            getSupportLoaderManager().restartLoader(0, null, PublishDetailActivity.this).forceLoad();
         }
     }
 }
