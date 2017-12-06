@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import edu.virginia.cs.vmarketplace.R;
-import edu.virginia.cs.vmarketplace.model.AppConstant;
 
 public class ProfileFavoriteActivity extends AppCompatActivity {
 

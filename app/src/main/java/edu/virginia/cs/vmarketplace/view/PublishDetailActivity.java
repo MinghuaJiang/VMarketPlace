@@ -3,13 +3,15 @@ package edu.virginia.cs.vmarketplace.view;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -21,8 +23,6 @@ import android.widget.Toast;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,17 +31,16 @@ import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.virginia.cs.vmarketplace.R;
-import edu.virginia.cs.vmarketplace.model.AppConstant;
-import edu.virginia.cs.vmarketplace.model.AppContext;
-import edu.virginia.cs.vmarketplace.model.AppContextManager;
-import edu.virginia.cs.vmarketplace.model.AppUser;
-import edu.virginia.cs.vmarketplace.model.nosql.CommentsDO;
-import edu.virginia.cs.vmarketplace.model.nosql.ProductItemsDO;
-import edu.virginia.cs.vmarketplace.util.AWSClientFactory;
-import edu.virginia.cs.vmarketplace.util.IntentUtil;
-import edu.virginia.cs.vmarketplace.view.loader.CommentsDOLoader;
+import edu.virginia.cs.vmarketplace.service.CommentService;
+import edu.virginia.cs.vmarketplace.service.loader.CommonLoaderCallback;
+import edu.virginia.cs.vmarketplace.service.login.AppContext;
+import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
+import edu.virginia.cs.vmarketplace.service.login.AppUser;
+import edu.virginia.cs.vmarketplace.model.CommentsDO;
+import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
+import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
 
-public class PublishDetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<CommentsDO>>{
+public class PublishDetailActivity extends AppCompatActivity{
     private AppContext context;
     private TextView username;
     private CircleImageView userpic;
@@ -52,14 +51,14 @@ public class PublishDetailActivity extends AppCompatActivity implements LoaderMa
     private ImageView favorite;
     private DetailImageAdapter adapter;
     private CommentsDOAdapter commentsDOAdapter;
-    private String respondId;
     private TextView replyCount;
     private ProductItemsDO itemsDO;
+    private String respondId;
+    private CommonLoaderCallback<String, CommentsDO> callback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        respondId = null;
         setContentView(R.layout.activity_publish_detail);
         Toolbar toolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
@@ -90,6 +89,7 @@ public class PublishDetailActivity extends AppCompatActivity implements LoaderMa
             public void onClick(View v) {
                 before.setVisibility(View.GONE);
                 after.setVisibility(View.VISIBLE);
+                respondId = null;
             }
         });
 
@@ -147,16 +147,16 @@ public class PublishDetailActivity extends AppCompatActivity implements LoaderMa
                 commentsDO.setComment(text);
                 commentsDO.setCommentId(UUID.randomUUID().toString());
                 commentsDO.setItemId(itemsDO.getItemId());
-                commentsDO.setCommentBy(AppContextManager.getContextManager().getAppContext().getUser().getUserName());
+                commentsDO.setCommentBy(AppContextManager.getContextManager().getAppContext().getUser().getUserId());
                 commentsDO.setCommentTime(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
-                commentsDO.setResponseId(respondId);
+                commentsDO.setRespondId(respondId);
                 new CommentsUpdateTask(PublishDetailActivity.this, itemsDO).execute(commentsDO);
             }
         });
 
         TextView locationView = findViewById(R.id.publish_location);
-        locationView.setText("Published at " + itemsDO.getLocationName().substring(itemsDO.getLocationName().indexOf(",") + 1
-        , itemsDO.getLocationName().lastIndexOf("美")));
+        locationView.setText("Published at " + itemsDO.getLocation().substring(itemsDO.getLocation().indexOf(",") + 1
+        , itemsDO.getLocation().lastIndexOf("美")));
 
         TextView priceView = findViewById(R.id.price_container);
         if(itemsDO.getPrice() == null){
@@ -184,7 +184,28 @@ public class PublishDetailActivity extends AppCompatActivity implements LoaderMa
         commentView = findViewById(R.id.user_comment);
         commentsDOAdapter = new CommentsDOAdapter(this, new ArrayList<CommentsDO>());
         commentView.setAdapter(commentsDOAdapter);
-        getSupportLoaderManager().restartLoader(0, null, this).forceLoad();
+
+        commentView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                CommentsDO dao = commentsDOAdapter.getItem(position);
+                if(dao.getCommentBy().equals(AppContextManager.
+                        getContextManager().getAppContext().getUser().getUserId())){
+
+                }else{
+                    respondId = dao.getCommentBy();
+                    //editText.setHint("@" + dao.getCommentBy());
+                }
+            }
+        });
+
+        callback = new CommonLoaderCallback<String, CommentsDO>(
+                commentsDOAdapter,
+                CommentService.getInstance()::findCommentsByItemId,
+                itemsDO.getItemId());
+
+        getSupportLoaderManager().restartLoader(0, null,
+                callback).forceLoad();
 
         TextView viewCount = findViewById(R.id.view);
         viewCount.setText("view "+ itemsDO.getViewCount().intValue());
@@ -210,22 +231,6 @@ public class PublishDetailActivity extends AppCompatActivity implements LoaderMa
         }
         AppContextManager.getContextManager().getAppContext().setItemsDO(null);
         return intent;
-    }
-
-    @Override
-    public Loader<List<CommentsDO>> onCreateLoader(int id, Bundle args) {
-        return new CommentsDOLoader(this, itemsDO.getItemId());
-    }
-
-    @Override
-    public void onLoadFinished(Loader<List<CommentsDO>> loader, List<CommentsDO> data) {
-        commentsDOAdapter.clear();
-        commentsDOAdapter.addAll(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<CommentsDO>> loader) {
-        commentsDOAdapter.clear();
     }
 
     class ViewCountUpdateTask extends AsyncTask<ProductItemsDO, Void, Void> {
@@ -261,11 +266,11 @@ public class PublishDetailActivity extends AppCompatActivity implements LoaderMa
 
         @Override
         protected void onPostExecute(ProductItemsDO itemsDO) {
-            Toast.makeText(PublishDetailActivity.this, "Comments added successfully", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Comments added successfully", Toast.LENGTH_SHORT).show();
             if(itemsDO.getReplyCount().intValue() > 0){
                 replyCount.setText("Comments " + itemsDO.getReplyCount().intValue());
             }
-            getSupportLoaderManager().restartLoader(0, null, PublishDetailActivity.this).forceLoad();
+            getSupportLoaderManager().restartLoader(0, null, callback).forceLoad();
         }
     }
 }

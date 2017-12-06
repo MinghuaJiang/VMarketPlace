@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,22 +23,19 @@ import java.io.File;
 import java.util.List;
 
 import edu.virginia.cs.vmarketplace.R;
-import edu.virginia.cs.vmarketplace.model.AppConstant;
-import edu.virginia.cs.vmarketplace.model.AppContextManager;
-import edu.virginia.cs.vmarketplace.model.ProfileItem;
-import edu.virginia.cs.vmarketplace.model.PublishItem;
-import edu.virginia.cs.vmarketplace.model.nosql.ProductItemsDO;
-import edu.virginia.cs.vmarketplace.util.AWSClientFactory;
+import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
+import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
+import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
 
 /**
  * Created by cutehuazai on 11/24/17.
  */
 
-public class ProfilePublishItemAdapter extends ArrayAdapter<PublishItem> {
+public class ProfilePublishItemAdapter extends ArrayAdapter<ProductItemsDO> {
     private TransferUtility utility;
     private DynamoDBMapper mapper;
 
-    public ProfilePublishItemAdapter(@NonNull Context context, @NonNull List<PublishItem> objects) {
+    public ProfilePublishItemAdapter(@NonNull Context context, @NonNull List<ProductItemsDO> objects) {
         super(context, 0, objects);
         utility = AWSClientFactory.getInstance().getTransferUtility(context);
         mapper = AWSClientFactory.getInstance().getDBMapper();
@@ -53,15 +49,15 @@ public class ProfilePublishItemAdapter extends ArrayAdapter<PublishItem> {
                     , false);
         }
 
-        final PublishItem currentItem = getItem(position);
+        final ProductItemsDO currentItem = getItem(position);
 
         final ImageView imageView = listView.findViewById(R.id.image);
-        if (currentItem.getImage() == null) {
+        if (currentItem.getThumbPic() == null) {
             imageView.setImageResource(R.drawable.product_placeholder_96dp);
         } else {
             imageView.setImageResource(R.drawable.product_placeholder_96dp);
-            final File file = new File(currentItem.getItemsDO().getOriginalFiles().get(0));
-            utility.download(currentItem.getImage(),
+            final File file = new File(currentItem.getOriginalFiles().get(0));
+            utility.download(currentItem.getThumbPic(),
                     file,
                     new TransferListener() {
                         @Override
@@ -86,7 +82,7 @@ public class ProfilePublishItemAdapter extends ArrayAdapter<PublishItem> {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppContextManager.getContextManager().getAppContext().setItemsDO(currentItem.getItemsDO());
+                AppContextManager.getContextManager().getAppContext().setItemsDO(currentItem);
                 Intent intent = new Intent(getContext(), PublishDetailActivity.class);
                 intent.putExtra(AppConstant.JUMP_FROM, AppConstant.PUBLISH_BY_ME);
                 getContext().startActivity(intent);
@@ -100,11 +96,11 @@ public class ProfilePublishItemAdapter extends ArrayAdapter<PublishItem> {
         priceView.setText("$" + currentItem.getPrice());
 
         TextView countView = listView.findViewById(R.id.count);
-        countView.setText("reply" + currentItem.getReplyCount() +
-                "  " + "view" + currentItem.getViewCount());
+        countView.setText("reply" + currentItem.getReplyCount().intValue() +
+                "  " + "view" + currentItem.getViewCount().intValue());
 
         TextView typeView = listView.findViewById(R.id.product_type);
-        typeView.setText(currentItem.getProductType());
+        typeView.setText(currentItem.getCategory() + " - " + currentItem.getSubcategory());
 
         Button edit = listView.findViewById(R.id.modify);
         edit.setOnClickListener(
@@ -112,7 +108,7 @@ public class ProfilePublishItemAdapter extends ArrayAdapter<PublishItem> {
                     @Override
                     public void onClick(View v) {
                         AppContextManager.getContextManager().getAppContext().setPublish(false);
-                        AppContextManager.getContextManager().getAppContext().setItemsDO(currentItem.getItemsDO());
+                        AppContextManager.getContextManager().getAppContext().setItemsDO(currentItem);
                         Intent intent = new Intent(getContext(), PublishFormActivity.class);
                         intent.putExtra(AppConstant.JUMP_FROM, AppConstant.PUBLISH_BY_ME);
                         getContext().startActivity(intent);
@@ -124,35 +120,33 @@ public class ProfilePublishItemAdapter extends ArrayAdapter<PublishItem> {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ProductItemsDO itemsDO = currentItem.getItemsDO();
+                ProductItemsDO itemsDO = currentItem;
                 List<String> files = itemsDO.getOriginalFiles();
                 for(String each : files){
                     new File(each).delete();
                 }
-                new ProductItemDeleteTask(mapper, currentItem).execute(itemsDO);
+                new ProductItemDeleteTask(mapper).execute(itemsDO);
             }
         });
 
         return listView;
     }
 
-    class ProductItemDeleteTask extends AsyncTask<ProductItemsDO,Void, Void> {
-        private PublishItem item;
+    class ProductItemDeleteTask extends AsyncTask<ProductItemsDO,Void, ProductItemsDO> {
         private DynamoDBMapper mapper;
 
-        public ProductItemDeleteTask(DynamoDBMapper mapper, PublishItem item){
+        public ProductItemDeleteTask(DynamoDBMapper mapper){
             this.mapper = mapper;
-            this.item = item;
         }
         @Override
-        protected Void doInBackground(ProductItemsDO... productItemsDOS) {
+        protected ProductItemsDO doInBackground(ProductItemsDO... productItemsDOS) {
             mapper.delete(productItemsDOS[0]);
-            return null;
+            return productItemsDOS[0];
         }
 
         @Override
-        protected void onPostExecute(Void result) {
-            ProfilePublishItemAdapter.this.remove(item);
+        protected void onPostExecute(ProductItemsDO result) {
+            ProfilePublishItemAdapter.this.remove(result);
             Toast.makeText(getContext(), "Item deleted successfully", Toast.LENGTH_SHORT).show();
         }
     }

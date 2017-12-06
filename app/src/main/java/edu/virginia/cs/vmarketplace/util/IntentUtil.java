@@ -4,8 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import edu.virginia.cs.vmarketplace.model.AppConstant;
-import edu.virginia.cs.vmarketplace.view.MainActivity;
+import edu.virginia.cs.vmarketplace.view.AppConstant;
 
 /**
  * Created by cutehuazai on 11/25/17.

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -27,13 +26,11 @@ import com.github.bassaer.chatmessageview.util.ChatBot;
 import com.github.bassaer.chatmessageview.views.ChatView;
 import java.io.File;
 import java.util.List;
-import java.util.Random;
 
 import edu.virginia.cs.vmarketplace.R;
-import edu.virginia.cs.vmarketplace.model.AppConstant;
-import edu.virginia.cs.vmarketplace.model.AppContextManager;
-import edu.virginia.cs.vmarketplace.model.nosql.ProductItemsDO;
-import edu.virginia.cs.vmarketplace.util.AWSClientFactory;
+import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
+import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
+import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
 import edu.virginia.cs.vmarketplace.util.ImageUtil;
 import edu.virginia.cs.vmarketplace.util.IntentUtil;
 import edu.virginia.cs.vmarketplace.view.fragments.UseCameraFragment;
@@ -72,7 +69,7 @@ public class MessageDetailActivity extends AppCompatActivity {
             if(inputIntent.getIntExtra(AppConstant.JUMP_FROM, 0)
                     == AppConstant.PUBLISH_DETAIL){
                 ProductItemsDO itemsDO = AppContextManager.getContextManager().getAppContext().getItemsDO();
-                textView.setText(itemsDO.getUserId());
+                textView.setText(itemsDO.getCreatedBy());
             }
         }else{
             textView.setText(inputIntent.getStringExtra(AppConstant.BUYER_NAME));

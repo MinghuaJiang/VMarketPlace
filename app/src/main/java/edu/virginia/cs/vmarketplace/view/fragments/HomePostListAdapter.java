@@ -2,7 +2,6 @@ package edu.virginia.cs.vmarketplace.view.fragments;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +21,9 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.virginia.cs.vmarketplace.R;
-import edu.virginia.cs.vmarketplace.model.nosql.ProductItemsDO;
-import edu.virginia.cs.vmarketplace.model.nosql.UserProfileDO;
-import edu.virginia.cs.vmarketplace.util.AWSClientFactory;
+import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
+import edu.virginia.cs.vmarketplace.model.UserProfileDO;
+import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
 
 /**
  * Created by VINCENTWEN on 12/4/17.
@@ -53,8 +52,8 @@ public class HomePostListAdapter extends ArrayAdapter<ProductItemsDO> {
                     ,false);
         }
         ProductItemsDO productItemsDO = getItem(position);
-        if (productItemsDO.getUserId() != null) {
-            new UserProfileDOLoadAsyncTask(listView).execute(productItemsDO.getUserId());
+        if (productItemsDO.getCreatedBy() != null) {
+            new UserProfileDOLoadAsyncTask(listView).execute(productItemsDO.getCreatedBy());
         }
 
         // download images from S3 to list item
@@ -93,8 +92,8 @@ public class HomePostListAdapter extends ArrayAdapter<ProductItemsDO> {
 
         // add post location
         TextView postLocale = listView.findViewById(R.id.home_post_locale);
-        if (productItemsDO.getLocationName() != null) {
-            postLocale.setText(productItemsDO.getLocationName());
+        if (productItemsDO.getLocation() != null) {
+            postLocale.setText(productItemsDO.getLocation());
         }
 
         // add thumb up

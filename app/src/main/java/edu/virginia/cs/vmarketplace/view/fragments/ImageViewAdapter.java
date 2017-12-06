@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.virginia.cs.vmarketplace.R;
-import edu.virginia.cs.vmarketplace.model.AppConstant;
+import edu.virginia.cs.vmarketplace.view.AppConstant;
 import edu.virginia.cs.vmarketplace.model.PreviewImageItem;
 import edu.virginia.cs.vmarketplace.view.PhotoActivity;
 import edu.virginia.cs.vmarketplace.view.PublishFormActivity;

@@ -1,7 +1,6 @@
 package edu.virginia.cs.vmarketplace.view.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
@@ -13,16 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.virginia.cs.vmarketplace.R;
-import edu.virginia.cs.vmarketplace.model.nosql.ProductItemsDO;
-import edu.virginia.cs.vmarketplace.view.loader.HomeNewTabLoader;
-import edu.virginia.cs.vmarketplace.view.loader.ProductItemDOLoader;
+import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
+import edu.virginia.cs.vmarketplace.service.ProductItemService;
+import edu.virginia.cs.vmarketplace.service.loader.CommonLoaderCallback;
 
 /**
  * Created by VINCENTWEN on 12/4/17.
  */
 
-public class HomeTabNewFragment extends AbstractFragment
-        implements LoaderCallbacks<List<ProductItemsDO>>{
+public class HomeTabNewFragment extends AbstractFragment {
 
     private HomePostListAdapter homePostListAdapter;
 
@@ -38,25 +36,11 @@ public class HomeTabNewFragment extends AbstractFragment
         homePostListAdapter = new HomePostListAdapter(getActivity(),
                 new ArrayList<ProductItemsDO>());
         listView.setAdapter(homePostListAdapter);
-        getLoaderManager().restartLoader(0, null, this).forceLoad();
+        getLoaderManager().restartLoader(0, null, new CommonLoaderCallback<Void, ProductItemsDO>(
+                homePostListAdapter,
+                ProductItemService.getInstance()::findTop100NewPostsInOneWeek
+        )).forceLoad();
         System.out.println("HomeTabNewFragment called");
         return rootView;
-    }
-
-
-    @Override
-    public Loader<List<ProductItemsDO>> onCreateLoader(int id, Bundle args) {
-        return new ProductItemDOLoader(getContext(), new HomeNewTabLoader());
-    }
-
-    @Override
-    public void onLoadFinished(Loader<List<ProductItemsDO>> loader, List<ProductItemsDO> data) {
-        homePostListAdapter.clear();
-        homePostListAdapter.addAll(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<ProductItemsDO>> loader) {
-
     }
 }

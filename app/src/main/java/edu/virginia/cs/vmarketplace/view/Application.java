@@ -6,7 +6,7 @@ import android.support.multidex.MultiDexApplication;
 
 import com.amazonaws.mobileconnectors.pinpoint.PinpointManager;
 
-import edu.virginia.cs.vmarketplace.util.AWSClientFactory;
+import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
 
 /**
  * Created by cutehuazai on 11/27/17.

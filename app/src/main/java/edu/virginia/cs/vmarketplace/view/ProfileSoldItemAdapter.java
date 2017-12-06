@@ -2,7 +2,6 @@ package edu.virginia.cs.vmarketplace.view;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +16,6 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import edu.virginia.cs.vmarketplace.R;
-import edu.virginia.cs.vmarketplace.model.AppConstant;
-import edu.virginia.cs.vmarketplace.model.PublishItem;
 import edu.virginia.cs.vmarketplace.model.SoldItem;
 
 /**

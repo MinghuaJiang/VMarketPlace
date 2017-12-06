@@ -27,7 +27,7 @@
             android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
             android:enabled="true" />
         <service
-            android:name=".service.FetchAddressIntentService"
+            android:name=".util.FetchAddressIntentService"
             android:exported="false" />
 
         <activity
@@ -120,7 +120,6 @@
         <activity
             android:name=".view.PhotoActivity"
             android:theme="@style/AppTheme.FullScreen" />
-        <activity android:name=".view.LocationActivity" />
         <activity
             android:name=".view.MessageCameraActivity"
             android:theme="@style/AppTheme.FullScreen" />

@@ -17,7 +17,7 @@ import java.io.File;
 import java.util.List;
 
 import edu.virginia.cs.vmarketplace.R;
-import edu.virginia.cs.vmarketplace.util.AWSClientFactory;
+import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
 
 /**
  * Created by cutehuazai on 12/4/17.

@@ -45,16 +45,14 @@ import java.util.List;
 import java.util.UUID;
 
 import edu.virginia.cs.vmarketplace.R;
-import edu.virginia.cs.vmarketplace.model.AppConstant;
-import edu.virginia.cs.vmarketplace.model.AppContext;
-import edu.virginia.cs.vmarketplace.model.AppContextManager;
-import edu.virginia.cs.vmarketplace.model.LocationConstant;
+import edu.virginia.cs.vmarketplace.service.login.AppContext;
+import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.PreviewImageItem;
-import edu.virginia.cs.vmarketplace.model.nosql.ProductItemsDO;
-import edu.virginia.cs.vmarketplace.service.FetchAddressIntentService;
-import edu.virginia.cs.vmarketplace.util.AWSClientFactory;
+import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
+import edu.virginia.cs.vmarketplace.util.FetchAddressIntentService;
+import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
 import edu.virginia.cs.vmarketplace.view.fragments.ImageViewAdapter;
-import edu.virginia.cs.vmarketplace.view.loader.PreviewImageItemLoader;
+import edu.virginia.cs.vmarketplace.service.loader.PreviewImageItemLoader;
 
 public class PublishFormActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<PreviewImageItem>> {
     private static final String TITLE_CONTENT = "title";
@@ -68,12 +66,12 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
     private GridView gridView;
     private ImageViewAdapter adapter;
     private List<String> mFiles;
-    private MyEditText titleView;
+    private SingleLineEditText titleView;
     private EditText descriptionView;
     private FusedLocationProviderClient mFusedLocationClient;
     private ImageView locationLogo;
     private TextView locationView;
-    private MyEditText priceView;
+    private SingleLineEditText priceView;
     private Spinner spinner;
     private Location mLastKnowLocation;
     private Task<Location> locationTask;
@@ -253,7 +251,7 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                 if(productItemsDo == null){
                     productItemsDo = new ProductItemsDO();
                     productItemsDo.setItemId(UUID.randomUUID().toString());
-                    productItemsDo.setUserId(AppContextManager.getContextManager().getAppContext().getUser().getUserId());
+                    productItemsDo.setCreatedBy(AppContextManager.getContextManager().getAppContext().getUser().getUserId());
                     productItemsDo.setViewCount(0.0);
                     productItemsDo.setReplyCount(0.0);
                 }
@@ -267,8 +265,8 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                 productItemsDo.setDescription(description);
                 productItemsDo.setLatitude(mLastKnowLocation.getLatitude());
                 productItemsDo.setLongtitude(mLastKnowLocation.getLongitude());
-                productItemsDo.setLocationName(location);
-                productItemsDo.setModificationTime(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
+                productItemsDo.setLocation(location);
+                productItemsDo.setLastModificationTime(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
                 appContext.destroyInstanceState();
                 appContext.setItemsDO(null);
                 loadIntoS3(productItemsDo);

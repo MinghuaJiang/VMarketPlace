@@ -19,14 +19,14 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.virginia.cs.vmarketplace.R;
-import edu.virginia.cs.vmarketplace.model.AppContextManager;
-import edu.virginia.cs.vmarketplace.model.AppUser;
+import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
+import edu.virginia.cs.vmarketplace.service.login.AppUser;
 import edu.virginia.cs.vmarketplace.model.ProfileItem;
 import edu.virginia.cs.vmarketplace.view.ProfileBoughtActivity;
 import edu.virginia.cs.vmarketplace.view.ProfileFavoriteActivity;
 import edu.virginia.cs.vmarketplace.view.ProfilePublishActivity;
 import edu.virginia.cs.vmarketplace.view.ProfileSoldActivity;
-import edu.virginia.cs.vmarketplace.view.loader.ProfileItemLoader;
+import edu.virginia.cs.vmarketplace.service.loader.ProfileItemLoader;
 import edu.virginia.cs.vmarketplace.view.login.AWSLoginActivity;
 
 /**

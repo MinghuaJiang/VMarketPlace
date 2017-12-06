@@ -1,18 +1,15 @@
 package edu.virginia.cs.vmarketplace.view;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import edu.virginia.cs.vmarketplace.R;
-import edu.virginia.cs.vmarketplace.model.AppConstant;
-import edu.virginia.cs.vmarketplace.model.AppContext;
-import edu.virginia.cs.vmarketplace.model.AppContextManager;
+import edu.virginia.cs.vmarketplace.service.login.AppContext;
+import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
 import edu.virginia.cs.vmarketplace.util.IntentUtil;
 
 public class PublishActivity extends AppCompatActivity {

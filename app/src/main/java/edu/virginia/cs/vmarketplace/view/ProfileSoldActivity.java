@@ -15,10 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.virginia.cs.vmarketplace.R;
-import edu.virginia.cs.vmarketplace.model.AppConstant;
 import edu.virginia.cs.vmarketplace.model.SoldItem;
 import edu.virginia.cs.vmarketplace.util.IntentUtil;
-import edu.virginia.cs.vmarketplace.view.loader.SoldItemLoader;
+import edu.virginia.cs.vmarketplace.service.loader.SoldItemLoader;
 
 public class ProfileSoldActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<SoldItem>>{
     private SwipeRefreshLayout refreshLayout;

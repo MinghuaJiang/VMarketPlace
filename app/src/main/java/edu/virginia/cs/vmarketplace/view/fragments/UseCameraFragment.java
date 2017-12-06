@@ -63,15 +63,15 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import edu.virginia.cs.vmarketplace.R;
-import edu.virginia.cs.vmarketplace.model.AppConstant;
-import edu.virginia.cs.vmarketplace.model.AppContextManager;
+import edu.virginia.cs.vmarketplace.view.AppConstant;
+import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.PreviewImageItem;
 import edu.virginia.cs.vmarketplace.util.ImageUtil;
 import edu.virginia.cs.vmarketplace.view.AutoFitTextureView;
 import edu.virginia.cs.vmarketplace.view.MainActivity;
 import edu.virginia.cs.vmarketplace.view.MessageDetailActivity;
 import edu.virginia.cs.vmarketplace.view.PublishFormActivity;
-import edu.virginia.cs.vmarketplace.view.loader.PreviewImageItemLoader;
+import edu.virginia.cs.vmarketplace.service.loader.PreviewImageItemLoader;
 
 /**
  * Created by cutehuazai on 11/25/17.

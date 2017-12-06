@@ -18,10 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.virginia.cs.vmarketplace.R;
-import edu.virginia.cs.vmarketplace.model.AppConstant;
+import edu.virginia.cs.vmarketplace.view.AppConstant;
 import edu.virginia.cs.vmarketplace.model.MessageItem;
 import edu.virginia.cs.vmarketplace.view.MessageDetailActivity;
-import edu.virginia.cs.vmarketplace.view.loader.MessageItemLoader;
+import edu.virginia.cs.vmarketplace.service.loader.MessageItemLoader;
 
 
 /**

@@ -9,16 +9,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.facebook.Profile;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.List;
 
 import edu.virginia.cs.vmarketplace.R;
-import edu.virginia.cs.vmarketplace.model.nosql.CommentsDO;
+import edu.virginia.cs.vmarketplace.model.CommentsDO;
 
 /**
  * Created by cutehuazai on 12/5/17.
