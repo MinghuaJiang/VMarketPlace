@@ -6,6 +6,7 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -31,7 +32,12 @@ public class HomeTabNewFragment extends AbstractFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.home_tab_list, container, false);
+//        View rootView = inflater.inflate(R.layout.test, container, false);
+//        ImageView view = rootView.findViewById(R.id.imageView);
+//        view.setImageResource(R.drawable.face_1);
+        View rootView = inflater.inflate(R.layout.home_tab, container, false);
+        ImageView testImage = rootView.findViewById(R.id.home_tab_image);
+        testImage.setImageResource(R.drawable.face_2);
         ListView listView = rootView.findViewById(R.id.home_tab_list);
         homePostListAdapter = new HomePostListAdapter(getActivity(),
                 new ArrayList<ProductItemsDO>());

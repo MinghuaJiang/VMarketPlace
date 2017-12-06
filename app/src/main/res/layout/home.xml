@@ -15,8 +15,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/button_margin_large"
-            android:layout_marginRight="@dimen/button_margin_large">
+            android:layout_marginLeft="48dp"
+            android:layout_marginRight="48dp">
 
             <android.support.v7.widget.SearchView
                 android:layout_width="match_parent"
@@ -204,6 +204,32 @@
                 >
             </TextView>
 
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/tab_container1"
+                android:layout_below="@+id/separator_above_tab"
+                >
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="@color/separator"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_below="@+id/tab_container1"
+                android:id="@+id/frame_separator"
+                />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/tab_container2"
+                android:layout_below="@+id/frame_separator"
+                >
+            </FrameLayout>
+
             <android.support.design.widget.TabLayout
                 android:id="@+id/tab"
                 android:layout_width="match_parent"
@@ -217,7 +243,19 @@
                 android:id="@+id/home_tab_viewpager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_below="@+id/tab"
                 />
+
+            <TextView
+                android:id="@+id/separator_below_tab"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/separator_height"
+                android:background="@color/separator"
+                android:layout_marginTop="8dp"
+                android:layout_below="@+id/home_tab_viewpager"
+                >
+            </TextView>
+
         </RelativeLayout>
     </ScrollView>
 </LinearLayout>

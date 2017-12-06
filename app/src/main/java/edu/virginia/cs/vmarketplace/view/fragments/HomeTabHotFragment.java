@@ -1,11 +1,13 @@
 package edu.virginia.cs.vmarketplace.view.fragments;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -32,7 +34,13 @@ public class HomeTabHotFragment extends AbstractFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.home_tab_list, container, false);
+//        View rootView = inflater.inflate(R.layout.test, container, false);
+//        ImageView view = rootView.findViewById(R.id.imageView);
+//        view.setImageResource(R.drawable.face_2);
+
+        View rootView = inflater.inflate(R.layout.home_tab, container, false);
+        ImageView testImage = rootView.findViewById(R.id.home_tab_image);
+        testImage.setImageResource(R.drawable.face_1);
         ListView listView = rootView.findViewById(R.id.home_tab_list);
         List<ProductItemsDO> test = new ArrayList<>();
         homePostListAdapter = new HomePostListAdapter(getActivity(),

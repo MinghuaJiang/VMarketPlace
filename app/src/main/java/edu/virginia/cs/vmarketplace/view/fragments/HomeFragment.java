@@ -2,6 +2,8 @@ package edu.virginia.cs.vmarketplace.view.fragments;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
@@ -48,9 +50,6 @@ public class HomeFragment extends AbstractFragment implements
 
         // set up list items
         ListView listView = rootView.findViewById(R.id.home_list);
-        List<ProductItemsDO> test = new ArrayList<>();
-        test.add(ProductItemsDO.getInstance());
-        System.out.println(ProductItemsDO.getInstance().toString());
         homePostListAdapter = new HomePostListAdapter(getActivity(),
                 new ArrayList<ProductItemsDO>());
         listView.setAdapter(homePostListAdapter);
@@ -58,17 +57,24 @@ public class HomeFragment extends AbstractFragment implements
         System.out.println("HomeTabHotFragment called");
 
         // setup view pager for tabs
-        initFragments();
-        ViewPager viewPager = rootView.findViewById(R.id.home_tab_viewpager);
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(
-                getActivity().getSupportFragmentManager(), fragments);
-        viewPager.setAdapter(viewPagerAdapter);
-        TabLayout tabLayout = rootView.findViewById(R.id.tab);
-        tabLayout.setupWithViewPager(viewPager);
+//        initFragments();
+//        ViewPager viewPager = rootView.findViewById(R.id.home_tab_viewpager);
+//        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), fragments);
+//        viewPager.setAdapter(viewPagerAdapter);
+//        TabLayout tabLayout = rootView.findViewById(R.id.tab);
+//        tabLayout.setupWithViewPager(viewPager);
+//
+//        for(int i = 0; i < fragments.length;i++){
+//            tabLayout.getTabAt(i).setIcon(fragments[i].getIconResourceId());
+//        }
 
-        for(int i = 0; i < fragments.length;i++){
-            tabLayout.getTabAt(i).setIcon(fragments[i].getIconResourceId());
-        }
+        // set up tab fragments
+        Fragment newFragment = new HomeTabNewFragment();
+        Fragment hotFragment = new HomeTabHotFragment();
+        getChildFragmentManager().beginTransaction()
+                .add(R.id.tab_container1, newFragment).commit();
+        getChildFragmentManager().beginTransaction()
+                .add(R.id.tab_container2, hotFragment).commit();
         return rootView;
     }
 

@@ -33,14 +33,12 @@ public class HomePostListAdapter extends ArrayAdapter<ProductItemsDO> {
     private List<File> images;
     private TransferUtility transferUtility;
     private int imageCounter;
-    private LayoutInflater layoutInflater;
 
     public HomePostListAdapter(Context context, List<ProductItemsDO> objects) {
         super(context, 0, objects);
         this.images = new ArrayList<>();
         this.transferUtility = AWSClientFactory.getInstance().getTransferUtility(context);
         this.imageCounter = 0;
-        this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -48,7 +46,7 @@ public class HomePostListAdapter extends ArrayAdapter<ProductItemsDO> {
 
         View listView = convertView;
         if(listView == null){
-            listView = layoutInflater.from(getContext()).inflate(R.layout.home_tab, parent
+            listView = LayoutInflater.from(getContext()).inflate(R.layout.home_tab, parent
                     ,false);
         }
         ProductItemsDO productItemsDO = getItem(position);
@@ -123,7 +121,7 @@ public class HomePostListAdapter extends ArrayAdapter<ProductItemsDO> {
 
         @Override
         protected void onPostExecute(UserProfileDO userProfileDO) {
-            System.out.println("user : " + userProfileDO.toString());
+//            System.out.println("user : " + userProfileDO.toString());
             CircleImageView userAvatar = rootView.findViewById(R.id.home_post_avatar);
             if(userProfileDO.getAvatar() == null) {
                 userAvatar.setImageResource(R.drawable.user_24p);
