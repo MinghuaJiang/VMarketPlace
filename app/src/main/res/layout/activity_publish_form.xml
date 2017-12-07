@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
-            <edu.virginia.cs.vmarketplace.view.MyEditText
+            <edu.virginia.cs.vmarketplace.view.SingleLineEditText
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/list_item_height"
                 android:hint="@string/hint_title"
@@ -140,7 +140,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_alignParentBottom="true"
                     />
-                <edu.virginia.cs.vmarketplace.view.MyEditText
+                <edu.virginia.cs.vmarketplace.view.SingleLineEditText
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/list_item_height"
                     app:backgroundTint="@color/separator"

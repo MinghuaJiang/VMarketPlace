@@ -21,8 +21,9 @@ public class CommonAyncTask<Params, Progress, Result> extends AsyncTask<Params, 
         this.supplier = supplier;
     }
 
-    public CommonAyncTask(Consumer<Params> consumer){
+    public CommonAyncTask(Consumer<Params> consumer, Params params){
         this.consumer = consumer;
+        this.params = params;
     }
 
     public CommonAyncTask(Function<Params, Result> function, Params params){

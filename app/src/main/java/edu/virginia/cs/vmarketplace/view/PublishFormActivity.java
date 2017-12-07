@@ -46,11 +46,13 @@ import java.util.UUID;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.service.ProductItemService;
+import edu.virginia.cs.vmarketplace.service.S3Service;
 import edu.virginia.cs.vmarketplace.service.loader.CommonAyncTask;
 import edu.virginia.cs.vmarketplace.service.login.AppContext;
 import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.PreviewImageItem;
 import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
+import edu.virginia.cs.vmarketplace.util.CategoryUtil;
 import edu.virginia.cs.vmarketplace.util.FetchAddressIntentService;
 import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
 import edu.virginia.cs.vmarketplace.view.fragments.ImageViewAdapter;
@@ -155,7 +157,7 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
             }
 
             category = appContext.getCurrentCategory();
-            ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.category_item, getSubCategory(category));
+            ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.category_item, CategoryUtil.getSubCategory(category));
             spinner.setAdapter(spinnerAdapter);
         }else{
             ProductItemsDO itemsDO = appContext.getItemsDO();
@@ -166,7 +168,7 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
 
             category = itemsDO.getCategory();
             appContext.setCurrentCategory(category);
-            ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.category_item, getSubCategory(category));
+            ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.category_item, CategoryUtil.getSubCategory(category));
             spinner.setAdapter(spinnerAdapter);
             spinner.setSelection(itemsDO.getSubcategoryPosition().intValue());
             if (mFiles != null) {
@@ -263,7 +265,6 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                 productItemsDo.setPrice(price);
                 productItemsDo.setTitle(title);
                 productItemsDo.setSubcategoryPosition(Double.valueOf(spinner.getSelectedItemPosition()));
-                productItemsDo.setOriginalFiles(mFiles);
                 productItemsDo.setDescription(description);
                 productItemsDo.setLatitude(mLastKnowLocation.getLatitude());
                 productItemsDo.setLongtitude(mLastKnowLocation.getLongitude());
@@ -317,51 +318,35 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                 mAddressOutput = resultData.getString(LocationConstant.RESULT_DATA_KEY);
                 locationView.setText(mAddressOutput);
             }else{
-                locationLogo.setImageResource(R.drawable.location_blue);
+                locationLogo.setBackground(getDrawable(R.drawable.location_blue));
                 locationView.setText("Choose one location");
             }
         }
     }
 
     private void loadIntoS3(final ProductItemsDO itemDo){
-        final List<String> result = new ArrayList<>();
+        final List<String> s3urls = new ArrayList<>();
         final TransferUtility utility = AWSClientFactory.getInstance().getTransferUtility(getApplicationContext());
-        final List<String> count = new ArrayList<>();
-        for(String each: mFiles){
+        final List<String> files = new ArrayList<>();
+        for(String each: mFiles) {
             final File file = new File(each);
             final String key = "public" + "/" + file.getName();
-            result.add(key);
-
-            TransferObserver observer = utility.upload(key, file);
-            observer.setTransferListener(new TransferListener() {
-                @Override
-                public void onStateChanged(int id, TransferState state) {
-                    if(state == TransferState.COMPLETED){
-                        file.delete();
-                        count.add(key);
-                        if(count.size() == mFiles.size()){
-                            itemDo.setPics(result);
-                            itemDo.setThumbPic(result.get(0));
-                            insertToDB(itemDo);
-                        }
-                    }
-                }
-
-                @Override
-                public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-
-                }
-
-                @Override
-                public void onError(int id, Exception ex) {
-
-                }
-            });
+            files.add(file.getName());
+            s3urls.add(key);
         }
+
+        S3Service.getInstance(getApplicationContext()).upload(s3urls, files, true,
+                ()->{
+                    itemDo.setPics(s3urls);
+                    itemDo.setThumbPic(s3urls.get(0));
+                    itemDo.setOriginalFiles(files);
+                    insertToDB(itemDo);
+                });
+
     }
 
     private void insertToDB(ProductItemsDO productItemsDO){
-        new CommonAyncTask<ProductItemsDO, Void, Void>(ProductItemService.getInstance() :: save).with(
+        new CommonAyncTask<ProductItemsDO, Void, Void>(ProductItemService.getInstance() :: save, productItemsDO).with(
                 (x) ->{
                     refreshLayout.setRefreshing(false);
                     Intent intent = new Intent(PublishFormActivity.this, PublishSuccessActivity.class);
@@ -394,29 +379,5 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                 }
             }
         }
-    }
-
-    private List<String> getSubCategory(String category){
-        List<String> result = new ArrayList();
-        if(category.equals("Second Hand")) {
-            result.add("Appliance");
-            result.add("Bicycle");
-            result.add("Book");
-            result.add("Car");
-            result.add("PC/Laptop");
-            result.add("Digital Device");
-            result.add("Furniture");
-            result.add("Game Device");
-            result.add("Kitchenware");
-            result.add("Other");
-        }else if(category.equals("Sublease")){
-            result.add("Apartment");
-            result.add("House");
-        }else if(category.equals("Ride")){
-            result.add("One-way Trip");
-            result.add("Round Trip");
-        }
-
-        return result;
     }
 }
