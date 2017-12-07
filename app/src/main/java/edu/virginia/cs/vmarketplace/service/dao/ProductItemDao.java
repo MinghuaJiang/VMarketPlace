@@ -26,6 +26,10 @@ public class ProductItemDao {
         mapper = AWSClientFactory.getInstance().getDBMapper();
     }
 
+    public void insertOrUpdate(ProductItemsDO itemsDO){
+        mapper.save(itemsDO);
+    }
+
     public List<ProductItemsDO> findTop100HotPostsInOneWeek(){
         Calendar cal = Calendar.getInstance();
         cal.setTime(new java.util.Date());

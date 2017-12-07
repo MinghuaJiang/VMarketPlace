@@ -45,6 +45,8 @@ import java.util.List;
 import java.util.UUID;
 
 import edu.virginia.cs.vmarketplace.R;
+import edu.virginia.cs.vmarketplace.service.ProductItemService;
+import edu.virginia.cs.vmarketplace.service.loader.CommonAyncTask;
 import edu.virginia.cs.vmarketplace.service.login.AppContext;
 import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.PreviewImageItem;
@@ -359,7 +361,13 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
     }
 
     private void insertToDB(ProductItemsDO productItemsDO){
-        new ProductItemInsertTask(refreshLayout, mapper, this).execute(productItemsDO);
+        new CommonAyncTask<ProductItemsDO, Void, Void>(ProductItemService.getInstance() :: save).with(
+                (x) ->{
+                    refreshLayout.setRefreshing(false);
+                    Intent intent = new Intent(PublishFormActivity.this, PublishSuccessActivity.class);
+                    PublishFormActivity.this.startActivity(intent);
+                }
+        ).run();
     }
 
     @SuppressLint("MissingPermission")
@@ -410,29 +418,5 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
         }
 
         return result;
-    }
-
-    static class ProductItemInsertTask extends AsyncTask<ProductItemsDO,Void, Void>{
-        private SwipeRefreshLayout refreshLayout;
-        private DynamoDBMapper mapper;
-        private PublishFormActivity activity;
-
-        public ProductItemInsertTask(SwipeRefreshLayout refreshLayout, DynamoDBMapper mapper, PublishFormActivity activity){
-            this.refreshLayout = refreshLayout;
-            this.mapper = mapper;
-            this.activity = activity;
-        }
-        @Override
-        protected Void doInBackground(ProductItemsDO... productItemsDOS) {
-            mapper.save(productItemsDOS[0]);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            refreshLayout.setRefreshing(false);
-            Intent intent = new Intent(activity, PublishSuccessActivity.class);
-            activity.startActivity(intent);
-        }
     }
 }

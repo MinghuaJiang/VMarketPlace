@@ -22,6 +22,10 @@ public class ProductItemService {
         dao = new ProductItemDao();
     }
 
+    public void save(ProductItemsDO itemsDO){
+        dao.insertOrUpdate(itemsDO);
+    }
+
     public List<ProductItemsDO> findTop100HotPostsInOneWeek(){
         return dao.findTop100HotPostsInOneWeek();
     }
