@@ -16,6 +16,9 @@ import java.util.List;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.CommentsDO;
+import edu.virginia.cs.vmarketplace.model.UserProfileDO;
+import edu.virginia.cs.vmarketplace.service.UserProfileService;
+import edu.virginia.cs.vmarketplace.service.loader.CommonAyncTask;
 
 /**
  * Created by cutehuazai on 12/5/17.
@@ -43,7 +46,9 @@ public class CommentsDOAdapter extends ArrayAdapter<CommentsDO> {
         }
         //picView.setImageResource(R.drawable.place_holder_96p);
         TextView userName = listView.findViewById(R.id.user_name);
-        userName.setText(commentsDO.getCommentBy());
+        new CommonAyncTask<String, Void, UserProfileDO>(UserProfileService.getInstance()::findUserById, commentsDO.getCommentBy()).with((x)->{
+            userName.setText(x.getUserName());
+        }).run();
 
         TextView comment = listView.findViewById(R.id.comment);
         comment.setText(commentsDO.getComment());

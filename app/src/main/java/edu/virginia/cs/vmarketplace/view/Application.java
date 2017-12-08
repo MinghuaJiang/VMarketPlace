@@ -13,18 +13,9 @@ import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
  */
 
 public class Application extends MultiDexApplication {
-    private static PinpointManager pinpointManager;
-
     @Override
     public void onCreate() {
         super.onCreate();
-    }
-
-    public static PinpointManager getPinpointManager(Context context){
-        if(pinpointManager == null){
-            pinpointManager = AWSClientFactory.getInstance().getPinpointManager(context);
-        }
-        return pinpointManager;
     }
 
     @Override
@@ -32,5 +23,4 @@ public class Application extends MultiDexApplication {
         super.attachBaseContext(base);
         MultiDex.install(this);
     }
-
 }

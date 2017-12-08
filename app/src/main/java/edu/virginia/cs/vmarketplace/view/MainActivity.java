@@ -1,13 +1,25 @@
 package edu.virginia.cs.vmarketplace.view;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+
+import com.amazonaws.mobileconnectors.pinpoint.PinpointManager;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.iid.InstanceID;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.service.AnalyticService;
+import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
+import edu.virginia.cs.vmarketplace.util.PushListenerService;
 import edu.virginia.cs.vmarketplace.view.fragments.AbstractFragment;
 import edu.virginia.cs.vmarketplace.view.fragments.HomeFragment;
 import edu.virginia.cs.vmarketplace.view.fragments.MessageFragment;
@@ -16,6 +28,7 @@ import edu.virginia.cs.vmarketplace.view.fragments.ProfileFragment;
 import edu.virginia.cs.vmarketplace.view.fragments.PublishFragment;
 import edu.virginia.cs.vmarketplace.view.fragments.ViewPagerAdapter;
 
+import static android.support.v4.content.LocalBroadcastManager.*;
 import static edu.virginia.cs.vmarketplace.view.AppConstant.SWITCH_TAB;
 
 /**
@@ -25,6 +38,8 @@ import static edu.virginia.cs.vmarketplace.view.AppConstant.SWITCH_TAB;
 public class MainActivity extends AppCompatActivity{
     public static String PACKAGE_NAME;
 
+    public static PinpointManager pinpointManager;
+
     private AbstractFragment[] fragments;
     private int[] iconFill;
 
@@ -32,7 +47,23 @@ public class MainActivity extends AppCompatActivity{
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AnalyticService.getInstance().logNormalUsage(Application.getPinpointManager(getApplicationContext()));
+        pinpointManager = AWSClientFactory.getInstance().getPinpointManager(this);
+        AnalyticService.getInstance().logNormalUsage(pinpointManager);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String deviceToken =
+                            InstanceID.getInstance(MainActivity.this).getToken(
+                                    "184697464235",
+                                    GoogleCloudMessaging.INSTANCE_ID_SCOPE);
+
+                    pinpointManager.getNotificationClient().registerDeviceToken(deviceToken);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
         PACKAGE_NAME = getApplicationContext().getPackageName();
         position = 0;
         initFragments();
@@ -101,4 +132,38 @@ public class MainActivity extends AppCompatActivity{
         iconFill[3] = R.drawable.message_24p_fill;
         iconFill[4] = R.drawable.user_24p_fill;
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // unregister notification receiver
+        getInstance(this).unregisterReceiver(notificationReceiver);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // register notification receiver
+        LocalBroadcastManager.getInstance(this).registerReceiver(notificationReceiver,
+                new IntentFilter(PushListenerService.ACTION_PUSH_NOTIFICATION));
+    }
+
+    private final BroadcastReceiver notificationReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Bundle data = intent.getBundleExtra(PushListenerService.INTENT_SNS_NOTIFICATION_DATA);
+            String message = PushListenerService.getMessage(data);
+
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Push notification")
+                    .setMessage(message)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show();
+        }
+    };
+
+
 }

@@ -1,6 +1,5 @@
 package edu.virginia.cs.vmarketplace.service;
 
-
 import edu.virginia.cs.vmarketplace.model.UserProfileDO;
 import edu.virginia.cs.vmarketplace.service.dao.UserProfileDao;
 
@@ -21,8 +20,12 @@ public class UserProfileService {
     private UserProfileService() {
         dao = new UserProfileDao();
     }
+ 
+    public void insertOrUpdate(UserProfileDO userDO){
+        dao.insertOrUpdate(userDO);
+    }
 
-    public void save(UserProfileDO userProfileDO) {
-        dao.insertOrUpdate(userProfileDO);
+    public UserProfileDO findUserById(String userId){
+        return dao.findUserById(userId);
     }
 }

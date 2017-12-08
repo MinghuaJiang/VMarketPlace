@@ -24,4 +24,8 @@ public class CommentService {
     public List<CommentsDO> findCommentsByItemId(String itemId){
         return dao.findCommentsByItemId(itemId);
     }
+
+    public void deleteComments(CommentsDO commentsDO){
+        dao.deleteComment(commentsDO);
+    }
 }

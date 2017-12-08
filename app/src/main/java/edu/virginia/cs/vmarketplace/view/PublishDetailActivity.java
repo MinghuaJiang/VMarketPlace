@@ -1,12 +1,14 @@
 package edu.virginia.cs.vmarketplace.view;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -32,6 +34,8 @@ import java.util.UUID;
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.service.CommentService;
+import edu.virginia.cs.vmarketplace.service.ProductItemService;
+import edu.virginia.cs.vmarketplace.service.loader.CommonAyncTask;
 import edu.virginia.cs.vmarketplace.service.loader.CommonLoaderCallback;
 import edu.virginia.cs.vmarketplace.service.login.AppContext;
 import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
@@ -83,13 +87,14 @@ public class PublishDetailActivity extends AppCompatActivity{
 
         final RelativeLayout before = findViewById(R.id.before_chat);
         final RelativeLayout after = findViewById(R.id.after_chat);
-
+        final EditText editText = findViewById(R.id.input);
         comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 before.setVisibility(View.GONE);
                 after.setVisibility(View.VISIBLE);
                 respondId = null;
+                editText.setHint("");
             }
         });
 
@@ -132,7 +137,6 @@ public class PublishDetailActivity extends AppCompatActivity{
                 }
             });
         }
-        final EditText editText = findViewById(R.id.input);
         final Button sendButton = findViewById(R.id.send);
         replyCount = findViewById(R.id.comment_tab);
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -144,7 +148,11 @@ public class PublishDetailActivity extends AppCompatActivity{
                 }
                 String text = editText.getText().toString();
                 CommentsDO commentsDO = new CommentsDO();
-                commentsDO.setComment(text);
+                if(respondId == null) {
+                    commentsDO.setComment(text);
+                }else{
+                    commentsDO.setComment(editText.getHint().toString() + " " + text);
+                }
                 commentsDO.setCommentId(UUID.randomUUID().toString());
                 commentsDO.setItemId(itemsDO.getItemId());
                 commentsDO.setCommentBy(AppContextManager.getContextManager().getAppContext().getUser().getUserId());
@@ -188,13 +196,37 @@ public class PublishDetailActivity extends AppCompatActivity{
         commentView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CommentsDO dao = commentsDOAdapter.getItem(position);
-                if(dao.getCommentBy().equals(AppContextManager.
+                final CommentsDO commentsDO = commentsDOAdapter.getItem(position);
+                if(commentsDO.getCommentBy().equals(AppContextManager.
                         getContextManager().getAppContext().getUser().getUserId())){
-
+                    new AlertDialog.Builder(PublishDetailActivity.this)
+                            .setTitle("Delete Comment")
+                            .setMessage("Do you really want to delete it?")
+                            .setIcon(R.drawable.warning)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    new CommonAyncTask<CommentsDO,Void,Void>((x)-> {
+                                        CommentService.getInstance().deleteComments(x);
+                                        itemsDO.setReplyCount(itemsDO.getReplyCount() - 1);
+                                        ProductItemService.getInstance().save(itemsDO);
+                                    }, commentsDO).
+                                            with((x)->{
+                                                Toast.makeText(PublishDetailActivity.this, "Comments deleted successfully", Toast.LENGTH_SHORT).show();
+                                                if(itemsDO.getReplyCount().intValue() > 0){
+                                                    replyCount.setText("Comments " + itemsDO.getReplyCount().intValue());
+                                                }else{
+                                                    replyCount.setText("Comments");
+                                                }
+                                                getSupportLoaderManager().restartLoader(0, null, callback).forceLoad();
+                                            }).run();
+                                }})
+                            .setNegativeButton(android.R.string.no, null).show();
                 }else{
-                    respondId = dao.getCommentBy();
-                    //editText.setHint("@" + dao.getCommentBy());
+                    respondId = commentsDO.getCommentBy();
+                    TextView userName = parent.findViewById(R.id.user_name);
+                    editText.setHint("@" + userName);
+                    before.setVisibility(View.GONE);
+                    after.setVisibility(View.VISIBLE);
                 }
             }
         });
