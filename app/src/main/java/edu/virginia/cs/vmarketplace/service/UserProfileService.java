@@ -8,18 +8,19 @@ import edu.virginia.cs.vmarketplace.service.dao.UserProfileDao;
  */
 
 public class UserProfileService {
+
     private UserProfileDao dao;
 
-    private static UserProfileService service = new UserProfileService();
+    public static UserProfileService userProfileService = new UserProfileService();
 
-    public static UserProfileService getInstance(){
-        return service;
+    public static UserProfileService getInstance() {
+        return userProfileService;
     }
 
-    private UserProfileService(){
+    private UserProfileService() {
         dao = new UserProfileDao();
     }
-
+ 
     public void insertOrUpdate(UserProfileDO userDO){
         dao.insertOrUpdate(userDO);
     }

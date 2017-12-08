@@ -336,7 +336,7 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
         }
 
         S3Service.getInstance(getApplicationContext()).upload(s3urls, files, true,
-                ()->{
+                (x)->{
                     itemDo.setPics(s3urls);
                     itemDo.setThumbPic(s3urls.get(0));
                     itemDo.setOriginalFiles(files);

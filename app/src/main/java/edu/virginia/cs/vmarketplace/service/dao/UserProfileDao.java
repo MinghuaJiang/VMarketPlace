@@ -15,10 +15,10 @@ public class UserProfileDao {
     public UserProfileDao (){
         mapper = AWSClientFactory.getInstance().getDBMapper();
     }
-
+  
     public void insertOrUpdate(UserProfileDO userDO){
         mapper.save(userDO);
-    }
+    } 
 
     public UserProfileDO findUserById(String userId){
         return mapper.load(UserProfileDO.class, userId);

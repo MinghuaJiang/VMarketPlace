@@ -40,15 +40,18 @@ public class S3Service {
     public void download(List<String> s3Urls, List<String> downloadedFile, S3Callback callback){
         String baseFileDir = context.getExternalFilesDir(null) + File.separator;
         List<Integer> count = new ArrayList<>();
+        List<File> fileList = new ArrayList<>();
         for(int i = 0; i < s3Urls.size();i++){
-            utility.download(s3Urls.get(i), new File(baseFileDir + downloadedFile.get(i)), new TransferListener() {
+            File file = new File(baseFileDir + downloadedFile.get(i));
+            fileList.add(file);
+            utility.download(s3Urls.get(i), file, new TransferListener() {
                 @Override
                 public void onStateChanged(int id, TransferState state) {
                     if(state == TransferState.COMPLETED){
                         count.add(1);
                         if(count.size() == s3Urls.size()){
                             if(callback != null){
-                                callback.runCallback();
+                                callback.runCallback(fileList);
                             }
                         }
                     }
@@ -83,7 +86,7 @@ public class S3Service {
                         count.add(1);
                         if(count.size() == s3Urls.size()){
                             if(callback != null){
-                                callback.runCallback();
+                                callback.runCallback(null);
                             }
                         }
                     }

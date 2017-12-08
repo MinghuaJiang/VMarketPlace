@@ -130,4 +130,23 @@ public class UserProfileDO {
     public void setUserName(final String _userName) {
         this._userName = _userName;
     }
+
+    @Override
+    public String toString() {
+        return "UserProfileDO{" +
+                "_userId='" + _userId + '\'' +
+                ", _address='" + _address + '\'' +
+                ", _avatar='" + _avatar + '\'' +
+                ", _backgroundPic='" + _backgroundPic + '\'' +
+                ", _bio='" + _bio + '\'' +
+                ", _birthdate='" + _birthdate + '\'' +
+                ", _buyerRating='" + _buyerRating + '\'' +
+                ", _buyerRatingCount='" + _buyerRatingCount + '\'' +
+                ", _department='" + _department + '\'' +
+                ", _sellerRating='" + _sellerRating + '\'' +
+                ", _sellerRatingCount='" + _sellerRatingCount + '\'' +
+                ", _sex='" + _sex + '\'' +
+                ", _userName='" + _userName + '\'' +
+                '}';
+    }
 }

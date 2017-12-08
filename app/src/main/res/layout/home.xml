@@ -15,15 +15,15 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/button_margin_large"
-            android:layout_marginRight="@dimen/button_margin_large">
+            android:layout_marginLeft="48dp"
+            android:layout_marginRight="48dp">
 
             <android.support.v7.widget.SearchView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/default_left_bubble_color"
                 android:gravity="center_vertical"
-                android:layout_marginTop="@dimen/button_margin">
+                android:layout_margin="@dimen/button_margin">
             </android.support.v7.widget.SearchView>
         </RelativeLayout>
 
@@ -176,7 +176,7 @@
             </GridLayout>
 
             <TextView
-                android:id="@+id/separator_above_tab"
+                android:id="@+id/separator_below_category"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/separator_height"
                 android:background="@color/separator"
@@ -185,11 +185,37 @@
                 >
             </TextView>
 
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/tab_container1"
+                android:layout_below="@+id/separator_below_category"
+                >
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="@color/separator"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_below="@+id/tab_container1"
+                android:id="@+id/frame_separator"
+                />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/tab_container2"
+                android:layout_below="@+id/frame_separator"
+                >
+            </FrameLayout>
+
             <android.support.design.widget.TabLayout
                 android:id="@+id/tab"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/separator_above_tab"
+                android:layout_below="@+id/frame_separator"
                 app:tabMode="fixed"
                 app:tabTextAppearance="@style/CustomTabText"
                 />
@@ -198,7 +224,9 @@
                 android:id="@+id/home_tab_viewpager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_below="@+id/tab"
                 />
+
         </RelativeLayout>
     </ScrollView>
 </LinearLayout>
