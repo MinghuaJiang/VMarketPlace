@@ -28,4 +28,8 @@ public class CommentsDao {
                 .withConsistentRead(false);
         return mapper.query(CommentsDO.class,dynamoDBQueryExpression);
     }
+
+    public void deleteComment(CommentsDO commentsDO){
+        mapper.delete(commentsDO);
+    }
 }
