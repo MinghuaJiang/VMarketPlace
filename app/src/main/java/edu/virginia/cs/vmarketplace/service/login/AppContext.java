@@ -1,10 +1,15 @@
 package edu.virginia.cs.vmarketplace.service.login;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.amazonaws.mobile.auth.core.IdentityManager;
 
 import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
+import edu.virginia.cs.vmarketplace.model.UserProfileDO;
+import edu.virginia.cs.vmarketplace.service.ProductItemService;
+import edu.virginia.cs.vmarketplace.service.UserProfileService;
+import edu.virginia.cs.vmarketplace.service.loader.CommonAyncTask;
 
 /**
  * Created by cutehuazai on 11/27/17.
@@ -30,6 +35,17 @@ public class AppContext {
     public void enrichUser(AppUserEnrichStrategy strategy){
         user.setUserName(strategy.getUserName());
         user.setUserPicUri(strategy.getUserPicUri());
+        new CommonAyncTask<String, Void, Void>((x)->{
+            UserProfileDO userDO = UserProfileService.getInstance().findUserById(x);
+            if(userDO != null){
+                userDO.setUserName(user.getUserName());
+            }else{
+                userDO = new UserProfileDO();
+                userDO.setUserId(user.getUserId());
+                userDO.setUserName(user.getUserName());
+            }
+            UserProfileService.getInstance().insertOrUpdate(userDO);
+        }, user.getUserId()).run();
     }
 
     public AppUser getUser(){

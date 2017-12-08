@@ -2,6 +2,7 @@ package edu.virginia.cs.vmarketplace.service.dao;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 
+import edu.virginia.cs.vmarketplace.model.UserProfileDO;
 import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
 import edu.virginia.cs.vmarketplace.service.login.AppUser;
 
@@ -15,7 +16,11 @@ public class UserProfileDao {
         mapper = AWSClientFactory.getInstance().getDBMapper();
     }
 
-    public void insertOrUpdate(AppUser user){
+    public void insertOrUpdate(UserProfileDO userDO){
+        mapper.save(userDO);
+    }
 
+    public UserProfileDO findUserById(String userId){
+        return mapper.load(UserProfileDO.class, userId);
     }
 }
