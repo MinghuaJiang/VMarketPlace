@@ -40,10 +40,11 @@ public class ProductItemDao {
         eav.put(":val1", new AttributeValue().withS(dateQuery));
 
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
-                .withFilterExpression("modification_time > :val1")
+                .withFilterExpression("last_modification_time > :val1")
                 .withExpressionAttributeValues(eav);
 
         List<ProductItemsDO> scanResult = mapper.scan(ProductItemsDO.class, scanExpression);
+        System.out.println("get the first item: " + scanResult.get(0));
         return scanResult;
     }
 
@@ -57,7 +58,7 @@ public class ProductItemDao {
         eav.put(":val1", new AttributeValue().withS(dateQuery));
 
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
-                .withFilterExpression("modification_time > :val1")
+                .withFilterExpression("last_modification_time > :val1")
                 .withExpressionAttributeValues(eav);
 
         List<ProductItemsDO> scanResult = mapper.scan(ProductItemsDO.class, scanExpression);

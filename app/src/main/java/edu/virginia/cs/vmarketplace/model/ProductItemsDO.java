@@ -43,6 +43,40 @@ public class ProductItemsDO {
     private String _title;
     private Double _viewCount;
 
+    @Override
+    public String toString() {
+        return "ProductItemsDO{" +
+                "_itemId='" + _itemId + '\'' +
+                ", _buyerRatingTime='" + _buyerRatingTime + '\'' +
+                ", _buyerToSellerRating='" + _buyerToSellerRating + '\'' +
+                ", _buyerToSellerReview='" + _buyerToSellerReview + '\'' +
+                ", _category='" + _category + '\'' +
+                ", _createdBy='" + _createdBy + '\'' +
+                ", _description='" + _description + '\'' +
+                ", _lastModificationTime='" + _lastModificationTime + '\'' +
+                ", _latitude=" + _latitude +
+                ", _location='" + _location + '\'' +
+                ", _longtitude=" + _longtitude +
+                ", _meetingLatitude=" + _meetingLatitude +
+                ", _meetingLongtitude=" + _meetingLongtitude +
+                ", _meetingTime='" + _meetingTime + '\'' +
+                ", _originalFiles=" + _originalFiles +
+                ", _pics=" + _pics +
+                ", _price=" + _price +
+                ", _replyCount=" + _replyCount +
+                ", _sellerRatingTime='" + _sellerRatingTime + '\'' +
+                ", _sellerToBuyerRating='" + _sellerToBuyerRating + '\'' +
+                ", _sellerToBuyerReview='" + _sellerToBuyerReview + '\'' +
+                ", _soldTime='" + _soldTime + '\'' +
+                ", _soldTo='" + _soldTo + '\'' +
+                ", _subcategory='" + _subcategory + '\'' +
+                ", _subcategoryPosition=" + _subcategoryPosition +
+                ", _thumbPic='" + _thumbPic + '\'' +
+                ", _title='" + _title + '\'' +
+                ", _viewCount=" + _viewCount +
+                '}';
+    }
+
     @DynamoDBHashKey(attributeName = "itemId")
     @DynamoDBAttribute(attributeName = "itemId")
     public String getItemId() {

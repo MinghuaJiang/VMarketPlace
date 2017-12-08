@@ -19,16 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.virginia.cs.vmarketplace.R;
-import edu.virginia.cs.vmarketplace.model.nosql.ProductItemsDO;
-import edu.virginia.cs.vmarketplace.view.loader.HomeHotTabLoader;
-import edu.virginia.cs.vmarketplace.view.loader.ProductItemDOLoader;
+import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
 
 /**
  * Created by cutehuazai on 11/23/17.
  */
 
-public class HomeFragment extends AbstractFragment implements
-        LoaderManager.LoaderCallbacks<List<ProductItemsDO>>{
+public class HomeFragment extends AbstractFragment {
 
     private AbstractFragment[] fragments;
     private HomePostListAdapter homePostListAdapter;
@@ -47,14 +44,6 @@ public class HomeFragment extends AbstractFragment implements
         ActionBar ab =  ((AppCompatActivity) getActivity()).getSupportActionBar();
 
         ab.setDisplayShowTitleEnabled(false);
-
-        // set up list items
-        ListView listView = rootView.findViewById(R.id.home_list);
-        homePostListAdapter = new HomePostListAdapter(getActivity(),
-                new ArrayList<ProductItemsDO>());
-        listView.setAdapter(homePostListAdapter);
-        getLoaderManager().restartLoader(0, null, this).forceLoad();
-        System.out.println("HomeTabHotFragment called");
 
         // setup view pager for tabs
 //        initFragments();
@@ -89,20 +78,4 @@ public class HomeFragment extends AbstractFragment implements
         fragments[1] = new HomeTabHotFragment();
     }
 
-    @Override
-    public Loader<List<ProductItemsDO>> onCreateLoader(int id, Bundle args) {
-        return new ProductItemDOLoader(getContext(), new HomeHotTabLoader());
-    }
-
-    @Override
-    public void onLoadFinished(Loader<List<ProductItemsDO>> loader, List<ProductItemsDO> data) {
-        homePostListAdapter.clear();
-        homePostListAdapter.addAll(data);
-        System.out.println("onLoadFinished called in " + HomeFragment.class);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<ProductItemsDO>> loader) {
-        homePostListAdapter.clear();
-    }
 }

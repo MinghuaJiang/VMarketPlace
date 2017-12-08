@@ -6,12 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.squareup.picasso.Picasso;
 
@@ -23,6 +21,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
 import edu.virginia.cs.vmarketplace.model.UserProfileDO;
+import edu.virginia.cs.vmarketplace.service.S3Service;
 import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
 
 /**
@@ -34,7 +33,7 @@ public class HomePostListAdapter extends ArrayAdapter<ProductItemsDO> {
     private TransferUtility transferUtility;
     private int imageCounter;
 
-    public HomePostListAdapter(Context context, List<ProductItemsDO> objects) {
+    HomePostListAdapter(Context context, List<ProductItemsDO> objects) {
         super(context, 0, objects);
         this.images = new ArrayList<>();
         this.transferUtility = AWSClientFactory.getInstance().getTransferUtility(context);
@@ -46,10 +45,12 @@ public class HomePostListAdapter extends ArrayAdapter<ProductItemsDO> {
 
         View listView = convertView;
         if(listView == null){
-            listView = LayoutInflater.from(getContext()).inflate(R.layout.home_tab, parent
+            listView = LayoutInflater.from(getContext()).inflate(R.layout.home_tab_list_item, parent
                     ,false);
         }
         ProductItemsDO productItemsDO = getItem(position);
+        System.out.println("current position: " + position);
+        System.out.println("&&&" + productItemsDO.toString());
         if (productItemsDO.getCreatedBy() != null) {
             new UserProfileDOLoadAsyncTask(listView).execute(productItemsDO.getCreatedBy());
         }
@@ -57,33 +58,62 @@ public class HomePostListAdapter extends ArrayAdapter<ProductItemsDO> {
         // download images from S3 to list item
         if (productItemsDO.getPics() != null) {
             final int picsTotalCount = productItemsDO.getPics().size();
-            GridView gridView = listView.findViewById(R.id.home_post_image_gallery);
+            System.out.println("picsTotalCount: " + picsTotalCount);
+
+            List<String> downloadedImgs = new ArrayList<>();
             for(int i=0; i<picsTotalCount; i++) {
-                File img = new File(getContext().getExternalFilesDir(null)
-                        + File.separator + i + ".jpg");
-                transferUtility.download(productItemsDO.getPics().get(i), img, new TransferListener() {
-                    @Override
-                    public void onStateChanged(int id, TransferState state) {
-                        if (imageCounter == picsTotalCount) {
-                            // initialize GridView
-                        }
-                    }
-
-                    @Override
-                    public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-
-                    }
-
-                    @Override
-                    public void onError(int id, Exception ex) {
-
-                    }
-                });
-                imageCounter++;
-                images.add(img);
+                downloadedImgs.add(i + ".jpg");
             }
-        }
+            View finalListView = listView;
+            S3Service.getInstance(getContext()).download(productItemsDO.getPics(), downloadedImgs,
+                    (x)->{
+                        ImageView imgview0 = finalListView.findViewById(R.id.product_pic_0);
+                        if(x.size() >= 1){
+                            Picasso.with(getContext()).load(x.get(0)).placeholder(R.drawable.product_placeholder_96dp)
+                                    .fit().into(imgview0);
+                        }
 
+                        ImageView imgview1 = finalListView.findViewById(R.id.product_pic_1);
+                        if(x.size() >= 2) {
+                            Picasso.with(getContext()).load(x.get(1)).placeholder(R.drawable.product_placeholder_96dp)
+                                    .fit().into(imgview1);
+                        }
+
+                        ImageView imgview2 = finalListView.findViewById(R.id.product_pic_2);
+                        if(x.size() >= 3) {
+                            Picasso.with(getContext()).load(x.get(2)).placeholder(R.drawable.product_placeholder_96dp)
+                                    .fit().into(imgview2);
+                        }
+
+//                        ImageView imgview0 = finalListView.findViewById(R.id.product_pic_3);
+//                        Picasso.with(getContext()).load(x.get(3)).placeholder(R.drawable.product_placeholder_96dp)
+//                                .fit().into(imgview0);
+//
+//                        ImageView imgview0 = finalListView.findViewById(R.id.product_pic_4);
+//                        Picasso.with(getContext()).load(x.get(4)).placeholder(R.drawable.product_placeholder_96dp)
+//                                .fit().into(imgview0);
+//
+//                        ImageView imgview0 = finalListView.findViewById(R.id.product_pic_5);
+//                        Picasso.with(getContext()).load(x.get(5)).placeholder(R.drawable.product_placeholder_96dp)
+//                                .fit().into(imgview0);
+//
+//                        ImageView imgview0 = finalListView.findViewById(R.id.product_pic_6);
+//                        Picasso.with(getContext()).load(x.get(6)).placeholder(R.drawable.product_placeholder_96dp)
+//                                .fit().into(imgview0);
+//
+//                        ImageView imgview0 = finalListView.findViewById(R.id.product_pic_7);
+//                        Picasso.with(getContext()).load(x.get(7)).placeholder(R.drawable.product_placeholder_96dp)
+//                                .fit().into(imgview0);
+//
+//                        ImageView imgview0 = finalListView.findViewById(R.id.product_pic_8);
+//                        Picasso.with(getContext()).load(x.get(8)).placeholder(R.drawable.product_placeholder_96dp)
+//                                .fit().into(imgview0);
+//
+//                        ImageView imgview0 = finalListView.findViewById(R.id.product_pic_9);
+//                        Picasso.with(getContext()).load(x.get(9)).placeholder(R.drawable.product_placeholder_96dp)
+//                                .fit().into(imgview0);
+                    });
+        }
 
         // add post title
         TextView postTitle = listView.findViewById(R.id.home_post_title);
@@ -121,8 +151,8 @@ public class HomePostListAdapter extends ArrayAdapter<ProductItemsDO> {
 
         @Override
         protected void onPostExecute(UserProfileDO userProfileDO) {
-//            System.out.println("user : " + userProfileDO.toString());
             CircleImageView userAvatar = rootView.findViewById(R.id.home_post_avatar);
+            System.out.println("Avatar: " + userProfileDO.getAvatar());
             if(userProfileDO.getAvatar() == null) {
                 userAvatar.setImageResource(R.drawable.user_24p);
             } else {
@@ -133,7 +163,7 @@ public class HomePostListAdapter extends ArrayAdapter<ProductItemsDO> {
             TextView userName = rootView.findViewById(R.id.home_post_user_name);
             userName.setText(userProfileDO.getUserName());
 
-            TextView userDep = rootView.findViewById(R.id.home_post_user_dep);
+            TextView userDep = rootView.findViewById(R.id.home_post_user_department);
             userDep.setText(userProfileDO.getDepartment());
         }
     }
