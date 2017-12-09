@@ -34,8 +34,10 @@ import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.virginia.cs.vmarketplace.R;
+import edu.virginia.cs.vmarketplace.model.UserProfileDO;
 import edu.virginia.cs.vmarketplace.service.CommentService;
 import edu.virginia.cs.vmarketplace.service.ProductItemService;
+import edu.virginia.cs.vmarketplace.service.UserProfileService;
 import edu.virginia.cs.vmarketplace.service.loader.CommonAyncTask;
 import edu.virginia.cs.vmarketplace.service.loader.CommonLoaderCallback;
 import edu.virginia.cs.vmarketplace.service.login.AppContext;
@@ -84,6 +86,30 @@ public class PublishDetailActivity extends AppCompatActivity{
         thumbup = findViewById(R.id.thumb_up);
         comment = findViewById(R.id.comment);
         favorite = findViewById(R.id.favorite);
+        final UserProfileDO userProfileDO = context.getUserDO();
+        if(userProfileDO.getFavoriteItems().contains(itemsDO.getItemId())){
+            favorite.setImageResource(R.drawable.favorite_yellow_24dp);
+        }else{
+            favorite.setImageResource(R.drawable.favorite_24dp);
+        }
+        favorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(userProfileDO.getFavoriteItems().contains(itemsDO.getItemId())){
+                    favorite.setImageResource(R.drawable.favorite_24dp);
+                    userProfileDO.getFavoriteItems().remove(itemsDO.getItemId());
+                    new CommonAyncTask<UserProfileDO, Void, Void>(
+                            UserProfileService.getInstance()::insertOrUpdate, userProfileDO).run();
+                    Toast.makeText(getApplicationContext(), "Unfavorite the item successfully!", Toast.LENGTH_SHORT).show();
+                }else{
+                    userProfileDO.getFavoriteItems().add(itemsDO.getItemId());
+                    favorite.setImageResource(R.drawable.favorite_yellow_24dp);
+                    new CommonAyncTask<UserProfileDO, Void, Void>(
+                            UserProfileService.getInstance()::insertOrUpdate, userProfileDO).run();
+                    Toast.makeText(getApplicationContext(), "Favorite the item successfully!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         ImageButton hide = findViewById(R.id.keyboard_down);
 

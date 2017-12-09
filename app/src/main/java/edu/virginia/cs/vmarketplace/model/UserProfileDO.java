@@ -5,6 +5,8 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBHashKey;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBRangeKey;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
 
+import java.util.Set;
+
 /**
  * Created by cutehuazai on 12/4/17.
  */
@@ -20,9 +22,11 @@ public class UserProfileDO {
     private String _buyerRating;
     private String _buyerRatingCount;
     private String _department;
+    private Set<String> _favoriteItems;
     private String _gender;
     private String _sellerRating;
     private String _sellerRatingCount;
+    private Set<String> _thumbItems;
     private String _userName;
 
     @DynamoDBHashKey(attributeName = "userId")
@@ -98,6 +102,14 @@ public class UserProfileDO {
     public void setDepartment(final String _department) {
         this._department = _department;
     }
+    @DynamoDBAttribute(attributeName = "favoriteItems")
+    public Set<String> getFavoriteItems() {
+        return _favoriteItems;
+    }
+
+    public void setFavoriteItems(final Set<String> _favoriteItems) {
+        this._favoriteItems = _favoriteItems;
+    }
     @DynamoDBAttribute(attributeName = "gender")
     public String getGender() {
         return _gender;
@@ -121,6 +133,14 @@ public class UserProfileDO {
 
     public void setSellerRatingCount(final String _sellerRatingCount) {
         this._sellerRatingCount = _sellerRatingCount;
+    }
+    @DynamoDBAttribute(attributeName = "thumbItems")
+    public Set<String> getThumbItems() {
+        return _thumbItems;
+    }
+
+    public void setThumbItems(final Set<String> _thumbItems) {
+        this._thumbItems = _thumbItems;
     }
     @DynamoDBAttribute(attributeName = "userName")
     public String getUserName() {

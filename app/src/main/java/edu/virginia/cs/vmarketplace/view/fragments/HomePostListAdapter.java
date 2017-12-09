@@ -151,20 +151,21 @@ public class HomePostListAdapter extends ArrayAdapter<ProductItemsDO> {
 
         @Override
         protected void onPostExecute(UserProfileDO userProfileDO) {
-            CircleImageView userAvatar = rootView.findViewById(R.id.home_post_avatar);
-            System.out.println("Avatar: " + userProfileDO.getAvatar());
-            if(userProfileDO.getAvatar() == null) {
-                userAvatar.setImageResource(R.drawable.place_holder_24p);
-            } else {
-                Picasso.with(getContext()).load(userProfileDO.getAvatar()).
-                        placeholder(R.drawable.product_placeholder_96dp).into(userAvatar);
+            if(userProfileDO != null) {
+                CircleImageView userAvatar = rootView.findViewById(R.id.home_post_avatar);
+                if (userProfileDO.getAvatar() == null) {
+                    userAvatar.setImageResource(R.drawable.place_holder_24p);
+                } else {
+                    Picasso.with(getContext()).load(userProfileDO.getAvatar()).
+                            placeholder(R.drawable.product_placeholder_96dp).into(userAvatar);
+                }
+
+                TextView userName = rootView.findViewById(R.id.home_post_user_name);
+                userName.setText(userProfileDO.getUserName());
+
+                TextView userDep = rootView.findViewById(R.id.home_post_user_department);
+                userDep.setText(userProfileDO.getDepartment());
             }
-
-            TextView userName = rootView.findViewById(R.id.home_post_user_name);
-            userName.setText(userProfileDO.getUserName());
-
-            TextView userDep = rootView.findViewById(R.id.home_post_user_department);
-            userDep.setText(userProfileDO.getDepartment());
         }
     }
 

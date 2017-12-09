@@ -5,6 +5,10 @@ import android.os.Bundle;
 
 import com.amazonaws.mobile.auth.core.IdentityManager;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
 import edu.virginia.cs.vmarketplace.model.UserProfileDO;
 import edu.virginia.cs.vmarketplace.service.ProductItemService;
@@ -22,6 +26,7 @@ public class AppContext {
     private boolean isPublish;
     private Bundle instanceState;
     private ProductItemsDO itemsDO;
+    private UserProfileDO userDO;
 
     public AppContext(){
         manager = IdentityManager.getDefaultIdentityManager();
@@ -36,13 +41,19 @@ public class AppContext {
         user.setUserName(strategy.getUserName());
         user.setUserPicUri(strategy.getUserPicUri());
         new CommonAyncTask<String, Void, Void>((x)->{
-            UserProfileDO userDO = UserProfileService.getInstance().findUserById(x);
+            userDO = UserProfileService.getInstance().findUserById(x);
             if(userDO != null){
                 userDO.setUserName(user.getUserName());
             }else{
                 userDO = new UserProfileDO();
                 userDO.setUserId(user.getUserId());
                 userDO.setUserName(user.getUserName());
+                Set<String> favorite = new HashSet<String>();
+                favorite.add("dummy");
+                userDO.setFavoriteItems(favorite);
+                Set<String> thumb = new HashSet<String>();
+                thumb.add("dummy");
+                userDO.setThumbItems(thumb);
             }
             if(strategy.getUserPicUri() != null){
                 userDO.setAvatar(strategy.getUserPicUri().toString());
@@ -89,5 +100,13 @@ public class AppContext {
 
     public void setItemsDO(ProductItemsDO itemsDO) {
         this.itemsDO = itemsDO;
+    }
+
+    public UserProfileDO getUserDO() {
+        return userDO;
+    }
+
+    public void setUserDO(UserProfileDO userDO) {
+        this.userDO = userDO;
     }
 }
