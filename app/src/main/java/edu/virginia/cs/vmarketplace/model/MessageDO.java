@@ -11,15 +11,18 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
  */
 
 @DynamoDBTable(tableName = "vmarketplace-mobilehub-440270839-MESSAGE")
-
 public class MessageDO {
     private String _messageThreadId;
+    private String _buyerAvatar;
     private String _buyerId;
+    private String _buyerName;
     private String _itemId;
     private String _lastUpdateMessage;
     private String _lastUpdateMessageType;
     private String _lastUpdateTime;
+    private String _sellerAvatar;
     private String _sellerId;
+    private String _sellerName;
 
     @DynamoDBHashKey(attributeName = "messageThreadId")
     @DynamoDBAttribute(attributeName = "messageThreadId")
@@ -30,6 +33,14 @@ public class MessageDO {
     public void setMessageThreadId(final String _messageThreadId) {
         this._messageThreadId = _messageThreadId;
     }
+    @DynamoDBAttribute(attributeName = "buyerAvatar")
+    public String getBuyerAvatar() {
+        return _buyerAvatar;
+    }
+
+    public void setBuyerAvatar(final String _buyerAvatar) {
+        this._buyerAvatar = _buyerAvatar;
+    }
     @DynamoDBAttribute(attributeName = "buyerId")
     public String getBuyerId() {
         return _buyerId;
@@ -37,6 +48,14 @@ public class MessageDO {
 
     public void setBuyerId(final String _buyerId) {
         this._buyerId = _buyerId;
+    }
+    @DynamoDBAttribute(attributeName = "buyerName")
+    public String getBuyerName() {
+        return _buyerName;
+    }
+
+    public void setBuyerName(final String _buyerName) {
+        this._buyerName = _buyerName;
     }
     @DynamoDBIndexHashKey(attributeName = "itemId", globalSecondaryIndexName = "TIME_SORT")
     public String getItemId() {
@@ -70,6 +89,14 @@ public class MessageDO {
     public void setLastUpdateTime(final String _lastUpdateTime) {
         this._lastUpdateTime = _lastUpdateTime;
     }
+    @DynamoDBAttribute(attributeName = "sellerAvatar")
+    public String getSellerAvatar() {
+        return _sellerAvatar;
+    }
+
+    public void setSellerAvatar(final String _sellerAvatar) {
+        this._sellerAvatar = _sellerAvatar;
+    }
     @DynamoDBAttribute(attributeName = "sellerId")
     public String getSellerId() {
         return _sellerId;
@@ -78,5 +105,12 @@ public class MessageDO {
     public void setSellerId(final String _sellerId) {
         this._sellerId = _sellerId;
     }
+    @DynamoDBAttribute(attributeName = "sellerName")
+    public String getSellerName() {
+        return _sellerName;
+    }
 
+    public void setSellerName(final String _sellerName) {
+        this._sellerName = _sellerName;
+    }
 }

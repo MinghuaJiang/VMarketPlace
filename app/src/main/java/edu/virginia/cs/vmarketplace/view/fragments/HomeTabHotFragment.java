@@ -46,19 +46,14 @@ public class HomeTabHotFragment extends AbstractFragment {
         getLoaderManager().restartLoader(0, null, new CommonLoaderCallback<Void, ProductItemsDO>(
                 homePostListAdapter, ProductItemService.getInstance()::findTop100HotPostsInOneWeek
         )).forceLoad();
-        listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                ProductItemsDO itemsDO = homePostListAdapter.getItem(i);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ProductItemsDO itemsDO = homePostListAdapter.getItem(position);
                 Intent intent = new Intent(HomeTabHotFragment.this.getActivity(), PublishDetailActivity.class);
                 intent.putExtra(AppConstant.JUMP_FROM, AppConstant.HOME_PAGE);
                 AppContextManager.getContextManager().getAppContext().setItemsDO(itemsDO);
                 startActivity(intent);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
         System.out.println("HomeTabHotFragment called");

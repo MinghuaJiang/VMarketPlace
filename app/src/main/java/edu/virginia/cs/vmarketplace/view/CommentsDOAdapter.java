@@ -9,16 +9,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.Profile;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.CommentsDO;
-import edu.virginia.cs.vmarketplace.model.UserProfileDO;
-import edu.virginia.cs.vmarketplace.service.UserProfileService;
-import edu.virginia.cs.vmarketplace.service.loader.CommonAyncTask;
+import edu.virginia.cs.vmarketplace.service.S3Service;
 
 /**
  * Created by cutehuazai on 12/5/17.
@@ -38,17 +37,25 @@ public class CommentsDOAdapter extends ArrayAdapter<CommentsDO> {
         }
         CommentsDO commentsDO = getItem(position);
         ImageView picView = listView.findViewById(R.id.user_pic);
-        if(Profile.getCurrentProfile() != null) {
-            Picasso.with(getContext()).load(Profile.getCurrentProfile().
-                    getProfilePictureUri(160, 160)).fit().into(picView);
+        if(commentsDO.getCommentByAvatar() != null) {
+            if(commentsDO.getCommentByAvatar().startsWith("S3://")) {
+                List<String> s3Url = new ArrayList<String>();
+                List<String> file = new ArrayList<String>();
+                s3Url.add(commentsDO.getCommentByAvatar().substring(5));
+                file.add(UUID.randomUUID() + ".png");
+                S3Service.getInstance(getContext()).download(s3Url, file,
+                        (x)->{
+                            Picasso.with(getContext()).load(x.get(0)).fit().into(picView);
+                        });
+            }else{
+                Picasso.with(getContext()).load(commentsDO.getCommentByAvatar()).fit().into(picView);
+            }
         }else{
             picView.setImageResource(R.drawable.place_holder_96p);
         }
         //picView.setImageResource(R.drawable.place_holder_96p);
         TextView userName = listView.findViewById(R.id.user_name);
-        new CommonAyncTask<String, Void, UserProfileDO>(UserProfileService.getInstance()::findUserById, commentsDO.getCommentBy()).with((x)->{
-            userName.setText(x.getUserName());
-        }).run();
+        userName.setText(commentsDO.getCommentByName());
 
         TextView comment = listView.findViewById(R.id.comment);
         comment.setText(commentsDO.getComment());

@@ -20,9 +20,9 @@ public class UserProfileDO {
     private String _buyerRating;
     private String _buyerRatingCount;
     private String _department;
+    private String _gender;
     private String _sellerRating;
     private String _sellerRatingCount;
-    private String _sex;
     private String _userName;
 
     @DynamoDBHashKey(attributeName = "userId")
@@ -98,6 +98,14 @@ public class UserProfileDO {
     public void setDepartment(final String _department) {
         this._department = _department;
     }
+    @DynamoDBAttribute(attributeName = "gender")
+    public String getGender() {
+        return _gender;
+    }
+
+    public void setGender(final String _gender) {
+        this._gender = _gender;
+    }
     @DynamoDBAttribute(attributeName = "sellerRating")
     public String getSellerRating() {
         return _sellerRating;
@@ -114,14 +122,6 @@ public class UserProfileDO {
     public void setSellerRatingCount(final String _sellerRatingCount) {
         this._sellerRatingCount = _sellerRatingCount;
     }
-    @DynamoDBAttribute(attributeName = "sex")
-    public String getSex() {
-        return _sex;
-    }
-
-    public void setSex(final String _sex) {
-        this._sex = _sex;
-    }
     @DynamoDBAttribute(attributeName = "userName")
     public String getUserName() {
         return _userName;
@@ -129,24 +129,5 @@ public class UserProfileDO {
 
     public void setUserName(final String _userName) {
         this._userName = _userName;
-    }
-
-    @Override
-    public String toString() {
-        return "UserProfileDO{" +
-                "_userId='" + _userId + '\'' +
-                ", _address='" + _address + '\'' +
-                ", _avatar='" + _avatar + '\'' +
-                ", _backgroundPic='" + _backgroundPic + '\'' +
-                ", _bio='" + _bio + '\'' +
-                ", _birthdate='" + _birthdate + '\'' +
-                ", _buyerRating='" + _buyerRating + '\'' +
-                ", _buyerRatingCount='" + _buyerRatingCount + '\'' +
-                ", _department='" + _department + '\'' +
-                ", _sellerRating='" + _sellerRating + '\'' +
-                ", _sellerRatingCount='" + _sellerRatingCount + '\'' +
-                ", _sex='" + _sex + '\'' +
-                ", _userName='" + _userName + '\'' +
-                '}';
     }
 }

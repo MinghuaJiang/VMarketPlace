@@ -14,11 +14,15 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
 
 public class MessageDetailDO {
     private String _messageId;
+    private String _messageFromAvatar;
     private String _messageFromId;
+    private String _messageFromUserName;
     private String _messagePicUrl;
     private String _messageThreadId;
     private String _messageTime;
+    private String _messageToAvatar;
     private String _messageToUserId;
+    private String _messageToUserName;
     private String _messageType;
     private String _messsageContent;
 
@@ -31,6 +35,14 @@ public class MessageDetailDO {
     public void setMessageId(final String _messageId) {
         this._messageId = _messageId;
     }
+    @DynamoDBAttribute(attributeName = "messageFromAvatar")
+    public String getMessageFromAvatar() {
+        return _messageFromAvatar;
+    }
+
+    public void setMessageFromAvatar(final String _messageFromAvatar) {
+        this._messageFromAvatar = _messageFromAvatar;
+    }
     @DynamoDBAttribute(attributeName = "messageFromId")
     public String getMessageFromId() {
         return _messageFromId;
@@ -38,6 +50,14 @@ public class MessageDetailDO {
 
     public void setMessageFromId(final String _messageFromId) {
         this._messageFromId = _messageFromId;
+    }
+    @DynamoDBAttribute(attributeName = "messageFromUserName")
+    public String getMessageFromUserName() {
+        return _messageFromUserName;
+    }
+
+    public void setMessageFromUserName(final String _messageFromUserName) {
+        this._messageFromUserName = _messageFromUserName;
     }
     @DynamoDBAttribute(attributeName = "messagePicUrl")
     public String getMessagePicUrl() {
@@ -63,6 +83,14 @@ public class MessageDetailDO {
     public void setMessageTime(final String _messageTime) {
         this._messageTime = _messageTime;
     }
+    @DynamoDBAttribute(attributeName = "messageToAvatar")
+    public String getMessageToAvatar() {
+        return _messageToAvatar;
+    }
+
+    public void setMessageToAvatar(final String _messageToAvatar) {
+        this._messageToAvatar = _messageToAvatar;
+    }
     @DynamoDBAttribute(attributeName = "messageToUserId")
     public String getMessageToUserId() {
         return _messageToUserId;
@@ -70,6 +98,14 @@ public class MessageDetailDO {
 
     public void setMessageToUserId(final String _messageToUserId) {
         this._messageToUserId = _messageToUserId;
+    }
+    @DynamoDBAttribute(attributeName = "messageToUserName")
+    public String getMessageToUserName() {
+        return _messageToUserName;
+    }
+
+    public void setMessageToUserName(final String _messageToUserName) {
+        this._messageToUserName = _messageToUserName;
     }
     @DynamoDBAttribute(attributeName = "messageType")
     public String getMessageType() {

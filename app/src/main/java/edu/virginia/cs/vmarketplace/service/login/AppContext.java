@@ -44,6 +44,9 @@ public class AppContext {
                 userDO.setUserId(user.getUserId());
                 userDO.setUserName(user.getUserName());
             }
+            if(strategy.getUserPicUri() != null){
+                userDO.setAvatar(strategy.getUserPicUri().toString());
+            }
             UserProfileService.getInstance().insertOrUpdate(userDO);
         }, user.getUserId()).run();
     }

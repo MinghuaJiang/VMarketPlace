@@ -20,6 +20,8 @@ public class ProductItemsDO {
     private String _buyerToSellerReview;
     private String _category;
     private String _createdBy;
+    private String _createdByAvatar;
+    private String _createdByName;
     private String _description;
     private String _lastModificationTime;
     private Double _latitude;
@@ -40,42 +42,11 @@ public class ProductItemsDO {
     private String _subcategory;
     private Double _subcategoryPosition;
     private String _thumbPic;
+    private Double _thumbUpCount;
+    private List<String> _thumbUpUserIds;
+    private List<String> _thumbUpUserNames;
     private String _title;
     private Double _viewCount;
-
-    @Override
-    public String toString() {
-        return "ProductItemsDO{" +
-                "_itemId='" + _itemId + '\'' +
-                ", _buyerRatingTime='" + _buyerRatingTime + '\'' +
-                ", _buyerToSellerRating='" + _buyerToSellerRating + '\'' +
-                ", _buyerToSellerReview='" + _buyerToSellerReview + '\'' +
-                ", _category='" + _category + '\'' +
-                ", _createdBy='" + _createdBy + '\'' +
-                ", _description='" + _description + '\'' +
-                ", _lastModificationTime='" + _lastModificationTime + '\'' +
-                ", _latitude=" + _latitude +
-                ", _location='" + _location + '\'' +
-                ", _longtitude=" + _longtitude +
-                ", _meetingLatitude=" + _meetingLatitude +
-                ", _meetingLongtitude=" + _meetingLongtitude +
-                ", _meetingTime='" + _meetingTime + '\'' +
-                ", _originalFiles=" + _originalFiles +
-                ", _pics=" + _pics +
-                ", _price=" + _price +
-                ", _replyCount=" + _replyCount +
-                ", _sellerRatingTime='" + _sellerRatingTime + '\'' +
-                ", _sellerToBuyerRating='" + _sellerToBuyerRating + '\'' +
-                ", _sellerToBuyerReview='" + _sellerToBuyerReview + '\'' +
-                ", _soldTime='" + _soldTime + '\'' +
-                ", _soldTo='" + _soldTo + '\'' +
-                ", _subcategory='" + _subcategory + '\'' +
-                ", _subcategoryPosition=" + _subcategoryPosition +
-                ", _thumbPic='" + _thumbPic + '\'' +
-                ", _title='" + _title + '\'' +
-                ", _viewCount=" + _viewCount +
-                '}';
-    }
 
     @DynamoDBHashKey(attributeName = "itemId")
     @DynamoDBAttribute(attributeName = "itemId")
@@ -125,6 +96,22 @@ public class ProductItemsDO {
 
     public void setCreatedBy(final String _createdBy) {
         this._createdBy = _createdBy;
+    }
+    @DynamoDBAttribute(attributeName = "created_by_avatar")
+    public String getCreatedByAvatar() {
+        return _createdByAvatar;
+    }
+
+    public void setCreatedByAvatar(final String _createdByAvatar) {
+        this._createdByAvatar = _createdByAvatar;
+    }
+    @DynamoDBAttribute(attributeName = "created_by_name")
+    public String getCreatedByName() {
+        return _createdByName;
+    }
+
+    public void setCreatedByName(final String _createdByName) {
+        this._createdByName = _createdByName;
     }
     @DynamoDBAttribute(attributeName = "description")
     public String getDescription() {
@@ -286,6 +273,30 @@ public class ProductItemsDO {
     public void setThumbPic(final String _thumbPic) {
         this._thumbPic = _thumbPic;
     }
+    @DynamoDBAttribute(attributeName = "thumb_up_count")
+    public Double getThumbUpCount() {
+        return _thumbUpCount;
+    }
+
+    public void setThumbUpCount(final Double _thumbUpCount) {
+        this._thumbUpCount = _thumbUpCount;
+    }
+    @DynamoDBAttribute(attributeName = "thumb_up_user_ids")
+    public List<String> getThumbUpUserIds() {
+        return _thumbUpUserIds;
+    }
+
+    public void setThumbUpUserIds(final List<String> _thumbUpUserIds) {
+        this._thumbUpUserIds = _thumbUpUserIds;
+    }
+    @DynamoDBAttribute(attributeName = "thumb_up_user_names")
+    public List<String> getThumbUpUserNames() {
+        return _thumbUpUserNames;
+    }
+
+    public void setThumbUpUserNames(final List<String> _thumbUpUserNames) {
+        this._thumbUpUserNames = _thumbUpUserNames;
+    }
     @DynamoDBAttribute(attributeName = "title")
     public String getTitle() {
         return _title;
@@ -302,5 +313,4 @@ public class ProductItemsDO {
     public void setViewCount(final Double _viewCount) {
         this._viewCount = _viewCount;
     }
-
 }

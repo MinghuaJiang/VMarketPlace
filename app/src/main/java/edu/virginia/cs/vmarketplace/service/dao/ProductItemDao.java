@@ -44,7 +44,6 @@ public class ProductItemDao {
                 .withExpressionAttributeValues(eav);
 
         List<ProductItemsDO> scanResult = mapper.scan(ProductItemsDO.class, scanExpression);
-        System.out.println("get the first item: " + scanResult.get(0));
         return scanResult;
     }
 

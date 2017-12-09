@@ -52,6 +52,7 @@ import edu.virginia.cs.vmarketplace.service.login.AppContext;
 import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.PreviewImageItem;
 import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
+import edu.virginia.cs.vmarketplace.service.login.AppUser;
 import edu.virginia.cs.vmarketplace.util.CategoryUtil;
 import edu.virginia.cs.vmarketplace.util.FetchAddressIntentService;
 import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
@@ -82,7 +83,6 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
     private SwipeRefreshLayout refreshLayout;
     private String category;
     private static final int MY_LOCATION_REQUEST_CODE = 200;
-
     private int count;
 
     protected void startIntentService() {
@@ -255,9 +255,19 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                 if(productItemsDo == null){
                     productItemsDo = new ProductItemsDO();
                     productItemsDo.setItemId(UUID.randomUUID().toString());
-                    productItemsDo.setCreatedBy(AppContextManager.getContextManager().getAppContext().getUser().getUserId());
+                    productItemsDo.setCreatedBy(appContext.getUser().getUserId());
                     productItemsDo.setViewCount(0.0);
                     productItemsDo.setReplyCount(0.0);
+                    productItemsDo.setThumbUpCount(0.0);
+                    productItemsDo.setThumbUpUserIds(new ArrayList<>());
+                    productItemsDo.setThumbUpUserNames(new ArrayList<>());
+                    productItemsDo.setCreatedByName(appContext.getUser().getUserName());
+                }
+
+                if(appContext.getUser().getUserPic() != null) {
+                    productItemsDo.setCreatedByAvatar(appContext.getUser().getUserPic());
+                }else{
+                    productItemsDo.setCreatedByAvatar(appContext.getUser().getUserPicUri().toString());
                 }
 
                 productItemsDo.setCategory(category);

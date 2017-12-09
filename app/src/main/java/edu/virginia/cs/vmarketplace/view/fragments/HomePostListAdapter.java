@@ -154,7 +154,7 @@ public class HomePostListAdapter extends ArrayAdapter<ProductItemsDO> {
             CircleImageView userAvatar = rootView.findViewById(R.id.home_post_avatar);
             System.out.println("Avatar: " + userProfileDO.getAvatar());
             if(userProfileDO.getAvatar() == null) {
-                userAvatar.setImageResource(R.drawable.user_24p);
+                userAvatar.setImageResource(R.drawable.place_holder_24p);
             } else {
                 Picasso.with(getContext()).load(userProfileDO.getAvatar()).
                         placeholder(R.drawable.product_placeholder_96dp).into(userAvatar);

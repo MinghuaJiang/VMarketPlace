@@ -3,6 +3,7 @@ package edu.virginia.cs.vmarketplace.view;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -59,6 +60,7 @@ public class PublishDetailActivity extends AppCompatActivity{
     private ProductItemsDO itemsDO;
     private String respondId;
     private CommonLoaderCallback<String, CommentsDO> callback;
+    private AppUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +69,7 @@ public class PublishDetailActivity extends AppCompatActivity{
         Toolbar toolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
         ActionBar ab = getSupportActionBar();
-
+        user = AppContextManager.getContextManager().getAppContext().getUser();
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setDisplayShowTitleEnabled(false);
 
@@ -155,10 +157,19 @@ public class PublishDetailActivity extends AppCompatActivity{
                 }
                 commentsDO.setCommentId(UUID.randomUUID().toString());
                 commentsDO.setItemId(itemsDO.getItemId());
-                commentsDO.setCommentBy(AppContextManager.getContextManager().getAppContext().getUser().getUserId());
+                commentsDO.setCommentBy(user.getUserId());
+                commentsDO.setCommentByName(user.getUserName());
+                if(user.getUserPicUri() != null) {
+                    commentsDO.setCommentByAvatar(user.getUserPicUri().toString());
+                }else{
+                    commentsDO.setCommentByAvatar(user.getUserPic());
+                }
                 commentsDO.setCommentTime(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
                 commentsDO.setRespondId(respondId);
+                editText.setHint("");
+                editText.setText("");
                 new CommentsUpdateTask(PublishDetailActivity.this, itemsDO).execute(commentsDO);
+                Toast.makeText(getApplicationContext(), "Comments added successfully", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -224,7 +235,7 @@ public class PublishDetailActivity extends AppCompatActivity{
                 }else{
                     respondId = commentsDO.getCommentBy();
                     TextView userName = parent.findViewById(R.id.user_name);
-                    editText.setHint("@" + userName);
+                    editText.setHint("@" + userName.getText());
                     before.setVisibility(View.GONE);
                     after.setVisibility(View.VISIBLE);
                 }
@@ -259,7 +270,7 @@ public class PublishDetailActivity extends AppCompatActivity{
         if(jump_from == AppConstant.PUBLISH_BY_ME){
             intent = new Intent(this, ProfilePublishActivity.class);
         }else if(jump_from == AppConstant.HOME_PAGE){
-
+            intent = new Intent(this, MainActivity.class);
         }
         AppContextManager.getContextManager().getAppContext().setItemsDO(null);
         return intent;
@@ -298,7 +309,6 @@ public class PublishDetailActivity extends AppCompatActivity{
 
         @Override
         protected void onPostExecute(ProductItemsDO itemsDO) {
-            Toast.makeText(context, "Comments added successfully", Toast.LENGTH_SHORT).show();
             if(itemsDO.getReplyCount().intValue() > 0){
                 replyCount.setText("Comments " + itemsDO.getReplyCount().intValue());
             }

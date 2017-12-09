@@ -57,7 +57,6 @@
                 android:layout_weight="1"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@android:color/black"
-                android:text="Ride to IAD"
                 />
 
             <TextView
@@ -67,7 +66,6 @@
                 android:layout_weight="1"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@android:color/black"
-                android:text = "$80"
                 />
 
             <TextView

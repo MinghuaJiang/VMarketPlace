@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
@@ -69,11 +70,20 @@ public class MessageDetailActivity extends AppCompatActivity {
             if(inputIntent.getIntExtra(AppConstant.JUMP_FROM, 0)
                     == AppConstant.PUBLISH_DETAIL){
                 ProductItemsDO itemsDO = AppContextManager.getContextManager().getAppContext().getItemsDO();
-                textView.setText(itemsDO.getCreatedBy());
+                textView.setText(itemsDO.getCreatedByName());
             }
         }else{
             textView.setText(inputIntent.getStringExtra(AppConstant.BUYER_NAME));
         }
+
+        TextView titleView = findViewById(R.id.title);
+        titleView.setText(AppContextManager.getContextManager().getAppContext().getItemsDO().getTitle());
+        TextView priceView = findViewById(R.id.price);
+        priceView.setText("$" + AppContextManager.getContextManager().getAppContext().getItemsDO().getPrice().toString());
+
+        ImageView imageView = findViewById(R.id.image);
+
+
         Button cameraButton = findViewById(R.id.camera);
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override

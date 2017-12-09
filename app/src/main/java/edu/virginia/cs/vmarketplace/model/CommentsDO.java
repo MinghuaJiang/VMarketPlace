@@ -16,6 +16,8 @@ public class CommentsDO {
     private String _commentId;
     private String _comment;
     private String _commentBy;
+    private String _commentByAvatar;
+    private String _commentByName;
     private String _commentTime;
     private String _itemId;
     private String _respondId;
@@ -44,6 +46,22 @@ public class CommentsDO {
 
     public void setCommentBy(final String _commentBy) {
         this._commentBy = _commentBy;
+    }
+    @DynamoDBAttribute(attributeName = "CommentByAvatar")
+    public String getCommentByAvatar() {
+        return _commentByAvatar;
+    }
+
+    public void setCommentByAvatar(final String _commentByAvatar) {
+        this._commentByAvatar = _commentByAvatar;
+    }
+    @DynamoDBAttribute(attributeName = "CommentByName")
+    public String getCommentByName() {
+        return _commentByName;
+    }
+
+    public void setCommentByName(final String _commentByName) {
+        this._commentByName = _commentByName;
     }
     @DynamoDBIndexRangeKey(attributeName = "CommentTime", globalSecondaryIndexName = "TIME")
     public String getCommentTime() {

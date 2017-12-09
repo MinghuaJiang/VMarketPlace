@@ -46,19 +46,14 @@ public class HomeTabNewFragment extends AbstractFragment {
                 homePostListAdapter,
                 ProductItemService.getInstance()::findTop100NewPostsInOneWeek
         )).forceLoad();
-        listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                ProductItemsDO itemsDO = homePostListAdapter.getItem(i);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ProductItemsDO itemsDO = homePostListAdapter.getItem(position);
                 Intent intent = new Intent(HomeTabNewFragment.this.getActivity(), PublishDetailActivity.class);
                 intent.putExtra(AppConstant.JUMP_FROM, AppConstant.HOME_PAGE);
                 AppContextManager.getContextManager().getAppContext().setItemsDO(itemsDO);
                 startActivity(intent);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
         System.out.println("HomeTabNewFragment called");
