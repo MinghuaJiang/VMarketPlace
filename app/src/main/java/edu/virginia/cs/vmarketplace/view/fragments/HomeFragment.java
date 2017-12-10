@@ -5,6 +5,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -45,17 +46,8 @@ public class HomeFragment extends AbstractFragment {
 
         ab.setDisplayShowTitleEnabled(false);
 
-        // setup view pager for tabs
-//        initFragments();
-//        ViewPager viewPager = rootView.findViewById(R.id.home_tab_viewpager);
-//        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), fragments);
-//        viewPager.setAdapter(viewPagerAdapter);
-//        TabLayout tabLayout = rootView.findViewById(R.id.tab);
-//        tabLayout.setupWithViewPager(viewPager);
-//
-//        for(int i = 0; i < fragments.length;i++){
-//            tabLayout.getTabAt(i).setIcon(fragments[i].getIconResourceId());
-//        }
+        getActivity().getWindow().setStatusBarColor(
+                ContextCompat.getColor(getContext(), R.color.barBackground));
 
         // set up tab fragments
         Fragment newFragment = new HomeTabNewFragment();

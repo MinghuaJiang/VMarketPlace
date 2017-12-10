@@ -23,6 +23,9 @@ import java.io.File;
 import java.util.List;
 
 import edu.virginia.cs.vmarketplace.R;
+import edu.virginia.cs.vmarketplace.service.ProductItemService;
+import edu.virginia.cs.vmarketplace.service.S3Service;
+import edu.virginia.cs.vmarketplace.service.loader.CommonAyncTask;
 import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
 import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
@@ -48,7 +51,6 @@ public class ProfilePublishItemAdapter extends ArrayAdapter<ProductItemsDO> {
             listView = LayoutInflater.from(getContext()).inflate(R.layout.profile_publish_item, parent
                     , false);
         }
-
         final ProductItemsDO currentItem = getItem(position);
 
         final ImageView imageView = listView.findViewById(R.id.image);
@@ -56,29 +58,18 @@ public class ProfilePublishItemAdapter extends ArrayAdapter<ProductItemsDO> {
             imageView.setImageResource(R.drawable.product_placeholder_96dp);
         } else {
             imageView.setImageResource(R.drawable.product_placeholder_96dp);
-            final File file = new File(currentItem.getOriginalFiles().get(0));
-            utility.download(currentItem.getThumbPic(),
-                    file,
-                    new TransferListener() {
-                        @Override
-                        public void onStateChanged(int id, TransferState state) {
-                            if (state == TransferState.COMPLETED) {
-                                Picasso.with(getContext()).load(file).
-                                        placeholder(R.drawable.product_placeholder_96dp).into(imageView);
-                            }
-                        }
-
-                        @Override
-                        public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-                        }
-
-                        @Override
-                        public void onError(int id, Exception ex) {
-                            imageView.setImageResource(R.drawable.product_placeholder_96dp);
-                        }
-                    });
+            final File file = new File(getContext().getExternalFilesDir(null ) + File.separator + currentItem.getOriginalFiles().get(0));
+            if(!file.exists()) {
+                S3Service.getInstance(getContext()).download(currentItem.getThumbPic(),file.getName(),
+                        (x) -> {
+                            Picasso.with(getContext()).load(x.get(0)).
+                                    placeholder(R.drawable.product_placeholder_96dp).into(imageView);
+                        });
+            }else{
+                Picasso.with(getContext()).load(file).
+                        placeholder(R.drawable.product_placeholder_96dp).into(imageView);
+            }
         }
-
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,29 +116,15 @@ public class ProfilePublishItemAdapter extends ArrayAdapter<ProductItemsDO> {
                 for(String each : files){
                     new File(each).delete();
                 }
-                new ProductItemDeleteTask(mapper).execute(itemsDO);
+                new CommonAyncTask<ProductItemsDO, Void, ProductItemsDO>(ProductItemService.getInstance()::delete,
+                        itemsDO).with(
+                                (x)-> {
+                                    ProfilePublishItemAdapter.this.remove(x);
+                                    Toast.makeText(getContext(), "Item deleted successfully", Toast.LENGTH_SHORT).show();
+                                }
+                ).run();
             }
         });
-
         return listView;
-    }
-
-    class ProductItemDeleteTask extends AsyncTask<ProductItemsDO,Void, ProductItemsDO> {
-        private DynamoDBMapper mapper;
-
-        public ProductItemDeleteTask(DynamoDBMapper mapper){
-            this.mapper = mapper;
-        }
-        @Override
-        protected ProductItemsDO doInBackground(ProductItemsDO... productItemsDOS) {
-            mapper.delete(productItemsDOS[0]);
-            return productItemsDOS[0];
-        }
-
-        @Override
-        protected void onPostExecute(ProductItemsDO result) {
-            ProfilePublishItemAdapter.this.remove(result);
-            Toast.makeText(getContext(), "Item deleted successfully", Toast.LENGTH_SHORT).show();
-        }
     }
 }

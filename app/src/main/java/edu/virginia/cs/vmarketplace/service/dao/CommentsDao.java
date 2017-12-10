@@ -19,6 +19,10 @@ public class CommentsDao {
         mapper = AWSClientFactory.getInstance().getDBMapper();
     }
 
+    public void insertOrUpdate(CommentsDO commentsDO){
+        mapper.save(commentsDO);
+    }
+
     public List<CommentsDO> findCommentsByItemId(String itemId){
         CommentsDO commentsDO = new CommentsDO();
         commentsDO.setItemId(itemId);

@@ -17,6 +17,7 @@ import java.io.File;
 import java.util.List;
 
 import edu.virginia.cs.vmarketplace.R;
+import edu.virginia.cs.vmarketplace.service.S3Service;
 import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
 
 /**
@@ -24,11 +25,9 @@ import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
  */
 
 public class DetailImageAdapter extends ArrayAdapter<String>{
-    private TransferUtility utility;
     private List<String> originalFileList;
     public DetailImageAdapter(@NonNull Context context, @NonNull List<String> objects, List<String> originalFileList) {
         super(context, 0, objects);
-        utility = AWSClientFactory.getInstance().getTransferUtility(getContext());
         this.originalFileList = originalFileList;
     }
 
@@ -43,25 +42,16 @@ public class DetailImageAdapter extends ArrayAdapter<String>{
         String fileStr = originalFileList.get(position);
         final ImageView view = listView.findViewById(R.id.image);
         view.setImageResource(R.drawable.place_holder_96p);
-        final File file = new File(fileStr);
-        utility.download(key, file, new TransferListener() {
-            @Override
-            public void onStateChanged(int id, TransferState state) {
-                if(state == TransferState.COMPLETED){
-                    Picasso.with(getContext()).load(file).placeholder(R.drawable.place_holder_96p).
-                            fit().into(view);
-                }
-            }
-
-            @Override
-            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-            }
-
-            @Override
-            public void onError(int id, Exception ex) {
-                view.setImageResource(R.drawable.place_holder_96p);
-            }
-        });
+        File file = new File(getContext().getExternalFilesDir(null) + File.separator +fileStr);
+        if(!file.exists()) {
+            S3Service.getInstance(getContext()).download(key, file.getName(), (x) -> {
+                Picasso.with(getContext()).load(x.get(0)).placeholder(R.drawable.place_holder_96p).
+                        fit().into(view);
+            });
+        }else{
+            Picasso.with(getContext()).load(file).placeholder(R.drawable.place_holder_96p).
+                    fit().into(view);
+        }
 
         return listView;
     }

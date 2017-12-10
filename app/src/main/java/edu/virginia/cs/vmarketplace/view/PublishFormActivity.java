@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.support.v4.app.ActivityCompat;
@@ -264,10 +263,10 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                     productItemsDo.setCreatedByName(appContext.getUser().getUserName());
                 }
 
-                if(appContext.getUser().getUserPic() != null) {
-                    productItemsDo.setCreatedByAvatar(appContext.getUser().getUserPic());
-                }else{
+                if(appContext.getUser().getUserPicUri() != null) {
                     productItemsDo.setCreatedByAvatar(appContext.getUser().getUserPicUri().toString());
+                }else{
+                    productItemsDo.setCreatedByAvatar(appContext.getUser().getUserPic());
                 }
 
                 productItemsDo.setCategory(category);
@@ -342,7 +341,7 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
             final File file = new File(each);
             final String key = "public" + "/" + file.getName();
             files.add(file.getName());
-            s3urls.add(key);
+            s3urls.add(S3Service.S3_PREFIX + key);
         }
 
         S3Service.getInstance(getApplicationContext()).upload(s3urls, files, true,

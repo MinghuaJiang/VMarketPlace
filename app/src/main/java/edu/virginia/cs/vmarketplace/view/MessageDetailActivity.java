@@ -47,12 +47,9 @@ public class MessageDetailActivity extends AppCompatActivity {
 
     private Intent inputIntent;
 
-    private TransferUtility transferUtility;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        transferUtility = AWSClientFactory.getInstance().getTransferUtility(getApplicationContext());
         setContentView(R.layout.activity_message_detail);
         Toolbar toolbar =
                  findViewById(R.id.my_toolbar);
@@ -121,7 +118,6 @@ public class MessageDetailActivity extends AppCompatActivity {
         mChatView.setAutoScroll(true);
         mChatView.setOptionIcon(R.drawable.add_24p);
         mChatView.setOptionButtonColor(Color.BLACK);
-
         //Set UI parameters if you need
         mChatView.setRightBubbleColor(ContextCompat.getColor(this, R.color.message_me));
         mChatView.setLeftBubbleColor(ContextCompat.getColor(this, R.color.message_you));
@@ -236,8 +232,8 @@ public class MessageDetailActivity extends AppCompatActivity {
     private void sendPictureFromFile(List<String> uriList){
         for(String str : uriList) {
             final File file = new File(str);
-            final TransferObserver observer = transferUtility
-                    .upload("uploads" + "/" + file.getName(), file);
+            //final TransferObserver observer = transferUtility
+              //      .upload("uploads" + "/" + file.getName(), file);
 
             final Message message = new Message.Builder()
                     .setUser(me)
@@ -247,28 +243,7 @@ public class MessageDetailActivity extends AppCompatActivity {
                     .hideIcon(false)
                     .setUsernameVisibility(false)
                     .build();
-            System.out.println(observer.getBucket());
-            System.out.println(observer.getAbsoluteFilePath());
-            System.out.println(observer.getKey());
-            System.out.println(observer.getId());
-            observer.setTransferListener(new TransferListener() {
-                @Override
-                public void onStateChanged(int id, TransferState state) {
-                    if(state == TransferState.COMPLETED){
-                        file.delete();
-                    }
-                }
 
-                @Override
-                public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-                    System.out.println(((double)bytesCurrent)/bytesTotal + " finished");
-                }
-
-                @Override
-                public void onError(int id, Exception ex) {
-
-                }
-            });
             //Set to chat view
             mChatView.send(message);
         }

@@ -49,8 +49,6 @@ public class HomePostListAdapter extends ArrayAdapter<ProductItemsDO> {
                     ,false);
         }
         ProductItemsDO productItemsDO = getItem(position);
-        System.out.println("current position: " + position);
-        System.out.println("&&&" + productItemsDO.toString());
         if (productItemsDO.getCreatedBy() != null) {
             new UserProfileDOLoadAsyncTask(listView).execute(productItemsDO.getCreatedBy());
         }

@@ -56,7 +56,6 @@ public class HomeTabNewFragment extends AbstractFragment {
                 startActivity(intent);
             }
         });
-        System.out.println("HomeTabNewFragment called");
         return rootView;
     }
 }

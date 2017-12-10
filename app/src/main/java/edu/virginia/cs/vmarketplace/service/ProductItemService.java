@@ -37,4 +37,8 @@ public class ProductItemService {
     public List<ProductItemsDO> findItemByUserId(String userId){
         return dao.findItemByUserId(userId);
     }
+
+    public void delete(ProductItemsDO itemsDO){
+        dao.delete(itemsDO);
+    }
 }

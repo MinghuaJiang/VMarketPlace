@@ -76,4 +76,8 @@ public class ProductItemDao {
 
         return mapper.query(ProductItemsDO.class,dynamoDBQueryExpression);
     }
+
+    public void delete(ProductItemsDO itemsDO){
+        mapper.delete(itemsDO);
+    }
 }

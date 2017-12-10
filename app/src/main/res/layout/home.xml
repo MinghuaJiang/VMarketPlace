@@ -10,6 +10,8 @@
         android:id="@+id/home_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:background="@color/barBackground"
+        android:theme="@style/AppTheme.Home"
         android:elevation="4dp">
 
         <RelativeLayout
@@ -21,12 +23,10 @@
             <android.support.v7.widget.SearchView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/default_left_bubble_color"
+                android:background="@android:color/white"
                 android:gravity="center_vertical"
-                android:layout_margin="@dimen/button_margin">
-            </android.support.v7.widget.SearchView>
+                android:layout_margin="@dimen/button_margin"/>
         </RelativeLayout>
-
 
     </android.support.v7.widget.Toolbar>
 
@@ -43,7 +43,7 @@
             <ImageView
                 android:id="@+id/home_poster_image"
                 android:layout_width="match_parent"
-                android:layout_height="160dp"
+                android:layout_height="132dp"
                 android:src="@drawable/uva_rotunda"
                 android:contentDescription="@string/home_page_poster"/>
 
@@ -64,13 +64,15 @@
                     android:layout_row="0"
                     android:layout_columnWeight="1"
                     android:layout_rowWeight="1"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/content_padding"
                     >
 
                     <ImageView
                         android:id="@+id/home_second_hand_image"
-                        android:layout_width="@dimen/list_item_height_small"
-                        android:layout_height="@dimen/list_item_height_small"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:clickable="true"
                         android:contentDescription="@string/second_hand"
                         android:focusable="true"
@@ -94,16 +96,18 @@
                     android:layout_columnWeight="1"
                     android:layout_rowWeight="1"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:layout_marginBottom="@dimen/content_padding"
                     >
 
                     <ImageView
                         android:id="@+id/home_rides_image"
-                        android:layout_width="@dimen/list_item_height_small"
-                        android:layout_height="@dimen/list_item_height_small"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:clickable="true"
                         android:contentDescription="@string/rides"
                         android:focusable="true"
-                        app:srcCompat="@drawable/ride_96dp"
+                        app:srcCompat="@drawable/ride_logo"
                         />
                     <TextView
                         android:id="@+id/home_rides"
@@ -123,6 +127,8 @@
                     android:layout_columnWeight="1"
                     android:layout_rowWeight="1"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:layout_marginBottom="@dimen/content_padding"
                     >
 
                     <ImageView
@@ -131,8 +137,8 @@
                         android:contentDescription="@string/sublease"
                         android:focusable="true"
                         app:srcCompat="@drawable/sublease_logo"
-                        android:layout_width="@dimen/list_item_height_small"
-                        android:layout_height="@dimen/list_item_height_small"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         />
                     <TextView
                         android:id="@+id/home_sublease"
@@ -152,12 +158,14 @@
                     android:layout_columnWeight="1"
                     android:layout_rowWeight="1"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:layout_marginBottom="@dimen/content_padding"
                     >
 
                     <ImageView
                         android:id="@+id/home_activity_image"
-                        android:layout_width="@dimen/list_item_height_small"
-                        android:layout_height="@dimen/list_item_height_small"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:clickable="true"
                         android:contentDescription="@string/activities"
                         android:focusable="true"

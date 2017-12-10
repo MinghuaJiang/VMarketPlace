@@ -29,7 +29,6 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -37,6 +36,7 @@ import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.UserProfileDO;
 import edu.virginia.cs.vmarketplace.service.CommentService;
 import edu.virginia.cs.vmarketplace.service.ProductItemService;
+import edu.virginia.cs.vmarketplace.service.S3Service;
 import edu.virginia.cs.vmarketplace.service.UserProfileService;
 import edu.virginia.cs.vmarketplace.service.loader.CommonAyncTask;
 import edu.virginia.cs.vmarketplace.service.loader.CommonLoaderCallback;
@@ -152,6 +152,17 @@ public class PublishDetailActivity extends AppCompatActivity{
             thumbup.setVisibility(View.GONE);
             favorite.setVisibility(View.GONE);
         }else{
+            username.setText(itemsDO.getCreatedByName());
+            if(itemsDO.getCreatedByAvatar() == null) {
+                userpic.setImageResource(R.drawable.place_holder_96p);
+            }else if(itemsDO.getCreatedByAvatar().startsWith(S3Service.S3_PREFIX)){
+                S3Service.getInstance(getApplicationContext()).download(
+                        itemsDO.getCreatedByAvatar(), (x)->{
+                            Picasso.with(this).load(x.get(0)).fit().placeholder(R.drawable.place_holder_96p).into(userpic);
+                        });
+            }else{
+                Picasso.with(this).load(itemsDO.getCreatedByAvatar()).fit().placeholder(R.drawable.place_holder_96p).into(userpic);
+            }
             button.setVisibility(View.VISIBLE);
             thumbup.setVisibility(View.VISIBLE);
             favorite.setVisibility(View.VISIBLE);
@@ -194,7 +205,17 @@ public class PublishDetailActivity extends AppCompatActivity{
                 commentsDO.setRespondId(respondId);
                 editText.setHint("");
                 editText.setText("");
-                new CommentsUpdateTask(PublishDetailActivity.this, itemsDO).execute(commentsDO);
+                new CommonAyncTask<CommentsDO, Void, ProductItemsDO>((x)->{
+                    CommentService.getInstance().insertOrUpdate(x);
+                    itemsDO.setReplyCount(itemsDO.getReplyCount() + 1);
+                    ProductItemService.getInstance().save(itemsDO);
+                    return itemsDO;
+                }, commentsDO).with((x)->{
+                        if(x.getReplyCount().intValue() > 0){
+                            replyCount.setText("Comments " + x.getReplyCount().intValue());
+                        }
+                        getSupportLoaderManager().restartLoader(0, null, callback).forceLoad();
+                    }).run();
                 Toast.makeText(getApplicationContext(), "Comments added successfully", Toast.LENGTH_SHORT).show();
             }
         });
@@ -284,7 +305,7 @@ public class PublishDetailActivity extends AppCompatActivity{
         }
 
         itemsDO.setViewCount(itemsDO.getViewCount() + 1);
-        new ViewCountUpdateTask().execute(itemsDO);
+        new CommonAyncTask<ProductItemsDO, Void, Void>(ProductItemService.getInstance()::save, itemsDO).run();
         AppContextManager.getContextManager().getAppContext().setItemsDO(null);
     }
 
@@ -300,45 +321,5 @@ public class PublishDetailActivity extends AppCompatActivity{
         }
         AppContextManager.getContextManager().getAppContext().setItemsDO(null);
         return intent;
-    }
-
-    class ViewCountUpdateTask extends AsyncTask<ProductItemsDO, Void, Void> {
-        private DynamoDBMapper mapper;
-        public ViewCountUpdateTask(){
-            mapper = AWSClientFactory.getInstance().getDBMapper();
-        }
-
-        @Override
-        protected Void doInBackground(ProductItemsDO... productItemsDOS) {
-            mapper.save(productItemsDOS[0]);
-            return null;
-        }
-    }
-
-    class CommentsUpdateTask extends AsyncTask<CommentsDO, Void, ProductItemsDO>{
-        private DynamoDBMapper mapper;
-        private Context context;
-        private ProductItemsDO itemDo;
-        public CommentsUpdateTask(Context context, ProductItemsDO itemDo){
-            mapper = AWSClientFactory.getInstance().getDBMapper();
-            this.context = context;
-            this.itemDo = itemDo;
-        }
-
-        @Override
-        protected ProductItemsDO doInBackground(CommentsDO... commentsDOS) {
-            mapper.save(commentsDOS[0]);
-            itemDo.setReplyCount(itemDo.getReplyCount() + 1);
-            mapper.save(itemDo);
-            return itemDo;
-        }
-
-        @Override
-        protected void onPostExecute(ProductItemsDO itemsDO) {
-            if(itemsDO.getReplyCount().intValue() > 0){
-                replyCount.setText("Comments " + itemsDO.getReplyCount().intValue());
-            }
-            getSupportLoaderManager().restartLoader(0, null, callback).forceLoad();
-        }
     }
 }

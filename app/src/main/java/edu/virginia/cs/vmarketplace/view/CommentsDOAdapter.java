@@ -38,12 +38,8 @@ public class CommentsDOAdapter extends ArrayAdapter<CommentsDO> {
         CommentsDO commentsDO = getItem(position);
         ImageView picView = listView.findViewById(R.id.user_pic);
         if(commentsDO.getCommentByAvatar() != null) {
-            if(commentsDO.getCommentByAvatar().startsWith("S3://")) {
-                List<String> s3Url = new ArrayList<String>();
-                List<String> file = new ArrayList<String>();
-                s3Url.add(commentsDO.getCommentByAvatar().substring(5));
-                file.add(UUID.randomUUID() + ".png");
-                S3Service.getInstance(getContext()).download(s3Url, file,
+            if(commentsDO.getCommentByAvatar().startsWith(S3Service.S3_PREFIX)) {
+                S3Service.getInstance(getContext()).download(commentsDO.getCommentByAvatar(),
                         (x)->{
                             Picasso.with(getContext()).load(x.get(0)).fit().into(picView);
                         });

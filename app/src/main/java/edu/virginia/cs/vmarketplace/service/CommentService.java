@@ -21,6 +21,10 @@ public class CommentService {
         return service;
     }
 
+    public void insertOrUpdate(CommentsDO commentsDO){
+        dao.insertOrUpdate(commentsDO);
+    }
+
     public List<CommentsDO> findCommentsByItemId(String itemId){
         return dao.findCommentsByItemId(itemId);
     }

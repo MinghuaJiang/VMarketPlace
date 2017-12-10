@@ -56,7 +56,6 @@ public class HomeTabHotFragment extends AbstractFragment {
                 startActivity(intent);
             }
         });
-        System.out.println("HomeTabHotFragment called");
         return rootView;
     }
 }

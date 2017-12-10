@@ -17,6 +17,8 @@ public class MessageDO {
     private String _buyerId;
     private String _buyerName;
     private String _itemId;
+    private String _itemOriginalPicFile;
+    private String _itemThumbPic;
     private String _lastUpdateMessage;
     private String _lastUpdateMessageType;
     private String _lastUpdateTime;
@@ -41,7 +43,8 @@ public class MessageDO {
     public void setBuyerAvatar(final String _buyerAvatar) {
         this._buyerAvatar = _buyerAvatar;
     }
-    @DynamoDBAttribute(attributeName = "buyerId")
+    @DynamoDBIndexHashKey(attributeName = "buyerId", globalSecondaryIndexName = "BUYER_TIME")
+    @DynamoDBIndexRangeKey(attributeName = "buyerId", globalSecondaryIndexName = "CHAT")
     public String getBuyerId() {
         return _buyerId;
     }
@@ -57,13 +60,29 @@ public class MessageDO {
     public void setBuyerName(final String _buyerName) {
         this._buyerName = _buyerName;
     }
-    @DynamoDBIndexHashKey(attributeName = "itemId", globalSecondaryIndexName = "TIME_SORT")
+    @DynamoDBIndexHashKey(attributeName = "itemId", globalSecondaryIndexNames = {"CHAT","TIME_SORT",})
     public String getItemId() {
         return _itemId;
     }
 
     public void setItemId(final String _itemId) {
         this._itemId = _itemId;
+    }
+    @DynamoDBAttribute(attributeName = "itemOriginalPicFile")
+    public String getItemOriginalPicFile() {
+        return _itemOriginalPicFile;
+    }
+
+    public void setItemOriginalPicFile(final String _itemOriginalPicFile) {
+        this._itemOriginalPicFile = _itemOriginalPicFile;
+    }
+    @DynamoDBAttribute(attributeName = "itemThumbPic")
+    public String getItemThumbPic() {
+        return _itemThumbPic;
+    }
+
+    public void setItemThumbPic(final String _itemThumbPic) {
+        this._itemThumbPic = _itemThumbPic;
     }
     @DynamoDBAttribute(attributeName = "lastUpdateMessage")
     public String getLastUpdateMessage() {
@@ -81,7 +100,7 @@ public class MessageDO {
     public void setLastUpdateMessageType(final String _lastUpdateMessageType) {
         this._lastUpdateMessageType = _lastUpdateMessageType;
     }
-    @DynamoDBIndexRangeKey(attributeName = "lastUpdateTime", globalSecondaryIndexName = "TIME_SORT")
+    @DynamoDBIndexRangeKey(attributeName = "lastUpdateTime", globalSecondaryIndexNames = {"BUYER_TIME","SELLER_TIME","TIME_SORT",})
     public String getLastUpdateTime() {
         return _lastUpdateTime;
     }
@@ -97,7 +116,7 @@ public class MessageDO {
     public void setSellerAvatar(final String _sellerAvatar) {
         this._sellerAvatar = _sellerAvatar;
     }
-    @DynamoDBAttribute(attributeName = "sellerId")
+    @DynamoDBIndexHashKey(attributeName = "sellerId", globalSecondaryIndexName = "SELLER_TIME")
     public String getSellerId() {
         return _sellerId;
     }
