@@ -3,6 +3,7 @@ package edu.virginia.cs.vmarketplace.view.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +46,9 @@ public class ProfileFragment extends AbstractFragment implements LoaderManager.L
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.profile, container, false);
+
+        getActivity().getWindow().setStatusBarColor(
+                getTabBackground());
 
         AppUser user = AppContextManager.getContextManager()
                 .getAppContext().getUser();
@@ -107,6 +111,10 @@ public class ProfileFragment extends AbstractFragment implements LoaderManager.L
         });
 
         return rootView;
+    }
+
+    public int getTabBackground(){
+        return ContextCompat.getColor(getContext(), R.color.tan_background);
     }
 
     private void handlePublish(){

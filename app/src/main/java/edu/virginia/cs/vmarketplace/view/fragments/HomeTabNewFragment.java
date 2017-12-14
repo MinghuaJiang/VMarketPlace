@@ -28,7 +28,7 @@ public class HomeTabNewFragment extends AbstractFragment {
     private HomePostListAdapter homePostListAdapter;
 
     public HomeTabNewFragment() {
-        super("new", R.drawable.new_icon);
+        super("Latest", 0);
 
     }
 
@@ -37,8 +37,7 @@ public class HomeTabNewFragment extends AbstractFragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.home_tab, container, false);
         ListView listView = rootView.findViewById(R.id.home_tab_list);
-        List<ProductItemsDO> list = new ArrayList<>();
-        list.add(new ProductItemsDO());
+        listView.setFocusable(false);
         homePostListAdapter = new HomePostListAdapter(getActivity(),
                 new ArrayList<>());
         listView.setAdapter(homePostListAdapter);

@@ -2,25 +2,153 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/tan_background"
     android:orientation="vertical"
     android:clipChildren="false"
+    android:id="@+id/popup_container"
     tools:context="edu.virginia.cs.vmarketplace.view.MainActivity">
 
-    <edu.virginia.cs.vmarketplace.view.NonSwipeableViewPager
-        android:id="@+id/viewpager"
+    <FrameLayout
+        android:id="@+id/page_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-   <android.support.design.widget.TabLayout
-        android:id="@+id/sliding_tabs"
+    <LinearLayout
+        android:id="@+id/ll_bottom"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:tabMode="fixed"
-        app:tabTextAppearance="@style/CustomTabText"/>
+        android:layout_height="52dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:background="@drawable/border">
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:id="@+id/home_container">
+            <ImageView
+                android:id="@+id/home"
+                android:layout_width="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/content_padding"
+                android:layout_height="wrap_content"
+                android:src="@drawable/home_24p" />
 
+            <TextView
+                android:textSize="10sp"
+                android:layout_centerInParent="true"
+                android:text="Home"
+                android:layout_alignParentBottom="true"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/home"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:id="@+id/place_container">
+            <ImageView
+                android:id="@+id/place"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/content_padding"
+                android:src="@drawable/place_24p" />
+            <TextView
+                android:textSize="10sp"
+                android:layout_centerInParent="true"
+                android:text="Place"
+                android:gravity="center_vertical"
+                android:layout_alignParentBottom="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/place"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="100dp"
+            android:layout_height="90dp"
+            android:layout_gravity="bottom"
+            android:id="@+id/publish_container">
+
+            <ImageView
+                android:id="@+id/publish"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/button_add_oval" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/publish"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_vertical"
+                android:paddingBottom="2dp"
+                android:text="Publish"
+                android:textSize="10sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:id="@+id/message_container">
+            <ImageView
+                android:id="@+id/message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/content_padding"
+                android:src="@drawable/message_24p" />
+            <TextView
+                android:textSize="10sp"
+                android:layout_centerInParent="true"
+                android:text="Message"
+                android:gravity="center_vertical"
+                android:layout_alignParentBottom="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/message"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:id="@+id/profile_container">
+            <ImageView
+                android:id="@+id/profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/content_padding"
+                android:src="@drawable/user_24p" />
+            <TextView
+                android:textSize="10sp"
+                android:layout_centerInParent="true"
+                android:text="Profile"
+                android:gravity="center_vertical"
+                android:layout_alignParentBottom="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profile"/>
+        </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>

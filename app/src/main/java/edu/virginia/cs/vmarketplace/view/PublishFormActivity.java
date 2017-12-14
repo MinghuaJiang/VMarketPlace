@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.ResultReceiver;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -96,6 +97,7 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
         super.onCreate(savedInstanceState);
         mResultReceiver = new AddressResultReceiver(new Handler());
         setContentView(R.layout.activity_publish_form);
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.separator));
         count = 0;
         appContext = AppContextManager.getContextManager().getAppContext();
         Toolbar toolbar =

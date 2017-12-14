@@ -9,9 +9,7 @@ import com.amazonaws.services.dynamodbv2.model.Condition;
 import java.util.List;
 
 import edu.virginia.cs.vmarketplace.model.MessageDO;
-import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
 import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
-import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
 
 /**
  * Created by cutehuazai on 12/9/17.

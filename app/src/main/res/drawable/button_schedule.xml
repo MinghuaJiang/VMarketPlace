@@ -6,7 +6,7 @@
         android:left="@dimen/button_margin"
         android:right="@dimen/button_margin"/>
     <item>
-        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+        <shape
             android:shape="rectangle" >
 
             <corners

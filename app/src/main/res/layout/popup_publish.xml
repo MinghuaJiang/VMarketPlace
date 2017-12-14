@@ -2,11 +2,10 @@
 
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id = "@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.virginia.cs.vmarketplace.view.PublishActivity">
+    android:background="@color/tan_background">
     <TextView
         android:id="@+id/second_hand"
         android:layout_width="wrap_content"
@@ -110,14 +109,14 @@
 
     <ImageView
         android:id="@+id/close_btn"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="64dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:contentDescription="@string/close_btn"
         android:clickable="true"
         android:focusable="true"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rides_image"
-        app:srcCompat="@drawable/close_24p" />
+        app:layout_constraintBottom_toTopOf="parent"
+        android:layout_marginBottom="35dp"
+        app:srcCompat="@drawable/cross" />
 </android.support.constraint.ConstraintLayout>

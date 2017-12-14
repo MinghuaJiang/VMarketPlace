@@ -33,7 +33,7 @@ public class HomePostListAdapter extends ArrayAdapter<ProductItemsDO> {
     private TransferUtility transferUtility;
     private int imageCounter;
 
-    HomePostListAdapter(Context context, List<ProductItemsDO> objects) {
+    public HomePostListAdapter(Context context, List<ProductItemsDO> objects) {
         super(context, 0, objects);
         this.images = new ArrayList<>();
         this.transferUtility = AWSClientFactory.getInstance().getTransferUtility(context);
@@ -59,60 +59,12 @@ public class HomePostListAdapter extends ArrayAdapter<ProductItemsDO> {
             System.out.println("picsTotalCount: " + picsTotalCount);
 
             List<String> downloadedImgs = new ArrayList<>();
-            for(int i=0; i<picsTotalCount; i++) {
+            for (int i = 0; i < picsTotalCount; i++) {
                 downloadedImgs.add(i + ".jpg");
             }
             View finalListView = listView;
-            S3Service.getInstance(getContext()).download(productItemsDO.getPics(), downloadedImgs,
-                    (x)->{
-                        ImageView imgview0 = finalListView.findViewById(R.id.product_pic_0);
-                        if(x.size() >= 1){
-                            Picasso.with(getContext()).load(x.get(0)).placeholder(R.drawable.product_placeholder_96dp)
-                                    .fit().into(imgview0);
-                        }
 
-                        ImageView imgview1 = finalListView.findViewById(R.id.product_pic_1);
-                        if(x.size() >= 2) {
-                            Picasso.with(getContext()).load(x.get(1)).placeholder(R.drawable.product_placeholder_96dp)
-                                    .fit().into(imgview1);
-                        }
-
-                        ImageView imgview2 = finalListView.findViewById(R.id.product_pic_2);
-                        if(x.size() >= 3) {
-                            Picasso.with(getContext()).load(x.get(2)).placeholder(R.drawable.product_placeholder_96dp)
-                                    .fit().into(imgview2);
-                        }
-
-//                        ImageView imgview0 = finalListView.findViewById(R.id.product_pic_3);
-//                        Picasso.with(getContext()).load(x.get(3)).placeholder(R.drawable.product_placeholder_96dp)
-//                                .fit().into(imgview0);
-//
-//                        ImageView imgview0 = finalListView.findViewById(R.id.product_pic_4);
-//                        Picasso.with(getContext()).load(x.get(4)).placeholder(R.drawable.product_placeholder_96dp)
-//                                .fit().into(imgview0);
-//
-//                        ImageView imgview0 = finalListView.findViewById(R.id.product_pic_5);
-//                        Picasso.with(getContext()).load(x.get(5)).placeholder(R.drawable.product_placeholder_96dp)
-//                                .fit().into(imgview0);
-//
-//                        ImageView imgview0 = finalListView.findViewById(R.id.product_pic_6);
-//                        Picasso.with(getContext()).load(x.get(6)).placeholder(R.drawable.product_placeholder_96dp)
-//                                .fit().into(imgview0);
-//
-//                        ImageView imgview0 = finalListView.findViewById(R.id.product_pic_7);
-//                        Picasso.with(getContext()).load(x.get(7)).placeholder(R.drawable.product_placeholder_96dp)
-//                                .fit().into(imgview0);
-//
-//                        ImageView imgview0 = finalListView.findViewById(R.id.product_pic_8);
-//                        Picasso.with(getContext()).load(x.get(8)).placeholder(R.drawable.product_placeholder_96dp)
-//                                .fit().into(imgview0);
-//
-//                        ImageView imgview0 = finalListView.findViewById(R.id.product_pic_9);
-//                        Picasso.with(getContext()).load(x.get(9)).placeholder(R.drawable.product_placeholder_96dp)
-//                                .fit().into(imgview0);
-                    });
         }
-
         // add post title
         TextView postTitle = listView.findViewById(R.id.home_post_title);
         if (productItemsDO.getTitle() != null) {

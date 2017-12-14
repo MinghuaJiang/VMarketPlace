@@ -23,12 +23,12 @@ import edu.virginia.cs.vmarketplace.view.PublishDetailActivity;
  * Created by VINCENTWEN on 12/4/17.
  */
 
-public class HomeTabHotFragment extends AbstractFragment {
+public class HomeTabNearByFragment extends AbstractFragment {
 
     private HomePostListAdapter homePostListAdapter;
 
-    public HomeTabHotFragment() {
-        super("hot", R.drawable.hot_icon);
+    public HomeTabNearByFragment() {
+        super("NearBy", 0);
 
     }
 
@@ -37,9 +37,7 @@ public class HomeTabHotFragment extends AbstractFragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.home_tab, container, false);
         ListView listView = rootView.findViewById(R.id.home_tab_list);
-        List<ProductItemsDO> list = new ArrayList<>();
-        list.add(new ProductItemsDO());
-
+        listView.setFocusable(false);
         homePostListAdapter = new HomePostListAdapter(getActivity(),
                 new ArrayList<>());
         listView.setAdapter(homePostListAdapter);
@@ -50,7 +48,7 @@ public class HomeTabHotFragment extends AbstractFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ProductItemsDO itemsDO = homePostListAdapter.getItem(position);
-                Intent intent = new Intent(HomeTabHotFragment.this.getActivity(), PublishDetailActivity.class);
+                Intent intent = new Intent(HomeTabNearByFragment.this.getActivity(), PublishDetailActivity.class);
                 intent.putExtra(AppConstant.JUMP_FROM, AppConstant.HOME_PAGE);
                 AppContextManager.getContextManager().getAppContext().setItemsDO(itemsDO);
                 startActivity(intent);

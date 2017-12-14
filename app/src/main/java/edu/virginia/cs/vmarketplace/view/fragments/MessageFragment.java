@@ -2,6 +2,7 @@ package edu.virginia.cs.vmarketplace.view.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +40,9 @@ public class MessageFragment extends AbstractFragment{
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.message, container, false);
 
+        getActivity().getWindow().setStatusBarColor(
+               getTabBackground());
+
         Toolbar toolbar =
                 rootView.findViewById(R.id.my_toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -74,5 +78,9 @@ public class MessageFragment extends AbstractFragment{
 
         getLoaderManager().initLoader(0, null, callback).forceLoad();
         return rootView;
+    }
+
+    public int getTabBackground(){
+        return ContextCompat.getColor(getContext(), R.color.colorPrimaryDark);
     }
 }

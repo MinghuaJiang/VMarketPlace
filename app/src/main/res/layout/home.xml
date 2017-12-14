@@ -27,31 +27,28 @@
                 android:gravity="center_vertical"
                 android:layout_margin="@dimen/button_margin"/>
         </RelativeLayout>
-
     </android.support.v7.widget.Toolbar>
-
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:id="@+id/scrollview"
         >
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/home_poster_image"
+            <com.daimajia.slider.library.SliderLayout
+                android:id="@+id/slider"
                 android:layout_width="match_parent"
-                android:layout_height="132dp"
-                android:src="@drawable/uva_rotunda"
-                android:contentDescription="@string/home_page_poster"/>
-
+                android:layout_height="132dp">
+            </com.daimajia.slider.library.SliderLayout>
             <GridLayout
                 android:id="@+id/home_navigator"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/home_poster_image"
+                android:layout_below="@+id/slider"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:columnCount="4"
@@ -62,6 +59,7 @@
                     android:orientation="vertical"
                     android:layout_column="0"
                     android:layout_row="0"
+                    android:layout_width="@dimen/list_item_height_medium"
                     android:layout_columnWeight="1"
                     android:layout_rowWeight="1"
                     android:layout_marginTop="@dimen/activity_horizontal_margin"
@@ -69,24 +67,28 @@
                     android:layout_marginBottom="@dimen/content_padding"
                     >
 
-                    <ImageView
-                        android:id="@+id/home_second_hand_image"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:clickable="true"
-                        android:contentDescription="@string/second_hand"
-                        android:focusable="true"
-                        app:srcCompat="@drawable/second_hand_logo"
-                        />
                     <TextView
                         android:id="@+id/home_second_hand"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/second_hand"
-                        android:layout_marginTop="8dp"
-                        android:textSize="10sp"
-                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                        android:textStyle="bold"
+                        android:textSize="11sp"
+                        android:gravity="center_horizontal"
                         />
+
+                    <ImageView
+                        android:id="@+id/home_second_hand_image"
+                        android:layout_width="@dimen/list_item_height"
+                        android:layout_height="@dimen/list_item_height"
+                        android:clickable="true"
+                        android:contentDescription="@string/second_hand"
+                        android:focusable="true"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/home_second_hand"
+                        />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -95,28 +97,32 @@
                     android:layout_row="0"
                     android:layout_columnWeight="1"
                     android:layout_rowWeight="1"
+                    android:layout_width="@dimen/list_item_height_medium"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/activity_horizontal_margin"
                     android:layout_marginBottom="@dimen/content_padding"
                     >
 
-                    <ImageView
-                        android:id="@+id/home_rides_image"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:clickable="true"
-                        android:contentDescription="@string/rides"
-                        android:focusable="true"
-                        app:srcCompat="@drawable/ride_logo"
-                        />
                     <TextView
                         android:id="@+id/home_rides"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/rides"
-                        android:layout_marginTop="8dp"
-                        android:textSize="10sp"
+                        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                        android:textStyle="bold"
+                        android:textSize="11sp"
                         android:layout_gravity="center_horizontal"
+                        />
+
+                    <ImageView
+                        android:id="@+id/home_rides_image"
+                        android:layout_width="@dimen/list_item_height"
+                        android:layout_height="@dimen/list_item_height"
+                        android:clickable="true"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/rides"
+                        android:focusable="true"
+                        app:srcCompat="@drawable/home_ride"
                         />
                 </LinearLayout>
 
@@ -126,29 +132,34 @@
                     android:layout_row="0"
                     android:layout_columnWeight="1"
                     android:layout_rowWeight="1"
+                    android:layout_width="@dimen/list_item_height_medium"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/activity_horizontal_margin"
                     android:layout_marginBottom="@dimen/content_padding"
                     >
+
+                    <TextView
+                        android:id="@+id/home_sublease"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sublease"
+                        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:layout_gravity="center_horizontal"
+                        />
 
                     <ImageView
                         android:id="@+id/home_sublease_image"
                         android:clickable="true"
                         android:contentDescription="@string/sublease"
                         android:focusable="true"
-                        app:srcCompat="@drawable/sublease_logo"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/home_sublease"
+                        android:layout_width="@dimen/list_item_height"
+                        android:layout_height="@dimen/list_item_height"
                         />
-                    <TextView
-                        android:id="@+id/home_sublease"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/sublease"
-                        android:layout_marginTop="8dp"
-                        android:textSize="10sp"
-                        android:layout_gravity="center_horizontal"
-                        />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -157,29 +168,33 @@
                     android:layout_row="0"
                     android:layout_columnWeight="1"
                     android:layout_rowWeight="1"
+                    android:layout_width="@dimen/list_item_height_medium"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/activity_horizontal_margin"
                     android:layout_marginBottom="@dimen/content_padding"
                     >
-
-                    <ImageView
-                        android:id="@+id/home_activity_image"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:clickable="true"
-                        android:contentDescription="@string/activities"
-                        android:focusable="true"
-                        app:srcCompat="@drawable/activity_logo"
-                        />
                     <TextView
                         android:id="@+id/home_activity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/activities"
-                        android:layout_marginTop="8dp"
-                        android:textSize="10sp"
+                        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
                         android:layout_gravity="center_horizontal"
                         />
+
+                    <ImageView
+                        android:id="@+id/home_activity_image"
+                        android:layout_width="@dimen/list_item_height"
+                        android:layout_height="@dimen/list_item_height"
+                        android:clickable="true"
+                        android:contentDescription="@string/activities"
+                        android:focusable="true"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/home_activity"
+                        />
+
                 </LinearLayout>
             </GridLayout>
 
@@ -189,52 +204,26 @@
                 android:layout_height="@dimen/separator_height"
                 android:background="@color/separator"
                 android:layout_marginTop="8dp"
-                android:layout_below="@+id/home_navigator"
+                android:layout_below="@id/home_navigator"
                 >
             </TextView>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/tab_container1"
-                android:layout_below="@+id/separator_below_category"
-                >
-            </FrameLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:background="@color/separator"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_below="@+id/tab_container1"
-                android:id="@+id/frame_separator"
-                />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/tab_container2"
-                android:layout_below="@+id/frame_separator"
-                >
-            </FrameLayout>
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tab"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/frame_separator"
+                android:layout_below="@id/separator_below_category"
                 app:tabMode="fixed"
                 app:tabTextAppearance="@style/CustomTabText"
                 />
 
-            <edu.virginia.cs.vmarketplace.view.NonSwipeableViewPager
-                android:id="@+id/home_tab_viewpager"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/tab"
-                />
-
+                android:id="@+id/tab_container"
+                android:layout_below="@id/tab"
+                >
+            </FrameLayout>
         </RelativeLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

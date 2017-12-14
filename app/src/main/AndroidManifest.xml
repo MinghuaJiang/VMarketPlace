@@ -119,10 +119,6 @@
                 android:value=".view.MainActivity" />
         </activity>
         <activity
-            android:name=".view.PublishActivity"
-            android:label="@string/publish"
-            android:theme="@style/AppTheme.FullScreen" />
-        <activity
             android:name=".view.login.AWSLoginActivity"
             android:theme="@style/AppTheme.FullScreen" />
         <activity

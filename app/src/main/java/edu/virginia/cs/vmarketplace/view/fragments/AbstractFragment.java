@@ -26,4 +26,8 @@ public abstract class AbstractFragment extends Fragment {
     public int getIconResourceId() {
         return iconResourceId;
     }
+
+    public int getTabBackground(){
+        return 0;
+    }
 }
