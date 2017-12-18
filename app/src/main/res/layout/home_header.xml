@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.daimajia.slider.library.SliderLayout
+        android:id="@+id/slider"
+        android:layout_width="match_parent"
+        android:layout_height="132dp"></com.daimajia.slider.library.SliderLayout>
+
+    <GridLayout
+        android:id="@+id/home_navigator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/slider"
+        android:columnCount="4"
+        android:rowCount="1"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin">
+
+        <LinearLayout
+            android:id="@+id/second_hand"
+            android:layout_width="@dimen/list_item_height_medium"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/content_padding"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/home_second_hand"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:gravity="center_horizontal"
+                android:text="@string/second_hand"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/home_second_hand_image"
+                android:layout_width="@dimen/list_item_height"
+                android:layout_height="@dimen/list_item_height"
+                android:layout_gravity="center"
+                android:clickable="true"
+                android:contentDescription="@string/second_hand"
+                android:focusable="true"
+                app:srcCompat="@drawable/home_second_hand" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/rides"
+            android:layout_width="@dimen/list_item_height_medium"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/content_padding"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/home_rides"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:text="@string/rides"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/home_rides_image"
+                android:layout_width="@dimen/list_item_height"
+                android:layout_height="@dimen/list_item_height"
+                android:layout_gravity="center"
+                android:clickable="true"
+                android:contentDescription="@string/rides"
+                android:focusable="true"
+                app:srcCompat="@drawable/home_ride" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/sublease"
+            android:layout_width="@dimen/list_item_height_medium"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/content_padding"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/home_sublease"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:text="@string/sublease"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/home_sublease_image"
+                android:layout_width="@dimen/list_item_height"
+                android:layout_height="@dimen/list_item_height"
+                android:layout_gravity="center"
+                android:clickable="true"
+                android:contentDescription="@string/sublease"
+                android:focusable="true"
+                app:srcCompat="@drawable/home_sublease" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/activity"
+            android:layout_width="@dimen/list_item_height_medium"
+            android:layout_column="3"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/content_padding"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/home_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:text="@string/activities"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/home_activity_image"
+                android:layout_width="@dimen/list_item_height"
+                android:layout_height="@dimen/list_item_height"
+                android:layout_gravity="center"
+                android:clickable="true"
+                android:contentDescription="@string/activities"
+                android:focusable="true"
+                app:srcCompat="@drawable/home_activity" />
+
+        </LinearLayout>
+    </GridLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_margin"
+        android:background="@color/separator"
+        android:layout_below="@id/home_navigator"
+        />
+</RelativeLayout>

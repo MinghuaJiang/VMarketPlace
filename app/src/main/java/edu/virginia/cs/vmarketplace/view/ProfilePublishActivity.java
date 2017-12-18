@@ -18,6 +18,7 @@ import edu.virginia.cs.vmarketplace.service.ProductItemService;
 import edu.virginia.cs.vmarketplace.service.loader.CommonLoaderCallback;
 import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
 import edu.virginia.cs.vmarketplace.util.IntentUtil;
+import edu.virginia.cs.vmarketplace.view.adapter.ProfilePublishItemAdapter;
 
 
 /**

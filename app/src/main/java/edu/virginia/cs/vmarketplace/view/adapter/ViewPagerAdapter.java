@@ -1,8 +1,10 @@
-package edu.virginia.cs.vmarketplace.view.fragments;
+package edu.virginia.cs.vmarketplace.view.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import edu.virginia.cs.vmarketplace.view.fragments.AbstractFragment;
 
 /**
  * Created by cutehuazai on 11/23/17.

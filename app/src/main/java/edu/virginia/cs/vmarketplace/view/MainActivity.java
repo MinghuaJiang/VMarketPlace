@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity{
         slideDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         slideUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
         slideBack = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_back);
-        
+
         home = findViewById(R.id.home);
         place = findViewById(R.id.place);
         message = findViewById(R.id.message);

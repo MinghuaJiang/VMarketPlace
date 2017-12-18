@@ -21,6 +21,7 @@ import edu.virginia.cs.vmarketplace.service.MessageService;
 import edu.virginia.cs.vmarketplace.service.loader.CommonLoaderCallback;
 import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
 import edu.virginia.cs.vmarketplace.view.MessageDetailActivity;
+import edu.virginia.cs.vmarketplace.view.adapter.MessageDOAdapter;
 
 
 /**

@@ -18,19 +18,19 @@
 
     <ImageView
         android:id="@+id/second_hand_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
-        android:contentDescription="@string/second_hand"
         android:clickable="true"
+        android:contentDescription="@string/second_hand"
         android:focusable="true"
-        app:layout_constraintEnd_toEndOf="@+id/second_hand"
-        app:layout_constraintHorizontal_bias="0.764"
+        app:layout_constraintEnd_toEndOf="@id/second_hand"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/second_hand"
         app:layout_constraintTop_toBottomOf="@+id/second_hand"
-        app:srcCompat="@drawable/second_hand_logo" />
+        app:srcCompat="@drawable/second_hand_publish" />
 
     <TextView
         android:id="@+id/sublease"
@@ -44,8 +44,8 @@
 
     <ImageView
         android:id="@+id/sublease_image"
-        android:layout_width="54dp"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:clickable="true"
@@ -53,9 +53,9 @@
         android:contentDescription="@string/sublease"
         app:layout_constraintEnd_toEndOf="@+id/sublease"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/sublease"
-        app:layout_constraintTop_toBottomOf="@+id/sublease"
-        app:srcCompat="@drawable/sublease_logo" />
+        app:layout_constraintStart_toStartOf="@id/sublease"
+        app:layout_constraintTop_toBottomOf="@id/sublease"
+        app:srcCompat="@drawable/sublease_publish" />
 
     <TextView
         android:id="@+id/rides"
@@ -64,22 +64,22 @@
         android:layout_marginEnd="8dp"
         android:layout_marginTop="92dp"
         android:text="@string/rides"
-        app:layout_constraintEnd_toEndOf="@+id/second_hand"
-        app:layout_constraintStart_toStartOf="@+id/second_hand"
-        app:layout_constraintTop_toBottomOf="@+id/second_hand" />
+        app:layout_constraintEnd_toEndOf="@id/second_hand"
+        app:layout_constraintStart_toStartOf="@id/second_hand"
+        app:layout_constraintTop_toBottomOf="@id/second_hand" />
 
     <ImageView
         android:id="@+id/rides_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginTop="24dp"
         android:contentDescription="@string/rides"
         android:clickable="true"
         android:focusable="true"
-        app:layout_constraintEnd_toEndOf="@+id/rides"
-        app:layout_constraintStart_toStartOf="@+id/rides"
-        app:layout_constraintTop_toBottomOf="@+id/rides"
-        app:srcCompat="@drawable/ride_logo" />
+        app:layout_constraintEnd_toEndOf="@id/rides"
+        app:layout_constraintStart_toStartOf="@id/rides"
+        app:layout_constraintTop_toBottomOf="@id/rides"
+        app:srcCompat="@drawable/ride_publish" />
 
     <TextView
         android:id="@+id/activity"
@@ -88,24 +88,24 @@
         android:layout_marginEnd="8dp"
         android:layout_marginTop="92dp"
         android:text="@string/activities"
-        app:layout_constraintEnd_toEndOf="@+id/sublease"
-        app:layout_constraintStart_toStartOf="@+id/sublease"
-        app:layout_constraintTop_toBottomOf="@+id/sublease" />
+        app:layout_constraintEnd_toEndOf="@id/sublease"
+        app:layout_constraintStart_toStartOf="@id/sublease"
+        app:layout_constraintTop_toBottomOf="@id/sublease" />
 
     <ImageView
         android:id="@+id/activity_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="24dp"
         android:contentDescription="@string/activities"
         android:clickable="true"
         android:focusable="true"
-        app:layout_constraintEnd_toEndOf="@+id/activity"
+        app:layout_constraintEnd_toEndOf="@id/activity"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/activity"
-        app:layout_constraintTop_toBottomOf="@+id/activity"
-        app:srcCompat="@drawable/activity_logo" />
+        app:layout_constraintStart_toStartOf="@id/activity"
+        app:layout_constraintTop_toBottomOf="@id/activity"
+        app:srcCompat="@drawable/activity_publish" />
 
     <ImageView
         android:id="@+id/close_btn"

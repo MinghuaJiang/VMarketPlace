@@ -1,4 +1,4 @@
-package edu.virginia.cs.vmarketplace.view;
+package edu.virginia.cs.vmarketplace.view.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +17,9 @@ import java.util.List;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.SoldItem;
+import edu.virginia.cs.vmarketplace.view.AppConstant;
+import edu.virginia.cs.vmarketplace.view.MessageDetailActivity;
+import edu.virginia.cs.vmarketplace.view.SoldReviewActivity;
 
 /**
  * Created by cutehuazai on 11/24/17.

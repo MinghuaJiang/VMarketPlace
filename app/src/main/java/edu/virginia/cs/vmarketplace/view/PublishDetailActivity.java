@@ -3,27 +3,23 @@ package edu.virginia.cs.vmarketplace.view;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -45,7 +41,9 @@ import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
 import edu.virginia.cs.vmarketplace.service.login.AppUser;
 import edu.virginia.cs.vmarketplace.model.CommentsDO;
 import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
-import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
+import edu.virginia.cs.vmarketplace.util.LocationUtil;
+import edu.virginia.cs.vmarketplace.view.adapter.CommentsDOAdapter;
+import edu.virginia.cs.vmarketplace.view.adapter.DetailImageAdapter;
 
 public class PublishDetailActivity extends AppCompatActivity{
     private AppContext context;
@@ -53,6 +51,7 @@ public class PublishDetailActivity extends AppCompatActivity{
     private CircleImageView userpic;
     private NonScrollGridView gridView;
     private NonScrollGridView commentView;
+    private ScrollView scrollView;
     private ImageView thumbup;
     private ImageView comment;
     private ImageView favorite;
@@ -74,9 +73,7 @@ public class PublishDetailActivity extends AppCompatActivity{
         user = AppContextManager.getContextManager().getAppContext().getUser();
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setDisplayShowTitleEnabled(false);
-
         TextView titleView = findViewById(R.id.toolbar_title);
-        titleView.setText(R.string.publish_detail);
 
         context = AppContextManager.getContextManager().getAppContext();
         itemsDO = context.getItemsDO();
@@ -92,6 +89,20 @@ public class PublishDetailActivity extends AppCompatActivity{
         }else{
             favorite.setImageResource(R.drawable.favorite_24dp);
         }
+
+        scrollView = findViewById(R.id.scrollview);
+        scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if(scrollY >= 325){
+                    titleView.setText("$"+ itemsDO.getPrice());
+                }else{
+                    titleView.setText("");
+                }
+            }
+        });
+
+
         favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,6 +127,7 @@ public class PublishDetailActivity extends AppCompatActivity{
         final RelativeLayout before = findViewById(R.id.before_chat);
         final RelativeLayout after = findViewById(R.id.after_chat);
         final EditText editText = findViewById(R.id.input);
+
         comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,8 +233,7 @@ public class PublishDetailActivity extends AppCompatActivity{
         });
 
         TextView locationView = findViewById(R.id.publish_location);
-        locationView.setText("Published at " + itemsDO.getLocation().substring(itemsDO.getLocation().indexOf(",") + 1
-        , itemsDO.getLocation().lastIndexOf("美")));
+        locationView.setText("Published at " + LocationUtil.getCityAndZipCode(itemsDO.getLocation()));
 
         TextView priceView = findViewById(R.id.price_container);
         if(itemsDO.getPrice() == null){
@@ -246,6 +257,7 @@ public class PublishDetailActivity extends AppCompatActivity{
         gridView = findViewById(R.id.pic_container);
         adapter = new DetailImageAdapter(this, itemsDO.getPics(),itemsDO.getOriginalFiles());
         gridView.setAdapter(adapter);
+        gridView.setFocusable(false);
 
         commentView = findViewById(R.id.user_comment);
         commentsDOAdapter = new CommentsDOAdapter(this, new ArrayList<CommentsDO>());

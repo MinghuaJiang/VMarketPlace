@@ -28,6 +28,7 @@ import edu.virginia.cs.vmarketplace.view.ProfileFavoriteActivity;
 import edu.virginia.cs.vmarketplace.view.ProfilePublishActivity;
 import edu.virginia.cs.vmarketplace.view.ProfileSoldActivity;
 import edu.virginia.cs.vmarketplace.service.loader.ProfileItemLoader;
+import edu.virginia.cs.vmarketplace.view.adapter.ProfileItemAdapter;
 import edu.virginia.cs.vmarketplace.view.login.AWSLoginActivity;
 
 /**

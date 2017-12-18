@@ -18,6 +18,7 @@ import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.SoldItem;
 import edu.virginia.cs.vmarketplace.util.IntentUtil;
 import edu.virginia.cs.vmarketplace.service.loader.SoldItemLoader;
+import edu.virginia.cs.vmarketplace.view.adapter.ProfileSoldItemAdapter;
 
 public class ProfileSoldActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<SoldItem>>{
     private SwipeRefreshLayout refreshLayout;

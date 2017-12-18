@@ -29,7 +29,6 @@ import android.widget.Toast;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -52,11 +51,10 @@ import edu.virginia.cs.vmarketplace.service.login.AppContext;
 import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.PreviewImageItem;
 import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
-import edu.virginia.cs.vmarketplace.service.login.AppUser;
 import edu.virginia.cs.vmarketplace.util.CategoryUtil;
 import edu.virginia.cs.vmarketplace.util.FetchAddressIntentService;
 import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
-import edu.virginia.cs.vmarketplace.view.fragments.ImageViewAdapter;
+import edu.virginia.cs.vmarketplace.view.adapter.ImageViewAdapter;
 import edu.virginia.cs.vmarketplace.service.loader.PreviewImageItemLoader;
 
 public class PublishFormActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<PreviewImageItem>> {

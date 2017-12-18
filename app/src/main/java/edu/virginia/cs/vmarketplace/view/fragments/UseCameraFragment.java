@@ -72,6 +72,7 @@ import edu.virginia.cs.vmarketplace.view.MainActivity;
 import edu.virginia.cs.vmarketplace.view.MessageDetailActivity;
 import edu.virginia.cs.vmarketplace.view.PublishFormActivity;
 import edu.virginia.cs.vmarketplace.service.loader.PreviewImageItemLoader;
+import edu.virginia.cs.vmarketplace.view.adapter.ImageViewAdapter;
 
 /**
  * Created by cutehuazai on 11/25/17.

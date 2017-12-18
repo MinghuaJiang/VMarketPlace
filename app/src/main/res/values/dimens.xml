@@ -14,4 +14,5 @@
     <dimen name="button_margin">12dp</dimen>
     <dimen name="button_margin_large">24dp</dimen>
     <dimen name="text_area">120dp</dimen>
+    <dimen name="item_offset">0.5dp</dimen>
 </resources>

@@ -1,4 +1,4 @@
-package edu.virginia.cs.vmarketplace.view.fragments;
+package edu.virginia.cs.vmarketplace.view.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

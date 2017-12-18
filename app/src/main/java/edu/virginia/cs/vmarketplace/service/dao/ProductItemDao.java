@@ -6,6 +6,7 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBScanExpr
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -44,6 +45,7 @@ public class ProductItemDao {
                 .withExpressionAttributeValues(eav);
 
         List<ProductItemsDO> scanResult = mapper.scan(ProductItemsDO.class, scanExpression);
+
         return scanResult;
     }
 

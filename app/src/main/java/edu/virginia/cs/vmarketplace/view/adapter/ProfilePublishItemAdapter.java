@@ -1,8 +1,7 @@
-package edu.virginia.cs.vmarketplace.view;
+package edu.virginia.cs.vmarketplace.view.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.squareup.picasso.Picasso;
 
@@ -29,6 +26,9 @@ import edu.virginia.cs.vmarketplace.service.loader.CommonAyncTask;
 import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
 import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
+import edu.virginia.cs.vmarketplace.view.AppConstant;
+import edu.virginia.cs.vmarketplace.view.PublishDetailActivity;
+import edu.virginia.cs.vmarketplace.view.PublishFormActivity;
 
 /**
  * Created by cutehuazai on 11/24/17.

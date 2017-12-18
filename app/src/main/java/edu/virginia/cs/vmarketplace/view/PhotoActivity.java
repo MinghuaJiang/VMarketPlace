@@ -9,7 +9,7 @@ import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.view.fragments.AbstractFragment;
 import edu.virginia.cs.vmarketplace.view.fragments.UseAlbumFragment;
 import edu.virginia.cs.vmarketplace.view.fragments.UseCameraFragment;
-import edu.virginia.cs.vmarketplace.view.fragments.ViewPagerAdapter;
+import edu.virginia.cs.vmarketplace.view.adapter.ViewPagerAdapter;
 
 public class PhotoActivity extends AppCompatActivity {
     private AbstractFragment[] fragments;
