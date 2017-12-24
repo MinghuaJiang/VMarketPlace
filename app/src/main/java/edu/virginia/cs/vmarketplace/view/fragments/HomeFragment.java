@@ -83,7 +83,7 @@ public class HomeFragment extends AbstractFragment {
 
         recyclerView.setAdapter(homeAdapter);
         layoutManager.setAutoMeasureEnabled(true);
-        listener = new EndlessRecyclerViewScrollListener(layoutManager) {
+        listener = new EndlessRecyclerViewScrollListener(layoutManager, 2) {
             @Override
             public void onNoMoreResult(RecyclerView view) {
                 Toast.makeText(getContext(), "No More Item", Toast.LENGTH_SHORT).show();

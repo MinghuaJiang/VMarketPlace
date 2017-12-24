@@ -20,12 +20,19 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
     // Sets the starting page index
     private int startingPageIndex = 0;
 
+    private int skipLines;
+
     private RecyclerView.LayoutManager mLayoutManager;
 
     private boolean hasMorePage;
 
     public EndlessRecyclerViewScrollListener(LinearLayoutManager layoutManager) {
+        this(layoutManager, 0);
+    }
+
+    public EndlessRecyclerViewScrollListener(LinearLayoutManager layoutManager, int skipLines) {
         this.mLayoutManager = layoutManager;
+        this.skipLines = skipLines;
     }
 
     public boolean isHasMorePage() {
@@ -66,7 +73,7 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
         // If we do need to reload some more data, we execute onLoadMore to fetch the data.
         // threshold should reflect how many total columns there are too
 
-        if (!loading && (lastVisibleItemPosition + visibleThreshold) >= totalItemCount && totalItemCount > 2) {
+        if (!loading && (lastVisibleItemPosition + visibleThreshold) >= totalItemCount && totalItemCount > skipLines) {
             if(hasMorePage) {
                 currentPage++;
                 onLoadMore(currentPage, totalItemCount, view);
