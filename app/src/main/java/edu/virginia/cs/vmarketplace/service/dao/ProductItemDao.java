@@ -3,6 +3,7 @@ package edu.virginia.cs.vmarketplace.service.dao;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExpression;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBScanExpression;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.ScanResultPage;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 
 import java.text.SimpleDateFormat;
@@ -13,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.virginia.cs.vmarketplace.model.PageRequest;
+import edu.virginia.cs.vmarketplace.model.PageResult;
 import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
 import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
 import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
@@ -31,10 +34,10 @@ public class ProductItemDao {
         mapper.save(itemsDO);
     }
 
-    public List<ProductItemsDO> findTop100HotPostsInOneWeek(){
+    public PageResult<ProductItemsDO> findNearByActivePostWithIn90Days(PageRequest request){
         Calendar cal = Calendar.getInstance();
         cal.setTime(new java.util.Date());
-        cal.add(Calendar.DATE, -7);
+        cal.add(Calendar.DATE, -90);
         Date dateBefore7Days = cal.getTime();
         String dateQuery = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateBefore7Days);
         Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
@@ -42,17 +45,22 @@ public class ProductItemDao {
 
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
                 .withFilterExpression("last_modification_time > :val1")
-                .withExpressionAttributeValues(eav);
+                .withExpressionAttributeValues(eav).withLimit(request.getPageSize());
 
-        List<ProductItemsDO> scanResult = mapper.scan(ProductItemsDO.class, scanExpression);
+        if(request.getPage() != 0){
+            scanExpression.setExclusiveStartKey((Map<String, AttributeValue>)request.getToken());
+        }
 
-        return scanResult;
+        ScanResultPage<ProductItemsDO> scanResult = mapper.scanPage(
+                ProductItemsDO.class, scanExpression);
+        PageResult<ProductItemsDO> result = new PageResult<ProductItemsDO>(scanResult.getResults(), scanResult.getLastEvaluatedKey());
+        return result;
     }
 
-    public List<ProductItemsDO> findTop100NewPostsInOneWeek(){
+    public PageResult<ProductItemsDO> findLatestActivePostWithIn90Days(PageRequest pageRequest){
         Calendar cal = Calendar.getInstance();
         cal.setTime(new java.util.Date());
-        cal.add(Calendar.DATE, -7);
+        cal.add(Calendar.DATE, -90);
         Date dateBefore7Days = cal.getTime();
         String dateQuery = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateBefore7Days);
         Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
@@ -60,10 +68,14 @@ public class ProductItemDao {
 
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
                 .withFilterExpression("last_modification_time > :val1")
-                .withExpressionAttributeValues(eav);
+                .withExpressionAttributeValues(eav).withLimit(pageRequest.getPageSize());
+        if(pageRequest.getPage() != 0){
+            scanExpression.setExclusiveStartKey((Map<String, AttributeValue>)pageRequest.getToken());
+        }
 
-        List<ProductItemsDO> scanResult = mapper.scan(ProductItemsDO.class, scanExpression);
-        return scanResult;
+        ScanResultPage<ProductItemsDO> scanResult = mapper.scanPage(ProductItemsDO.class, scanExpression);
+        PageResult<ProductItemsDO> result = new PageResult<>(scanResult.getResults(), scanResult.getLastEvaluatedKey());
+        return result;
     }
 
     public List<ProductItemsDO> findItemByUserId(String userId){

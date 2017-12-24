@@ -15,31 +15,29 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import edu.virginia.cs.vmarketplace.model.PageResult;
 import edu.virginia.cs.vmarketplace.view.adapter.RefreshableRecycleAdapter;
 
 /**
  * Created by cutehuazai on 12/14/17.
  */
 
-public class CommonRecycleViewLoaderCallback <T, R> implements LoaderManager.LoaderCallbacks<List<R>> {
+public class CommonRecycleViewLoaderCallback <T, R> implements LoaderManager.LoaderCallbacks<PageResult<R>> {
     public RefreshableRecycleAdapter<R, RecyclerView.ViewHolder> adapter;
-    private Function<T, List<R>> function;
-    private Supplier<List<R>> supplier;
+    private Function<T, PageResult<R>> function;
+    private Supplier<PageResult<R>> supplier;
     private T param;
     private Context context;
-    private NestedScrollView nestedScrollView;
-    private int scrollX;
-    private int scrollY;
     private CustomCallback<R> callback;
 
     public CommonRecycleViewLoaderCallback(Context context, RefreshableRecycleAdapter<R, RecyclerView.ViewHolder> adapter,
-                                Supplier<List<R>> supplier){
+                                Supplier<PageResult<R>> supplier){
         this.context = context;
         this.adapter = adapter;
         this.supplier = supplier;
     }
 
-    public CommonRecycleViewLoaderCallback(Context context, RefreshableRecycleAdapter<R, RecyclerView.ViewHolder> adapter, Function<T, List<R>> function, T param){
+    public CommonRecycleViewLoaderCallback(Context context, RefreshableRecycleAdapter<R, RecyclerView.ViewHolder> adapter, Function<T, PageResult<R>> function, T param){
         this.context = context;
         this.adapter = adapter;
         this.function = function;
@@ -52,23 +50,23 @@ public class CommonRecycleViewLoaderCallback <T, R> implements LoaderManager.Loa
     }
 
     @Override
-    public Loader<List<R>> onCreateLoader(int id, Bundle args) {
-        return new CommonAsyncTaskLoader<T,List<R>>(context, function, supplier, param);
+    public Loader<PageResult<R>> onCreateLoader(int id, Bundle args) {
+        return new CommonAsyncTaskLoader<T,PageResult<R>>(context, function, supplier, param);
     }
 
     @Override
-    public void onLoadFinished(Loader<List<R>> loader, List<R> data) {
+    public void onLoadFinished(Loader<PageResult<R>> loader, PageResult<R> data) {
         if(callback != null){
             callback.runCallBack(data);
         }
     }
 
     @Override
-    public void onLoaderReset(Loader<List<R>> loader) {
+    public void onLoaderReset(Loader<PageResult<R>> loader) {
         adapter.setData(new ArrayList<>(), 0);
     }
 
     public interface CustomCallback<R>{
-        public void runCallBack(List<R> data);
+        public void runCallBack(PageResult<R> data);
     }
 }

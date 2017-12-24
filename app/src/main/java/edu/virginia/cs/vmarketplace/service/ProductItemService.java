@@ -2,6 +2,8 @@ package edu.virginia.cs.vmarketplace.service;
 
 import java.util.List;
 
+import edu.virginia.cs.vmarketplace.model.PageRequest;
+import edu.virginia.cs.vmarketplace.model.PageResult;
 import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
 import edu.virginia.cs.vmarketplace.service.dao.ProductItemDao;
 
@@ -26,12 +28,12 @@ public class ProductItemService {
         dao.insertOrUpdate(itemsDO);
     }
 
-    public List<ProductItemsDO> findTop100HotPostsInOneWeek(){
-        return dao.findTop100HotPostsInOneWeek();
+    public PageResult<ProductItemsDO> findNearByActivePostWithIn90Days(PageRequest request){
+        return dao.findNearByActivePostWithIn90Days(request);
     }
 
-    public List<ProductItemsDO> findTop100NewPostsInOneWeek(){
-        return dao.findTop100NewPostsInOneWeek();
+    public PageResult<ProductItemsDO> findLatestActivePostWithIn90Days(PageRequest request){
+        return dao.findLatestActivePostWithIn90Days(request);
     }
 
     public List<ProductItemsDO> findItemByUserId(String userId){

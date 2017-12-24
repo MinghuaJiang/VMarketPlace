@@ -39,14 +39,12 @@ public class HomePageListAdapter extends RefreshableRecycleAdapter<ProductItemsD
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_TAB = 1;
     private static final int TYPE_ITEM = 2;
-    private int tabPosition;
     private HeaderViewHolder headerViewHolder;
     private TabViewHolder tabViewHolder;
     private HomeFragment fragment;
 
-    public HomePageListAdapter(Context context, List<ProductItemsDO> items, int tabPosition, HomeFragment fragment) {
+    public HomePageListAdapter(Context context, List<ProductItemsDO> items, HomeFragment fragment) {
         super(context, items);
-        this.tabPosition = tabPosition;
         this.fragment = fragment;
     }
 
@@ -60,16 +58,14 @@ public class HomePageListAdapter extends RefreshableRecycleAdapter<ProductItemsD
         return TYPE_ITEM;
     }
 
+
+
     private boolean isPositionHeader(int position) {
         return position == 0;
     }
 
     private boolean isPositionTab(int position) {
         return position == 1;
-    }
-
-    public void setTabPosition(int tabPosition) {
-        this.tabPosition = tabPosition;
     }
 
     @Override
@@ -89,6 +85,11 @@ public class HomePageListAdapter extends RefreshableRecycleAdapter<ProductItemsD
         } else {
             throw new RuntimeException("No matching viewType");
         }
+    }
+
+    @Override
+    public int getItemCount() {
+        return super.getItemCount() + 2;
     }
 
     @Override
@@ -214,7 +215,6 @@ public class HomePageListAdapter extends RefreshableRecycleAdapter<ProductItemsD
             });
         }else if(viewHolder instanceof TabViewHolder){
             TabViewHolder holder = (TabViewHolder)viewHolder;
-            holder.tabLayout.getTabAt(tabPosition).select();
         }else{
             throw new RuntimeException("invalid holder type");
         }

@@ -5,22 +5,22 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.daimajia.slider.library.SliderLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import edu.virginia.cs.vmarketplace.R;
+import edu.virginia.cs.vmarketplace.model.PageRequest;
 import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
 import edu.virginia.cs.vmarketplace.service.ProductItemService;
 import edu.virginia.cs.vmarketplace.service.loader.CommonRecycleViewLoaderCallback;
+import edu.virginia.cs.vmarketplace.view.EndlessRecyclerViewScrollListener;
 import edu.virginia.cs.vmarketplace.view.adapter.HomePageListAdapter;
 
 /**
@@ -35,6 +35,11 @@ public class HomeFragment extends AbstractFragment {
 
     private int currentVisiblePosition1;
     private int currentVisiblePosition2;
+
+    private static final int PAGE_SIZE = 15;
+    private Object loadMoreToken;
+
+    private EndlessRecyclerViewScrollListener listener;
 
     public HomeFragment() {
         super("home", R.drawable.home_24p);
@@ -74,10 +79,47 @@ public class HomeFragment extends AbstractFragment {
         layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         homeAdapter = new HomePageListAdapter(getContext(),
-                new ArrayList<>(), 0, this);
+                new ArrayList<>(), this);
 
         recyclerView.setAdapter(homeAdapter);
         layoutManager.setAutoMeasureEnabled(true);
+        listener = new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onNoMoreResult(RecyclerView view) {
+                Toast.makeText(getContext(), "No More Item", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                PageRequest request = new PageRequest(PAGE_SIZE, page);
+                request.setToken(loadMoreToken);
+                if(tabLayoutFixed.getTabAt(0).isSelected()) {
+                    getLoaderManager().restartLoader(0, null, new CommonRecycleViewLoaderCallback<PageRequest, ProductItemsDO>(
+                            getContext(),
+                            homeAdapter,
+                            ProductItemService.getInstance()::findLatestActivePostWithIn90Days, request
+                    ).with((x) ->{
+                            listener.setHasMorePage(x.getToken() != null);
+                            loadMoreToken = x.getToken();
+                            homeAdapter.insertData(x.getResult(), totalItemsCount);
+                            Toast.makeText(getContext(), "Loaded more items successfully", Toast.LENGTH_SHORT).show();
+                    })).forceLoad();
+                }else{
+                    getLoaderManager().restartLoader(0, null, new CommonRecycleViewLoaderCallback<PageRequest, ProductItemsDO>(
+                            getContext(),
+                            homeAdapter,
+                            ProductItemService.getInstance()::findNearByActivePostWithIn90Days, request
+                    ).with((x) -> {
+                        listener.setHasMorePage(x.getToken() != null);
+                        loadMoreToken = x.getToken();
+                        homeAdapter.insertData(x.getResult(), totalItemsCount);
+                        Toast.makeText(getContext(), "More items added successfully", Toast.LENGTH_SHORT).show();
+                    })).forceLoad();
+                }
+            }
+        };
+
+        recyclerView.addOnScrollListener(listener);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -100,35 +142,45 @@ public class HomeFragment extends AbstractFragment {
             }
         });
 
-        getLoaderManager().restartLoader(0, null, new CommonRecycleViewLoaderCallback<Void, ProductItemsDO>(
+        getLoaderManager().restartLoader(0, null, new CommonRecycleViewLoaderCallback<PageRequest, ProductItemsDO>(
                 getContext(),
                 homeAdapter,
-                ProductItemService.getInstance()::findTop100NewPostsInOneWeek
-        ).with((x)->
-                homeAdapter.setData(x, 0))).forceLoad();
+                ProductItemService.getInstance()::findLatestActivePostWithIn90Days, new PageRequest(PAGE_SIZE, 0)
+        ).with((x)->{
+                listener.setHasMorePage(x.getToken() != null);
+                loadMoreToken = x.getToken();
+                homeAdapter.setData(x.getResult(), 0);
+        })).forceLoad();
 
         tabLayoutFixed.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                listener.resetState();
+                loadMoreToken = null;
                 if(tab.getPosition() == 0){
-                    getLoaderManager().restartLoader(0, null, new CommonRecycleViewLoaderCallback<Void, ProductItemsDO>(
+                    getLoaderManager().restartLoader(0, null, new CommonRecycleViewLoaderCallback<PageRequest, ProductItemsDO>(
                             getContext(),
                             homeAdapter,
-                            ProductItemService.getInstance()::findTop100NewPostsInOneWeek
-                    ).with((x)->
-                            homeAdapter.setData(x, 2))).forceLoad();
+                            ProductItemService.getInstance()::findLatestActivePostWithIn90Days, new PageRequest(PAGE_SIZE, 0)
+                    ).with((x)->{
+                        listener.setHasMorePage(x.getToken() != null);
+                        loadMoreToken = x.getToken();
+                        homeAdapter.setData(x.getResult(), 2);
+                    })).forceLoad();
                     if(currentVisiblePosition2 > 1){
                         layoutManager.scrollToPositionWithOffset(2, 130);
                     }
                 }else{
-                    getLoaderManager().restartLoader(0, null, new CommonRecycleViewLoaderCallback<Void, ProductItemsDO>(
+                    getLoaderManager().restartLoader(0, null, new CommonRecycleViewLoaderCallback<PageRequest, ProductItemsDO>(
                             getContext(),
                             homeAdapter,
-                            ProductItemService.getInstance()::findTop100HotPostsInOneWeek
-                    ).with((x)->
-                    homeAdapter.setData(x, 2))).forceLoad();
-                    System.out.println(currentVisiblePosition1);
-                    if(currentVisiblePosition1 > 1){
+                            ProductItemService.getInstance()::findNearByActivePostWithIn90Days, new PageRequest(PAGE_SIZE, 0)
+                    ).with((x)->{
+                    listener.setHasMorePage(x.getToken() != null);
+                    loadMoreToken = x.getToken();
+                    homeAdapter.setData(x.getResult(), 2);
+                    })).forceLoad();
+                    if(currentVisiblePosition1 > 1) {
                         layoutManager.scrollToPositionWithOffset(2, 130);
                     }
                 }
@@ -155,6 +207,7 @@ public class HomeFragment extends AbstractFragment {
     }
 
     public void setOnTabListener(TabLayout.Tab tab){
+        System.out.println("hello");
         tabLayoutFixed.getTabAt(tab.getPosition()).select();
     }
 

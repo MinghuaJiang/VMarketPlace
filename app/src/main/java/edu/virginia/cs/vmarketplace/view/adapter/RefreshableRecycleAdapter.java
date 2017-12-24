@@ -48,4 +48,13 @@ public abstract class RefreshableRecycleAdapter<T,VH extends RecyclerView.ViewHo
             notifyItemRangeChanged(start, items.size());
         }
     }
+
+    public void insertData(List<T> data, int start){
+        if(null != data && !data.isEmpty()){
+            synchronized (items){
+                items.addAll(data);
+            }
+            notifyItemRangeInserted(start, data.size());
+        }
+    }
 }
