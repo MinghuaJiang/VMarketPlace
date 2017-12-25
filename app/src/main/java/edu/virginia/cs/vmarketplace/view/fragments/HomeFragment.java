@@ -83,9 +83,10 @@ public class HomeFragment extends AbstractFragment {
 
         recyclerView.setAdapter(homeAdapter);
         layoutManager.setAutoMeasureEnabled(true);
-        listener = new EndlessRecyclerViewScrollListener(layoutManager, 2) {
+        listener = new EndlessRecyclerViewScrollListener(layoutManager, 3) {
             @Override
             public void onNoMoreResult(RecyclerView view) {
+                homeAdapter.getFootViewHolder().progressBar.setVisibility(View.GONE);
                 Toast.makeText(getContext(), "No More Item", Toast.LENGTH_SHORT).show();
             }
 
@@ -93,12 +94,21 @@ public class HomeFragment extends AbstractFragment {
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 PageRequest request = new PageRequest(PAGE_SIZE, page);
                 request.setToken(loadMoreToken);
+                homeAdapter.getFootViewHolder().progressBar.setVisibility(View.VISIBLE);
                 if(tabLayoutFixed.getTabAt(0).isSelected()) {
                     getLoaderManager().restartLoader(0, null, new CommonRecycleViewLoaderCallback<PageRequest, ProductItemsDO>(
                             getContext(),
                             homeAdapter,
-                            ProductItemService.getInstance()::findLatestActivePostWithIn90Days, request
+                            (x)-> {
+                                try {
+                                    Thread.currentThread().sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                return ProductItemService.getInstance().findLatestActivePostWithIn90Days(x);
+                            }, request
                     ).with((x) ->{
+                            homeAdapter.getFootViewHolder().progressBar.setVisibility(View.INVISIBLE);
                             listener.setHasMorePage(x.getToken() != null);
                             loadMoreToken = x.getToken();
                             homeAdapter.insertData(x.getResult(), totalItemsCount);
@@ -108,8 +118,16 @@ public class HomeFragment extends AbstractFragment {
                     getLoaderManager().restartLoader(0, null, new CommonRecycleViewLoaderCallback<PageRequest, ProductItemsDO>(
                             getContext(),
                             homeAdapter,
-                            ProductItemService.getInstance()::findNearByActivePostWithIn90Days, request
+                            (x)->{
+                                try {
+                                    Thread.currentThread().sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                return ProductItemService.getInstance().findNearByActivePostWithIn90Days(x);
+                            }, request
                     ).with((x) -> {
+                        homeAdapter.getFootViewHolder().progressBar.setVisibility(View.GONE);
                         listener.setHasMorePage(x.getToken() != null);
                         loadMoreToken = x.getToken();
                         homeAdapter.insertData(x.getResult(), totalItemsCount);

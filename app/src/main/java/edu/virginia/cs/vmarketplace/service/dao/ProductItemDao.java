@@ -83,7 +83,7 @@ public class ProductItemDao {
                 .withIndexName("STATUS_PUBLISH").withHashKeyValues(itemsDO).
                         withScanIndexForward(false).
                         withRangeKeyCondition("last_modification_time",rangeKeyCondition).
-                        withFilterExpression("created_by <> :created_by").withExpressionAttributeValues(eav).
+                        //withFilterExpression("created_by <> :created_by").withExpressionAttributeValues(eav).
                         withLimit(pageRequest.getPageSize()).withConsistentRead(false);
 
         if(pageRequest.getPage() != 0){

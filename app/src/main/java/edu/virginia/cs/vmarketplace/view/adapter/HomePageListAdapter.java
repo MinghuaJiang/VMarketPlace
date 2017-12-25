@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
@@ -40,8 +41,10 @@ public class HomePageListAdapter extends RefreshableRecycleAdapter<ProductItemsD
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_TAB = 1;
     private static final int TYPE_ITEM = 2;
+    private static final int TYPE_FOOTER = 3;
     private HeaderViewHolder headerViewHolder;
     private TabViewHolder tabViewHolder;
+    private FootViewHolder footViewHolder;
     private HomeFragment fragment;
 
     public HomePageListAdapter(Context context, List<ProductItemsDO> items, HomeFragment fragment) {
@@ -55,6 +58,8 @@ public class HomePageListAdapter extends RefreshableRecycleAdapter<ProductItemsD
             return TYPE_HEADER;
         }else if(isPositionTab(position)){
             return TYPE_TAB;
+        }else if(isPositionFooter(position)){
+            return TYPE_FOOTER;
         }
         return TYPE_ITEM;
     }
@@ -67,6 +72,10 @@ public class HomePageListAdapter extends RefreshableRecycleAdapter<ProductItemsD
 
     private boolean isPositionTab(int position) {
         return position == 1;
+    }
+
+    private boolean isPositionFooter(int position){
+        return position == getItemCount() - 1;
     }
 
     @Override
@@ -83,6 +92,10 @@ public class HomePageListAdapter extends RefreshableRecycleAdapter<ProductItemsD
             View view = getInflater().inflate(R.layout.home_tab_list_item, parent, false);
             ItemViewHolder itemViewHolder = new ItemViewHolder(view);
             return itemViewHolder;
+        }else if(viewType == TYPE_FOOTER){
+            View view = getInflater().inflate(R.layout.home_tab_footer, parent, false);
+            footViewHolder = new FootViewHolder(view);
+            return footViewHolder;
         } else {
             throw new RuntimeException("No matching viewType");
         }
@@ -90,7 +103,7 @@ public class HomePageListAdapter extends RefreshableRecycleAdapter<ProductItemsD
 
     @Override
     public int getItemCount() {
-        return super.getItemCount() + 2;
+        return super.getItemCount() + 3;
     }
 
     @Override
@@ -215,10 +228,9 @@ public class HomePageListAdapter extends RefreshableRecycleAdapter<ProductItemsD
 
                 }
             });
-        }else if(viewHolder instanceof TabViewHolder){
-            TabViewHolder holder = (TabViewHolder)viewHolder;
-        }else{
-            throw new RuntimeException("invalid holder type");
+        }else if(viewHolder instanceof FootViewHolder){
+            FootViewHolder holder = (FootViewHolder)viewHolder;
+            holder.progressBar.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -317,11 +329,23 @@ public class HomePageListAdapter extends RefreshableRecycleAdapter<ProductItemsD
         }
     }
 
+    public class FootViewHolder extends RecyclerView.ViewHolder{
+        public ProgressBar progressBar;
+        public FootViewHolder(View itemView) {
+            super(itemView);
+            progressBar = itemView.findViewById(R.id.progressBar);
+        }
+    }
+
     public HeaderViewHolder getHeaderViewHolder() {
         return headerViewHolder;
     }
 
     public TabViewHolder getTabViewHolder() {
         return tabViewHolder;
+    }
+
+    public FootViewHolder getFootViewHolder(){
+        return footViewHolder;
     }
 }

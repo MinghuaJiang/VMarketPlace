@@ -14,12 +14,10 @@ public class TimeUtil {
     }
 
     public static String getRelativeTimeFromNow(String time){
-        System.out.println(time);
         try {
             Date date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(time);
             Date now = new Date();
             long diff = now.getTime() - date.getTime();
-            System.out.println(diff);
             if(diff < 30 * 60 * 1000){
                 return "just now";
             }else if(diff < 60 * 60 * 1000){
