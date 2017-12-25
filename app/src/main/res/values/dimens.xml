@@ -11,6 +11,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="content_margin">8dp</dimen>
     <dimen name="content_padding">8dp</dimen>
+    <dimen name="location_logo">18dp</dimen>
     <dimen name="button_margin">12dp</dimen>
     <dimen name="button_margin_large">24dp</dimen>
     <dimen name="text_area">120dp</dimen>

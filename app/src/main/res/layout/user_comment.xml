@@ -5,10 +5,11 @@
     android:layout_height="match_parent"
     android:paddingTop="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/activity_horizontal_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     >
     <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="@dimen/list_item_height"
-        android:layout_height="@dimen/list_item_height"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:id="@+id/user_pic"
         />
     <RelativeLayout

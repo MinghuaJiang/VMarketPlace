@@ -47,7 +47,7 @@ public class CommentsDOAdapter extends ArrayAdapter<CommentsDO> {
                 Picasso.with(getContext()).load(commentsDO.getCommentByAvatar()).fit().into(picView);
             }
         }else{
-            picView.setImageResource(R.drawable.place_holder_96p);
+            Picasso.with(getContext()).load(R.drawable.placeholder).fit().into(picView);
         }
         //picView.setImageResource(R.drawable.place_holder_96p);
         TextView userName = listView.findViewById(R.id.user_name);

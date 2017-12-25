@@ -6,8 +6,8 @@ package edu.virginia.cs.vmarketplace.util;
 
 public class LocationUtil {
 
-    public static String getCityAndZipCode(String address){
-        return address.substring(address.indexOf(",") + 1
+    public static String getAddressAndZipCode(String address){
+        return address.substring(0, address.indexOf(",")) + address.substring(address.lastIndexOf("美") - 6
                 , address.lastIndexOf("美"));
     }
 }

@@ -39,6 +39,7 @@ public class ProductItemsDO {
     private String _sellerToBuyerReview;
     private String _soldTime;
     private String _soldTo;
+    private String _status;
     private String _subcategory;
     private Double _subcategoryPosition;
     private String _thumbPic;
@@ -121,7 +122,7 @@ public class ProductItemsDO {
     public void setDescription(final String _description) {
         this._description = _description;
     }
-    @DynamoDBIndexRangeKey(attributeName = "last_modification_time", globalSecondaryIndexName = "CREATED_BY")
+    @DynamoDBIndexRangeKey(attributeName = "last_modification_time", globalSecondaryIndexNames = {"CREATED_BY","STATUS_PUBLISH",})
     public String getLastModificationTime() {
         return _lastModificationTime;
     }
@@ -248,6 +249,14 @@ public class ProductItemsDO {
 
     public void setSoldTo(final String _soldTo) {
         this._soldTo = _soldTo;
+    }
+    @DynamoDBIndexHashKey(attributeName = "status", globalSecondaryIndexName = "STATUS_PUBLISH")
+    public String getStatus() {
+        return _status;
+    }
+
+    public void setStatus(final String _status) {
+        this._status = _status;
     }
     @DynamoDBAttribute(attributeName = "subcategory")
     public String getSubcategory() {

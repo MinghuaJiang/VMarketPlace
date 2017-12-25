@@ -65,11 +65,11 @@ public class ProfileFragment extends AbstractFragment implements LoaderManager.L
         }
         CircleImageView imageView = rootView.findViewById(R.id.user_pic);
         if(user.getUserPic() == null && user.getUserPicUri() == null) {
-            imageView.setImageResource(R.drawable.place_holder_96p);
+            imageView.setImageResource(R.drawable.placeholder);
         }else if(user.getUserPicUri() != null){
-            Picasso.with(getActivity()).load(user.getUserPicUri()).fit().placeholder(R.drawable.place_holder_96p).into(imageView);
+            Picasso.with(getActivity()).load(user.getUserPicUri()).fit().placeholder(R.drawable.placeholder).into(imageView);
         }else{
-            Picasso.with(getActivity()).load(user.getUserPic()).fit().placeholder(R.drawable.place_holder_96p).into(imageView);
+            Picasso.with(getActivity()).load(user.getUserPic()).fit().placeholder(R.drawable.placeholder).into(imageView);
         }
 
 

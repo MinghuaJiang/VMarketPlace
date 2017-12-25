@@ -85,24 +85,22 @@
                 android:id="@+id/location_container"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/button_margin_large"
+                android:layout_height="32dp"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_below="@id/container">
                 <ImageView
                     android:id="@+id/location_logo"
-                    android:gravity="center"
-                    android:layout_width="@dimen/activity_horizontal_margin"
-                    android:layout_height="@dimen/activity_horizontal_margin"
+                    android:layout_centerVertical="true"
+                    android:layout_width="@dimen/location_logo"
+                    android:layout_height="@dimen/location_logo"
                     android:layout_alignParentLeft="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentTop="true"
                     android:background="@drawable/location_black"/>
                 <TextView
                     android:id="@+id/location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:gravity="center_vertical"
                     android:layout_toRightOf="@+id/location_logo"
                     android:layout_marginLeft="@dimen/content_padding"
                     android:text="Loading"/>

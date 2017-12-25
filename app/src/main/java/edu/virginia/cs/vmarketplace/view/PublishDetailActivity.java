@@ -1,6 +1,5 @@
 package edu.virginia.cs.vmarketplace.view;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,6 +40,7 @@ import edu.virginia.cs.vmarketplace.service.login.AppUser;
 import edu.virginia.cs.vmarketplace.model.CommentsDO;
 import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
 import edu.virginia.cs.vmarketplace.util.LocationUtil;
+import edu.virginia.cs.vmarketplace.util.TimeUtil;
 import edu.virginia.cs.vmarketplace.view.adapter.CommentsDOAdapter;
 import edu.virginia.cs.vmarketplace.view.adapter.DetailImageAdapter;
 
@@ -154,11 +153,11 @@ public class PublishDetailActivity extends AppCompatActivity{
             AppUser user = context.getUser();
             username.setText(user.getUserName());
             if(user.getUserPic() == null && user.getUserPicUri() == null) {
-                userpic.setImageResource(R.drawable.place_holder_96p);
+                userpic.setImageResource(R.drawable.placeholder);
             }else if(user.getUserPicUri() != null){
-                Picasso.with(this).load(user.getUserPicUri()).fit().placeholder(R.drawable.place_holder_96p).into(userpic);
+                Picasso.with(this).load(user.getUserPicUri()).fit().placeholder(R.drawable.placeholder).into(userpic);
             }else{
-                Picasso.with(this).load(user.getUserPic()).fit().placeholder(R.drawable.place_holder_96p).into(userpic);
+                Picasso.with(this).load(user.getUserPic()).fit().placeholder(R.drawable.placeholder).into(userpic);
             }
             button.setVisibility(View.GONE);
             thumbup.setVisibility(View.GONE);
@@ -166,14 +165,14 @@ public class PublishDetailActivity extends AppCompatActivity{
         }else{
             username.setText(itemsDO.getCreatedByName());
             if(itemsDO.getCreatedByAvatar() == null) {
-                userpic.setImageResource(R.drawable.place_holder_96p);
+                userpic.setImageResource(R.drawable.placeholder);
             }else if(itemsDO.getCreatedByAvatar().startsWith(S3Service.S3_PREFIX)){
                 S3Service.getInstance(getApplicationContext()).download(
                         itemsDO.getCreatedByAvatar(), (x)->{
-                            Picasso.with(this).load(x.get(0)).fit().placeholder(R.drawable.place_holder_96p).into(userpic);
+                            Picasso.with(this).load(x.get(0)).fit().placeholder(R.drawable.placeholder).into(userpic);
                         });
             }else{
-                Picasso.with(this).load(itemsDO.getCreatedByAvatar()).fit().placeholder(R.drawable.place_holder_96p).into(userpic);
+                Picasso.with(this).load(itemsDO.getCreatedByAvatar()).fit().placeholder(R.drawable.placeholder).into(userpic);
             }
             button.setVisibility(View.VISIBLE);
             thumbup.setVisibility(View.VISIBLE);
@@ -232,8 +231,11 @@ public class PublishDetailActivity extends AppCompatActivity{
             }
         });
 
+        TextView timeView = findViewById(R.id.publish_time);
+        timeView.setText(TimeUtil.getRelativeTimeFromNow(itemsDO.getLastModificationTime()));
+
         TextView locationView = findViewById(R.id.publish_location);
-        locationView.setText("Published at " + LocationUtil.getCityAndZipCode(itemsDO.getLocation()));
+        locationView.setText("@" + LocationUtil.getAddressAndZipCode(itemsDO.getLocation()));
 
         TextView priceView = findViewById(R.id.price_container);
         if(itemsDO.getPrice() == null){

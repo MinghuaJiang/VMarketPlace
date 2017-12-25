@@ -25,6 +25,7 @@ import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
 import edu.virginia.cs.vmarketplace.service.S3Service;
 import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
 import edu.virginia.cs.vmarketplace.util.LocationUtil;
+import edu.virginia.cs.vmarketplace.util.TimeUtil;
 import edu.virginia.cs.vmarketplace.view.AppConstant;
 import edu.virginia.cs.vmarketplace.view.PublishDetailActivity;
 import edu.virginia.cs.vmarketplace.view.adapter.decoration.ItemOffsetDecoration;
@@ -98,20 +99,21 @@ public class HomePageListAdapter extends RefreshableRecycleAdapter<ProductItemsD
             ItemViewHolder holder = (ItemViewHolder)viewHolder;
             ProductItemsDO productItemsDO = getItems().get(position - 2);
             if (productItemsDO.getCreatedByAvatar() == null) {
-                holder.userAvatar.setImageResource(R.drawable.place_holder_24p);
+                holder.userAvatar.setImageResource(R.drawable.placeholder);
             } else if (productItemsDO.getCreatedByAvatar().startsWith(S3Service.S3_PREFIX)) {
                 S3Service.getInstance(getContext()).download(productItemsDO.getCreatedByAvatar(), (x) -> {
                     Picasso.with(getContext()).load(x.get(0)).
-                            placeholder(R.drawable.product_placeholder_96dp).into(holder.userAvatar);
+                            placeholder(R.drawable.placeholder).into(holder.userAvatar);
                 });
             } else {
                 Picasso.with(getContext()).load(productItemsDO.getCreatedByAvatar()).
-                        placeholder(R.drawable.product_placeholder_96dp).into(holder.userAvatar);
+                        placeholder(R.drawable.placeholder).into(holder.userAvatar);
             }
 
             holder.userName.setText(productItemsDO.getCreatedByName());
             holder.price.setText("$" + productItemsDO.getPrice());
             holder.title.setText(productItemsDO.getTitle());
+            holder.time.setText(TimeUtil.getRelativeTimeFromNow(productItemsDO.getLastModificationTime()));
             TextView description = holder.description;
             if (productItemsDO.getDescription() == null) {
                 description.setVisibility(View.GONE);
@@ -124,7 +126,7 @@ public class HomePageListAdapter extends RefreshableRecycleAdapter<ProductItemsD
                     description.setText(productItemsDO.getDescription());
                 }
             }
-            holder.location.setText(LocationUtil.getCityAndZipCode(productItemsDO.getLocation()));
+            holder.location.setText(LocationUtil.getAddressAndZipCode(productItemsDO.getLocation()));
 
             TextView thumbUpCount = holder.thumbup;
             if (productItemsDO.getThumbUpCount() == 0) {
@@ -287,6 +289,7 @@ public class HomePageListAdapter extends RefreshableRecycleAdapter<ProductItemsD
     public class ItemViewHolder extends RecyclerView.ViewHolder {
         public CircleImageView userAvatar;
         public TextView userName;
+        public TextView time;
         public TextView price;
         public TextView title;
         public TextView description;
@@ -302,6 +305,7 @@ public class HomePageListAdapter extends RefreshableRecycleAdapter<ProductItemsD
             userName = itemView.findViewById(R.id.home_post_user_name);
             price = itemView.findViewById(R.id.product_price);
             title = itemView.findViewById(R.id.home_post_title);
+            time = itemView.findViewById(R.id.home_post_time);
             description = itemView.findViewById(R.id.home_post_description);
             location = itemView.findViewById(R.id.home_post_locale);
             thumbup = itemView.findViewById(R.id.home_post_thumbup);

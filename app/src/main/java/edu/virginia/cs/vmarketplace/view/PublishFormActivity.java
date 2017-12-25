@@ -37,13 +37,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import edu.virginia.cs.vmarketplace.R;
+import edu.virginia.cs.vmarketplace.model.ItemStatus;
 import edu.virginia.cs.vmarketplace.service.ProductItemService;
 import edu.virginia.cs.vmarketplace.service.S3Service;
 import edu.virginia.cs.vmarketplace.service.loader.CommonAyncTask;
@@ -54,6 +54,7 @@ import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
 import edu.virginia.cs.vmarketplace.util.CategoryUtil;
 import edu.virginia.cs.vmarketplace.util.FetchAddressIntentService;
 import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
+import edu.virginia.cs.vmarketplace.util.TimeUtil;
 import edu.virginia.cs.vmarketplace.view.adapter.ImageViewAdapter;
 import edu.virginia.cs.vmarketplace.service.loader.PreviewImageItemLoader;
 
@@ -174,39 +175,17 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                 adapter = new ImageViewAdapter(this, new ArrayList<PreviewImageItem>());
                 gridView.setAdapter(adapter);
                 adapter.setmFiles(mFiles);
-                getSupportLoaderManager().restartLoader(0, null, PublishFormActivity.this).forceLoad();
-                final TransferUtility utility = AWSClientFactory.getInstance().getTransferUtility(getApplicationContext());
-                for(int i = 0;i < mFiles.size();i++){
-                    utility.download(itemsDO.getPics().get(i), new File(mFiles.get(i)), new TransferListener(){
-                        @Override
-                        public void onStateChanged(int id, TransferState state) {
-                            if(state == TransferState.COMPLETED){
-                                count++;
-                                if(count == mFiles.size()){
-                                    getSupportLoaderManager().restartLoader(0, null, PublishFormActivity.this).forceLoad();
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-
-                        }
-
-                        @Override
-                        public void onError(int id, Exception ex) {
-
-                        }
-                    });
-                }
+                S3Service.getInstance(getApplicationContext()).download(itemsDO.getPics(), mFiles, (x)->{
+                    getSupportLoaderManager().restartLoader(0, null, PublishFormActivity.this).forceLoad();
+                });
             } else {
                 gridView.setVisibility(View.GONE);
             }
         }
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_LOCATION_REQUEST_CODE);
         }else{
             locationTask =  mFusedLocationClient.getLastLocation();
@@ -261,6 +240,7 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                     productItemsDo.setThumbUpUserIds(new ArrayList<>());
                     productItemsDo.setThumbUpUserNames(new ArrayList<>());
                     productItemsDo.setCreatedByName(appContext.getUser().getUserName());
+                    productItemsDo.setStatus(ItemStatus.publish.toString());
                 }
 
                 if(appContext.getUser().getUserPicUri() != null) {
@@ -278,7 +258,7 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                 productItemsDo.setLatitude(mLastKnowLocation.getLatitude());
                 productItemsDo.setLongtitude(mLastKnowLocation.getLongitude());
                 productItemsDo.setLocation(location);
-                productItemsDo.setLastModificationTime(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
+                productItemsDo.setLastModificationTime(TimeUtil.formatYYYYMMDDhhmmss(new Date()));
                 appContext.destroyInstanceState();
                 appContext.setItemsDO(null);
                 loadIntoS3(productItemsDo);

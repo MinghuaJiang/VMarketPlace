@@ -3,9 +3,13 @@ package edu.virginia.cs.vmarketplace.service.dao;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExpression;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBScanExpression;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.QueryResultPage;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.ScanResultPage;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
+import com.amazonaws.services.dynamodbv2.model.Condition;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,11 +18,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.virginia.cs.vmarketplace.model.ItemStatus;
 import edu.virginia.cs.vmarketplace.model.PageRequest;
 import edu.virginia.cs.vmarketplace.model.PageResult;
 import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
 import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
 import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
+import edu.virginia.cs.vmarketplace.util.TimeUtil;
 
 /**
  * Created by cutehuazai on 12/5/17.
@@ -38,8 +44,8 @@ public class ProductItemDao {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new java.util.Date());
         cal.add(Calendar.DATE, -90);
-        Date dateBefore7Days = cal.getTime();
-        String dateQuery = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateBefore7Days);
+        Date dateBefore90days = cal.getTime();
+        String dateQuery = TimeUtil.formatYYYYMMDDhhmmss(dateBefore90days);
         Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
         eav.put(":val1", new AttributeValue().withS(dateQuery));
 
@@ -61,26 +67,37 @@ public class ProductItemDao {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new java.util.Date());
         cal.add(Calendar.DATE, -90);
-        Date dateBefore7Days = cal.getTime();
-        String dateQuery = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateBefore7Days);
+        Date dateBefore90days = cal.getTime();
+        String dateQuery = TimeUtil.formatYYYYMMDDhhmmss(dateBefore90days);
         Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
-        eav.put(":val1", new AttributeValue().withS(dateQuery));
+        eav.put(":created_by", new AttributeValue().withS(AppContextManager.getContextManager().getAppContext().getUser().getUserId()));
 
-        DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
-                .withFilterExpression("last_modification_time > :val1")
-                .withExpressionAttributeValues(eav).withLimit(pageRequest.getPageSize());
+        ProductItemsDO itemsDO = new ProductItemsDO();
+        itemsDO.setStatus(ItemStatus.publish.toString());
+
+        Condition rangeKeyCondition = new Condition()
+                .withComparisonOperator(ComparisonOperator.GE)
+                .withAttributeValueList(new AttributeValue().withS(dateQuery));
+
+        DynamoDBQueryExpression<ProductItemsDO> queryExpression = new DynamoDBQueryExpression<ProductItemsDO>()
+                .withIndexName("STATUS_PUBLISH").withHashKeyValues(itemsDO).
+                        withScanIndexForward(false).
+                        withRangeKeyCondition("last_modification_time",rangeKeyCondition).
+                        withFilterExpression("created_by <> :created_by").withExpressionAttributeValues(eav).
+                        withLimit(pageRequest.getPageSize()).withConsistentRead(false);
+
         if(pageRequest.getPage() != 0){
-            scanExpression.setExclusiveStartKey((Map<String, AttributeValue>)pageRequest.getToken());
+            queryExpression.setExclusiveStartKey((Map<String, AttributeValue>)pageRequest.getToken());
         }
 
-        ScanResultPage<ProductItemsDO> scanResult = mapper.scanPage(ProductItemsDO.class, scanExpression);
-        PageResult<ProductItemsDO> result = new PageResult<>(scanResult.getResults(), scanResult.getLastEvaluatedKey());
+        QueryResultPage<ProductItemsDO> queryResult = mapper.queryPage(ProductItemsDO.class, queryExpression);
+        PageResult<ProductItemsDO> result = new PageResult<>(queryResult.getResults(), queryResult.getLastEvaluatedKey());
         return result;
     }
 
     public List<ProductItemsDO> findItemByUserId(String userId){
         ProductItemsDO itemsDO = new ProductItemsDO();
-        itemsDO.setCreatedBy(AppContextManager.getContextManager().getAppContext().getUser().getUserId());
+        itemsDO.setCreatedBy(userId);
 
         DynamoDBQueryExpression<ProductItemsDO> dynamoDBQueryExpression = new DynamoDBQueryExpression<ProductItemsDO>()
                 .withIndexName("CREATED_BY")

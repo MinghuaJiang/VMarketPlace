@@ -36,7 +36,7 @@ public class HomeFragment extends AbstractFragment {
     private int currentVisiblePosition1;
     private int currentVisiblePosition2;
 
-    private static final int PAGE_SIZE = 15;
+    private static final int PAGE_SIZE = 20;
     private Object loadMoreToken;
 
     private EndlessRecyclerViewScrollListener listener;
