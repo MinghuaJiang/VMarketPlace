@@ -63,6 +63,31 @@ public class ProductItemDao {
         return result;
     }
 
+    public int calculateTotalPagesForLatest(int pageSize){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new java.util.Date());
+        cal.add(Calendar.DATE, -90);
+        Date dateBefore90days = cal.getTime();
+        String dateQuery = TimeUtil.formatYYYYMMDDhhmmss(dateBefore90days);
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        eav.put(":created_by", new AttributeValue().withS(AppContextManager.getContextManager().getAppContext().getUser().getUserId()));
+
+        ProductItemsDO itemsDO = new ProductItemsDO();
+        itemsDO.setStatus(ItemStatus.publish.toString());
+
+        Condition rangeKeyCondition = new Condition()
+                .withComparisonOperator(ComparisonOperator.GE)
+                .withAttributeValueList(new AttributeValue().withS(dateQuery));
+
+        DynamoDBQueryExpression<ProductItemsDO> queryExpression = new DynamoDBQueryExpression<ProductItemsDO>()
+                .withIndexName("STATUS_PUBLISH").withHashKeyValues(itemsDO).
+                        withScanIndexForward(false).
+                        withRangeKeyCondition("last_modification_time",rangeKeyCondition).
+                        withFilterExpression("created_by <> :created_by").withExpressionAttributeValues(eav).withConsistentRead(false);
+        int result = mapper.count(ProductItemsDO.class, queryExpression);
+        return (result - 1) / pageSize + 1;
+    }
+
     public PageResult<ProductItemsDO> findLatestActivePostWithIn90Days(PageRequest pageRequest){
         Calendar cal = Calendar.getInstance();
         cal.setTime(new java.util.Date());
@@ -83,7 +108,7 @@ public class ProductItemDao {
                 .withIndexName("STATUS_PUBLISH").withHashKeyValues(itemsDO).
                         withScanIndexForward(false).
                         withRangeKeyCondition("last_modification_time",rangeKeyCondition).
-                        //withFilterExpression("created_by <> :created_by").withExpressionAttributeValues(eav).
+                        withFilterExpression("created_by <> :created_by").withExpressionAttributeValues(eav).
                         withLimit(pageRequest.getPageSize()).withConsistentRead(false);
 
         if(pageRequest.getPage() != 0){
@@ -91,8 +116,22 @@ public class ProductItemDao {
         }
 
         QueryResultPage<ProductItemsDO> queryResult = mapper.queryPage(ProductItemsDO.class, queryExpression);
-        PageResult<ProductItemsDO> result = new PageResult<>(queryResult.getResults(), queryResult.getLastEvaluatedKey());
-        return result;
+        List<ProductItemsDO> result = new ArrayList<>();
+        result.addAll(queryResult.getResults());
+        while (result.size() < pageRequest.getPageSize() && queryResult.getLastEvaluatedKey() != null){
+            queryExpression = new DynamoDBQueryExpression<ProductItemsDO>()
+                    .withIndexName("STATUS_PUBLISH").withHashKeyValues(itemsDO).
+                            withScanIndexForward(false).
+                            withRangeKeyCondition("last_modification_time",rangeKeyCondition).
+                            withFilterExpression("created_by <> :created_by").withExpressionAttributeValues(eav).
+                            withLimit(pageRequest.getPageSize() - result.size()).withConsistentRead(false);
+            queryExpression.setExclusiveStartKey(queryResult.getLastEvaluatedKey());
+            queryResult = mapper.queryPage(ProductItemsDO.class, queryExpression);
+            result.addAll(queryResult.getResults());
+        }
+
+        PageResult<ProductItemsDO> finalResult = new PageResult<>(result, queryResult.getLastEvaluatedKey());
+        return finalResult;
     }
 
     public List<ProductItemsDO> findItemByUserId(String userId){

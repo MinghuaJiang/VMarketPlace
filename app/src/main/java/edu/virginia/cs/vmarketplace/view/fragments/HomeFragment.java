@@ -36,7 +36,7 @@ public class HomeFragment extends AbstractFragment {
     private int currentVisiblePosition1;
     private int currentVisiblePosition2;
 
-    private static final int PAGE_SIZE = 20;
+    private static final int PAGE_SIZE = 3;
     private Object loadMoreToken;
 
     private EndlessRecyclerViewScrollListener listener;
@@ -88,6 +88,7 @@ public class HomeFragment extends AbstractFragment {
             public void onNoMoreResult(RecyclerView view) {
                 homeAdapter.getFootViewHolder().progressBar.setVisibility(View.GONE);
                 Toast.makeText(getContext(), "No More Item", Toast.LENGTH_SHORT).show();
+                ProductItemService.getInstance().clearCache();
             }
 
             @Override
@@ -225,7 +226,6 @@ public class HomeFragment extends AbstractFragment {
     }
 
     public void setOnTabListener(TabLayout.Tab tab){
-        System.out.println("hello");
         tabLayoutFixed.getTabAt(tab.getPosition()).select();
     }
 

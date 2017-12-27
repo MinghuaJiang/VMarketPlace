@@ -21,4 +21,8 @@ public class PageResult<T> {
     public Object getToken() {
         return token;
     }
+
+    public void setToken(Object token) {
+        this.token = token;
+    }
 }
