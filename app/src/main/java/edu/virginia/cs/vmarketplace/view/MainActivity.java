@@ -1,12 +1,20 @@
 package edu.virginia.cs.vmarketplace.view;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -29,12 +37,18 @@ import android.widget.RelativeLayout;
 import com.amazonaws.mobileconnectors.pinpoint.PinpointManager;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.service.AnalyticService;
 import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
 import edu.virginia.cs.vmarketplace.service.login.AppContext;
 import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
+import edu.virginia.cs.vmarketplace.util.FetchAddressIntentService;
+import edu.virginia.cs.vmarketplace.util.LocationHolder;
 import edu.virginia.cs.vmarketplace.util.PushListenerService;
 import edu.virginia.cs.vmarketplace.view.fragments.AbstractFragment;
 import edu.virginia.cs.vmarketplace.view.fragments.HomeFragment;
@@ -83,9 +97,23 @@ public class MainActivity extends AppCompatActivity{
     private Animation slideDown;
     private Animation slideUp;
     private Animation slideBack;
+    private AddressResultReceiver mResultReceiver;
+    private FusedLocationProviderClient mFusedLocationClient;
+    private Location mLastKnowLocation;
+    private Task<Location> locationTask;
+    private static final int MY_LOCATION_REQUEST_CODE = 200;
+
+    protected void startIntentService() {
+        Intent intent = new Intent(this, FetchAddressIntentService.class);
+        intent.putExtra(LocationConstant.RECEIVER, mResultReceiver);
+        intent.putExtra(LocationConstant.LOCATION_DATA_EXTRA, mLastKnowLocation);
+        startService(intent);
+    }
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mResultReceiver = new AddressResultReceiver(new Handler());
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         pinpointManager = AWSClientFactory.getInstance().getPinpointManager(this);
         AnalyticService.getInstance().logNormalUsage(pinpointManager);
         new Thread(new Runnable() {
@@ -424,12 +452,69 @@ public class MainActivity extends AppCompatActivity{
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_LOCATION_REQUEST_CODE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    extractLocation();
+                }
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void extractLocation() {
+        locationTask =  mFusedLocationClient.getLastLocation();
+        locationTask.addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                // Got last known location. In some rare situations this can be null.
+                if (location != null && Geocoder.isPresent()) {
+                    // Logic to handle location object
+                    mLastKnowLocation = location;
+                    LocationHolder.getInstance().setLatitude(mLastKnowLocation.getLatitude());
+                    LocationHolder.getInstance().setLongitude(mLastKnowLocation.getLongitude());
+                    LocationHolder.getInstance().setLocation(null);
+                    startIntentService();
+                }
+            }
+        });
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_LOCATION_REQUEST_CODE);
+        }else{
+            extractLocation();
+        }
         // register notification receiver
         LocalBroadcastManager.getInstance(this).registerReceiver(notificationReceiver,
                 new IntentFilter(PushListenerService.ACTION_PUSH_NOTIFICATION));
+    }
+
+    class AddressResultReceiver extends ResultReceiver {
+        private String mAddressOutput;
+
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+
+            // Display the address string
+            // or an error message sent from the intent service.
+            if(resultCode == LocationConstant.SUCCESS_RESULT) {
+                 LocationHolder.getInstance().setLocation(resultData.getString(LocationConstant.RESULT_DATA_KEY));
+            }
+        }
     }
 
     private final BroadcastReceiver notificationReceiver = new BroadcastReceiver() {

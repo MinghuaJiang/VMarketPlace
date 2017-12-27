@@ -1,14 +1,10 @@
 package edu.virginia.cs.vmarketplace.view;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
-import android.os.Handler;
-import android.os.ResultReceiver;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
@@ -28,13 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -52,8 +43,8 @@ import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.PreviewImageItem;
 import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
 import edu.virginia.cs.vmarketplace.util.CategoryUtil;
-import edu.virginia.cs.vmarketplace.util.FetchAddressIntentService;
 import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
+import edu.virginia.cs.vmarketplace.util.LocationHolder;
 import edu.virginia.cs.vmarketplace.util.TimeUtil;
 import edu.virginia.cs.vmarketplace.view.adapter.ImageViewAdapter;
 import edu.virginia.cs.vmarketplace.service.loader.PreviewImageItemLoader;
@@ -65,39 +56,26 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
     private static final String CATEGORY_CONTENT = "category";
 
     private AppContext appContext;
-    private AddressResultReceiver mResultReceiver;
     private DynamoDBMapper mapper;
     private GridView gridView;
     private ImageViewAdapter adapter;
     private List<String> mFiles;
     private SingleLineEditText titleView;
     private EditText descriptionView;
-    private FusedLocationProviderClient mFusedLocationClient;
     private ImageView locationLogo;
     private TextView locationView;
     private SingleLineEditText priceView;
     private Spinner spinner;
-    private Location mLastKnowLocation;
-    private Task<Location> locationTask;
+
     private SwipeRefreshLayout refreshLayout;
     private String category;
-    private static final int MY_LOCATION_REQUEST_CODE = 200;
-    private int count;
 
-    protected void startIntentService() {
-        Intent intent = new Intent(this, FetchAddressIntentService.class);
-        intent.putExtra(LocationConstant.RECEIVER, mResultReceiver);
-        intent.putExtra(LocationConstant.LOCATION_DATA_EXTRA, mLastKnowLocation);
-        startService(intent);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mResultReceiver = new AddressResultReceiver(new Handler());
         setContentView(R.layout.activity_publish_form);
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.separator));
-        count = 0;
         appContext = AppContextManager.getContextManager().getAppContext();
         Toolbar toolbar =
                 findViewById(R.id.my_toolbar);
@@ -141,6 +119,13 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
 
         locationView = findViewById(R.id.location);
 
+        if(LocationHolder.getInstance().getLocation() != null){
+            locationView.setText(LocationHolder.getInstance().getLocation());
+        }else{
+            locationLogo.setBackground(getDrawable(R.drawable.location_blue));
+            locationView.setText("Choose one location");
+        }
+
         spinner = findViewById(R.id.category);
 
         boolean isPublish = appContext.isPublish();
@@ -181,25 +166,6 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
             } else {
                 gridView.setVisibility(View.GONE);
             }
-        }
-
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_LOCATION_REQUEST_CODE);
-        }else{
-            locationTask =  mFusedLocationClient.getLastLocation();
-            locationTask.addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    // Got last known location. In some rare situations this can be null.
-                    if (location != null && Geocoder.isPresent()) {
-                        // Logic to handle location object
-                        mLastKnowLocation = location;
-                        startIntentService();
-                    }
-                }
-            });
         }
 
         if(!appContext.getInstanceState().isEmpty()) {
@@ -255,8 +221,8 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                 productItemsDo.setTitle(title);
                 productItemsDo.setSubcategoryPosition(Double.valueOf(spinner.getSelectedItemPosition()));
                 productItemsDo.setDescription(description);
-                productItemsDo.setLatitude(mLastKnowLocation.getLatitude());
-                productItemsDo.setLongtitude(mLastKnowLocation.getLongitude());
+                productItemsDo.setLatitude(LocationHolder.getInstance().getLatitude());
+                productItemsDo.setLongtitude(LocationHolder.getInstance().getLongitude());
                 productItemsDo.setLocation(location);
                 productItemsDo.setLastModificationTime(TimeUtil.formatYYYYMMDDhhmmss(new Date()));
                 appContext.destroyInstanceState();
@@ -291,28 +257,6 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
         adapter.clear();
     }
 
-    class AddressResultReceiver extends ResultReceiver {
-        private String mAddressOutput;
-
-        public AddressResultReceiver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-
-            // Display the address string
-            // or an error message sent from the intent service.
-            if(resultCode == LocationConstant.SUCCESS_RESULT) {
-                mAddressOutput = resultData.getString(LocationConstant.RESULT_DATA_KEY);
-                locationView.setText(mAddressOutput);
-            }else{
-                locationLogo.setBackground(getDrawable(R.drawable.location_blue));
-                locationView.setText("Choose one location");
-            }
-        }
-    }
-
     private void loadIntoS3(final ProductItemsDO itemDo){
         final List<String> s3urls = new ArrayList<>();
         final TransferUtility utility = AWSClientFactory.getInstance().getTransferUtility(getApplicationContext());
@@ -342,31 +286,5 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                     PublishFormActivity.this.startActivity(intent);
                 }
         ).run();
-    }
-
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_LOCATION_REQUEST_CODE: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    locationTask =  mFusedLocationClient.getLastLocation();
-                    locationTask.addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null.
-                            if (location != null && Geocoder.isPresent()) {
-                                // Logic to handle location object
-                                mLastKnowLocation = location;
-                                startIntentService();
-                            }
-                        }
-                    });
-                }
-            }
-        }
     }
 }
