@@ -64,7 +64,7 @@ public class CommonRecycleViewLoaderCallback <T, R> implements LoaderManager.Loa
 
     @Override
     public void onLoaderReset(Loader<PageResult<R>> loader) {
-        adapter.setData(new ArrayList<>(), 0);
+        adapter.initData(new ArrayList<>());
     }
 
     public interface CustomCallback<R>{

@@ -31,6 +31,7 @@ import edu.virginia.cs.vmarketplace.view.AppConstant;
 import edu.virginia.cs.vmarketplace.view.PublishDetailActivity;
 import edu.virginia.cs.vmarketplace.view.adapter.decoration.ItemOffsetDecoration;
 import edu.virginia.cs.vmarketplace.view.adapter.model.ImageGalleryItem;
+import edu.virginia.cs.vmarketplace.view.adapter.viewholder.FootViewHolder;
 import edu.virginia.cs.vmarketplace.view.fragments.HomeFragment;
 
 /**
@@ -141,13 +142,6 @@ public class HomePageListAdapter extends RefreshableRecycleAdapter<ProductItemsD
             }
             holder.location.setText(LocationUtil.getAddressAndZipCode(productItemsDO.getLocation()));
 
-            TextView thumbUpCount = holder.thumbup;
-            if (productItemsDO.getThumbUpCount() == 0) {
-                thumbUpCount.setVisibility(View.GONE);
-            } else {
-                thumbUpCount.setText("like" + productItemsDO.getThumbUpCount().intValue());
-                thumbUpCount.setVisibility(View.VISIBLE);
-            }
             // add thumb up
             TextView replyCount = holder.reply;
 
@@ -156,6 +150,15 @@ public class HomePageListAdapter extends RefreshableRecycleAdapter<ProductItemsD
             } else {
                 replyCount.setText("reply" + productItemsDO.getReplyCount().intValue());
                 replyCount.setVisibility(View.VISIBLE);
+            }
+
+            TextView thumbUpCount = holder.thumbup;
+            if (productItemsDO.getThumbUpCount() == 0) {
+                thumbUpCount.setVisibility(View.GONE);
+            } else {
+                thumbUpCount.setText("like" + productItemsDO.getThumbUpCount().intValue());
+                thumbUpCount.setVisibility(View.VISIBLE);
+
             }
 
             RecyclerView gallery = holder.gallery;
@@ -326,14 +329,6 @@ public class HomePageListAdapter extends RefreshableRecycleAdapter<ProductItemsD
             layout = itemView.findViewById(R.id.container);
             ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(getContext(), R.dimen.item_offset);
             gallery.addItemDecoration(itemDecoration);
-        }
-    }
-
-    public class FootViewHolder extends RecyclerView.ViewHolder{
-        public ProgressBar progressBar;
-        public FootViewHolder(View itemView) {
-            super(itemView);
-            progressBar = itemView.findViewById(R.id.progressBar);
         }
     }
 

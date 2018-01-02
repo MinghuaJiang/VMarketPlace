@@ -35,13 +35,8 @@ import edu.virginia.cs.vmarketplace.view.PublishFormActivity;
  */
 
 public class ProfilePublishItemAdapter extends ArrayAdapter<ProductItemsDO> {
-    private TransferUtility utility;
-    private DynamoDBMapper mapper;
-
     public ProfilePublishItemAdapter(@NonNull Context context, @NonNull List<ProductItemsDO> objects) {
         super(context, 0, objects);
-        utility = AWSClientFactory.getInstance().getTransferUtility(context);
-        mapper = AWSClientFactory.getInstance().getDBMapper();
     }
 
     @Override

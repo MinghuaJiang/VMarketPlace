@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:focusableInTouchMode="true"
+    android:orientation="vertical"
     tools:context="edu.virginia.cs.vmarketplace.view.PublishDetailActivity">
 
     <android.support.v7.widget.Toolbar
@@ -23,29 +23,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="@android:color/holo_red_light"
-            android:textAppearance="?android:textAppearanceMedium" />
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@android:color/holo_red_light" />
 
         <Button
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="right"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:background="@drawable/share"/>
+            android:background="@drawable/share" />
     </android.support.v7.widget.Toolbar>
 
     <ScrollView
+        android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="460dp"
-        android:scrollbars="vertical"
+        android:layout_below="@id/my_toolbar"
         android:fillViewport="true"
-        android:id="@+id/scrollview"
-        android:layout_below="@id/my_toolbar">
+        android:scrollbars="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <RelativeLayout
                 android:id="@+id/user_container"
@@ -59,8 +58,7 @@
                     android:layout_width="@dimen/list_item_height"
                     android:layout_height="@dimen/list_item_height"
                     android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    />
+                    android:layout_centerVertical="true" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -70,26 +68,27 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/username"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:textColor="@android:color/black"
-                        android:textStyle="bold"
-                        android:id="@+id/username"
                         android:gravity="bottom"
-                        />
+                        android:textColor="@android:color/black"
+                        android:textStyle="bold" />
+
                     <TextView
+                        android:id="@+id/publish_time"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_weight="0.7"
-                        android:id="@+id/publish_time"
                         android:gravity="center_vertical" />
+
                     <TextView
+                        android:id="@+id/publish_location"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:gravity="top"
-                        android:id="@+id/publish_location"/>
+                        android:gravity="top" />
                 </LinearLayout>
             </RelativeLayout>
 
@@ -123,7 +122,6 @@
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/content_margin"
-                android:text="test"
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@android:color/black" />
 
@@ -135,7 +133,6 @@
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/content_margin"
-                android:text="hahahaha"
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@android:color/black" />
 
@@ -161,14 +158,53 @@
                 android:layout_below="@id/pic_container"
                 android:layout_marginTop="@dimen/activity_horizontal_margin">
 
-                <TextView
-                    android:id="@+id/view"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/activity_horizontal_margin"
-                    />
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:id="@+id/users">
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="@dimen/button_margin_large"
+                        android:layout_height="@dimen/button_margin_large"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="-2dp"
+                        android:id="@+id/user1"
+                        />
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="@dimen/button_margin_large"
+                        android:layout_height="@dimen/button_margin_large"
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/user2"
+                        android:layout_marginRight="-2dp"
+                        />
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="@dimen/button_margin_large"
+                        android:layout_height="@dimen/button_margin_large"
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/user3"
+                        android:layout_marginRight="4dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/like"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="@android:color/holo_blue_light"
+                        android:layout_marginRight="@dimen/content_padding" />
+                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin" />
+                </LinearLayout>
             </RelativeLayout>
 
             <TextView
@@ -204,13 +240,12 @@
                 android:background="@color/separator" />
 
             <edu.virginia.cs.vmarketplace.view.NonScrollGridView
+                android:id="@+id/user_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:numColumns="1"
                 android:layout_below="@id/seperator3"
                 android:layout_marginTop="4dp"
-                android:id="@+id/user_comment"
-                >
+                android:numColumns="1">
 
             </edu.virginia.cs.vmarketplace.view.NonScrollGridView>
         </RelativeLayout>
@@ -237,7 +272,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/thumb_up"/>
+                android:src="@drawable/thumb_up" />
 
             <ImageView
                 android:id="@+id/comment"
@@ -261,14 +296,14 @@
                 android:id="@+id/buy"
                 android:layout_width="@dimen/list_item_height_medium"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_centerVertical="true"
+                android:layout_marginBottom="8dp"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="8dp"
                 android:background="@android:color/holo_red_light"
-                android:textColor="@android:color/white"
-                android:text="Chat"/>
+                android:text="Chat"
+                android:textColor="@android:color/white" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -281,33 +316,31 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/keyboard_24dp"/>
+                android:src="@drawable/keyboard_24dp" />
 
             <EditText
                 android:id="@+id/input"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
-                android:hint="Type your comment"
-                android:layout_marginLeft="8dp"
-                android:layout_toRightOf="@id/keyboard_down"
-                android:layout_toLeftOf="@id/send"
                 android:layout_gravity="bottom"
-                />
+                android:layout_marginLeft="8dp"
+                android:layout_toLeftOf="@id/send"
+                android:layout_toRightOf="@id/keyboard_down"
+                android:hint="Type your comment" />
 
             <Button
                 android:id="@+id/send"
                 android:layout_width="@dimen/list_item_height_medium"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="8dp"
                 android:background="@android:color/holo_red_light"
-                android:textColor="@android:color/white"
                 android:text="Send"
-                />
+                android:textColor="@android:color/white" />
         </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>

@@ -39,13 +39,27 @@ public abstract class RefreshableRecycleAdapter<T,VH extends RecyclerView.ViewHo
         return inflater;
     }
 
-    public void setData(List<T> data, int start){
+    public void setData(List<T> data, int start, int end){
+        if(null != data){
+            synchronized (items){
+                items.clear();
+                items.addAll(data);
+            }
+            if(end > (start + items.size())) {
+                notifyItemRangeRemoved(start + items.size(),
+                        end - (start + items.size()));
+            }
+            notifyItemRangeChanged(start, items.size());
+        }
+    }
+
+    public void initData(List<T> data){
         if(null != data && !data.isEmpty()){
             synchronized (items){
                 items.clear();
                 items.addAll(data);
             }
-            notifyItemRangeChanged(start, items.size());
+            notifyDataSetChanged();
         }
     }
 

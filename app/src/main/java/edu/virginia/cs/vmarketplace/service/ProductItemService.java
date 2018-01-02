@@ -51,6 +51,10 @@ public class ProductItemService {
         return result;
     }
 
+    public PageResult<ProductItemsDO> getFavoritesByItemIds(List<String> items, PageRequest pageRequest){
+        return dao.getFavoritesByItemIds(items, pageRequest);
+    }
+
     public void clearCache(){
         cache.clear();
     }

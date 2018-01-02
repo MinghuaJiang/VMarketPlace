@@ -44,8 +44,7 @@ public class ProductItemsDO {
     private Double _subcategoryPosition;
     private String _thumbPic;
     private Double _thumbUpCount;
-    private List<String> _thumbUpUserIds;
-    private List<String> _thumbUpUserNames;
+    private Set<String> _thumbUpUserIds;
     private String _title;
     private Double _viewCount;
 
@@ -291,20 +290,12 @@ public class ProductItemsDO {
         this._thumbUpCount = _thumbUpCount;
     }
     @DynamoDBAttribute(attributeName = "thumb_up_user_ids")
-    public List<String> getThumbUpUserIds() {
+    public Set<String> getThumbUpUserIds() {
         return _thumbUpUserIds;
     }
 
-    public void setThumbUpUserIds(final List<String> _thumbUpUserIds) {
+    public void setThumbUpUserIds(final Set<String> _thumbUpUserIds) {
         this._thumbUpUserIds = _thumbUpUserIds;
-    }
-    @DynamoDBAttribute(attributeName = "thumb_up_user_names")
-    public List<String> getThumbUpUserNames() {
-        return _thumbUpUserNames;
-    }
-
-    public void setThumbUpUserNames(final List<String> _thumbUpUserNames) {
-        this._thumbUpUserNames = _thumbUpUserNames;
     }
     @DynamoDBAttribute(attributeName = "title")
     public String getTitle() {

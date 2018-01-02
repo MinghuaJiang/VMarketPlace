@@ -7,9 +7,11 @@ import com.amazonaws.mobile.auth.core.IdentityManager;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
+import edu.virginia.cs.vmarketplace.model.ThumbupDO;
 import edu.virginia.cs.vmarketplace.model.UserProfileDO;
 import edu.virginia.cs.vmarketplace.service.ProductItemService;
 import edu.virginia.cs.vmarketplace.service.UserProfileService;
@@ -27,6 +29,7 @@ public class AppContext {
     private Bundle instanceState;
     private ProductItemsDO itemsDO;
     private UserProfileDO userDO;
+    private List<ThumbupDO> thumbupDO;
 
     public AppContext(){
         manager = IdentityManager.getDefaultIdentityManager();
@@ -108,5 +111,13 @@ public class AppContext {
 
     public void setUserDO(UserProfileDO userDO) {
         this.userDO = userDO;
+    }
+
+    public List<ThumbupDO> getThumbupDO() {
+        return thumbupDO;
+    }
+
+    public void setThumbupDO(List<ThumbupDO> thumbupDO) {
+        this.thumbupDO = thumbupDO;
     }
 }

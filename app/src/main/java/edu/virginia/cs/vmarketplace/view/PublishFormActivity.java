@@ -30,7 +30,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import edu.virginia.cs.vmarketplace.R;
@@ -203,8 +205,9 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                     productItemsDo.setViewCount(0.0);
                     productItemsDo.setReplyCount(0.0);
                     productItemsDo.setThumbUpCount(0.0);
-                    productItemsDo.setThumbUpUserIds(new ArrayList<>());
-                    productItemsDo.setThumbUpUserNames(new ArrayList<>());
+                    Set<String> userIds = new HashSet<String>();
+                    userIds.add("dummy");
+                    productItemsDo.setThumbUpUserIds(userIds);
                     productItemsDo.setCreatedByName(appContext.getUser().getUserName());
                     productItemsDo.setStatus(ItemStatus.publish.toString());
                 }

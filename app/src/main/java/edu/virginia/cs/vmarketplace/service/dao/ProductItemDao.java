@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import edu.virginia.cs.vmarketplace.model.ItemStatus;
 import edu.virginia.cs.vmarketplace.model.PageRequest;
@@ -61,6 +62,28 @@ public class ProductItemDao {
                 ProductItemsDO.class, scanExpression);
         PageResult<ProductItemsDO> result = new PageResult<ProductItemsDO>(scanResult.getResults(), scanResult.getLastEvaluatedKey());
         return result;
+    }
+
+    public PageResult<ProductItemsDO> getFavoritesByItemIds(List<String> items, PageRequest pageRequest){
+        List<Object> itemsToGet = new ArrayList<>();
+        for(String itemId : items){
+            ProductItemsDO itemsDO = new ProductItemsDO();
+            itemsDO.setItemId(itemId);
+            itemsToGet.add(itemsDO);
+        }
+        Map<String,List<Object>> loadResultMap = mapper.batchLoad(itemsToGet);
+        List<ProductItemsDO> result = loadResultMap.values().stream().flatMap(x -> x.stream()).map(x->(ProductItemsDO)x).collect(Collectors.toList());
+        if(pageRequest.getPage() * pageRequest.getPageSize() + pageRequest.getPageSize() >= result.size()) {
+            List<ProductItemsDO> loadResult = result.subList(pageRequest.getPage() * pageRequest.getPageSize(), result.size());
+            PageResult<ProductItemsDO> finalResult =
+                    new PageResult<ProductItemsDO>(result, null);
+            return finalResult;
+        }else{
+            List<ProductItemsDO> loadResult = result.subList(pageRequest.getPage() * pageRequest.getPageSize(), pageRequest.getPage() * pageRequest.getPageSize() + pageRequest.getPageSize());
+            PageResult<ProductItemsDO> finalResult =
+                    new PageResult<ProductItemsDO>(result, "hasMore");
+            return finalResult;
+        }
     }
 
     public int calculateTotalPagesForLatest(int pageSize){

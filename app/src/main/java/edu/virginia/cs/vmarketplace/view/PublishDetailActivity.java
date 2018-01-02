@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -23,14 +24,17 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.virginia.cs.vmarketplace.R;
+import edu.virginia.cs.vmarketplace.model.ThumbupDO;
 import edu.virginia.cs.vmarketplace.model.UserProfileDO;
 import edu.virginia.cs.vmarketplace.service.CommentService;
 import edu.virginia.cs.vmarketplace.service.ProductItemService;
 import edu.virginia.cs.vmarketplace.service.S3Service;
+import edu.virginia.cs.vmarketplace.service.ThumbupService;
 import edu.virginia.cs.vmarketplace.service.UserProfileService;
 import edu.virginia.cs.vmarketplace.service.loader.CommonAyncTask;
 import edu.virginia.cs.vmarketplace.service.loader.CommonLoaderCallback;
@@ -89,6 +93,14 @@ public class PublishDetailActivity extends AppCompatActivity{
             favorite.setImageResource(R.drawable.favorite_24dp);
         }
 
+        if(userProfileDO.getThumbItems().contains(itemsDO.getItemId())){
+            thumbup.setImageResource(R.drawable.like_fill);
+        }else{
+            thumbup.setImageResource(R.drawable.like);
+        }
+
+
+
         scrollView = findViewById(R.id.scrollview);
         scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
@@ -100,7 +112,6 @@ public class PublishDetailActivity extends AppCompatActivity{
                 }
             }
         });
-
 
         favorite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,6 +128,92 @@ public class PublishDetailActivity extends AppCompatActivity{
                     new CommonAyncTask<UserProfileDO, Void, Void>(
                             UserProfileService.getInstance()::insertOrUpdate, userProfileDO).run();
                     Toast.makeText(getApplicationContext(), "Favorite the item successfully!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        final LinearLayout users = findViewById(R.id.users);
+        final CircleImageView user1 = findViewById(R.id.user1);
+        final CircleImageView user2 = findViewById(R.id.user2);
+        final CircleImageView user3 = findViewById(R.id.user3);
+        final TextView likeCount = findViewById(R.id.like);
+
+        users.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PublishDetailActivity.this, LikeHistoryActivity.class);
+                startActivity(intent);
+            }
+        });
+        if(itemsDO.getThumbUpCount() == 0){
+            users.setVisibility(View.GONE);
+        }else{
+            users.setVisibility(View.VISIBLE);
+            likeCount.setText("like" + itemsDO.getThumbUpCount().intValue());
+        }
+
+        thumbup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(userProfileDO.getThumbItems().contains(itemsDO.getItemId())){
+                    thumbup.setImageResource(R.drawable.like);
+                    userProfileDO.getThumbItems().remove(itemsDO.getItemId());
+                    itemsDO.getThumbUpUserIds().remove(userProfileDO.getUserId());
+                    itemsDO.setThumbUpCount(itemsDO.getThumbUpCount() - 1);
+
+                    if(itemsDO.getThumbUpCount() == 0) {
+                        users.setVisibility(View.GONE);
+                    }else{
+                        likeCount.setText("like" + itemsDO.getThumbUpCount().intValue());
+                    }
+
+                    new CommonAyncTask<Void, Void, Void>(
+                            ()->{
+                                ThumbupDO thumbupDO = ThumbupService.getInstance().findThumbupByKey(new String[]{itemsDO.getItemId(), context.getUser().getUserId()});
+                                ThumbupService.getInstance().delete(thumbupDO);
+                                return null;
+                            }).with(
+                            (x)->{
+                                new CommonAyncTask<String, Void, List<ThumbupDO>>(
+                                        ThumbupService.getInstance()::findThumbupByItemId,
+                                        itemsDO.getItemId()).with((y)-> {
+                                    context.setThumbupDO(y);
+                                    updateThumbupAvatars(user1, user2, user3, y);
+                                }).run();
+                            }).run();
+                    new CommonAyncTask<UserProfileDO, Void, Void>(
+                            UserProfileService.getInstance()::insertOrUpdate, userProfileDO).run();
+                    new CommonAyncTask<ProductItemsDO, Void, Void>(
+                            ProductItemService.getInstance()::save, itemsDO).run();
+                    Toast.makeText(getApplicationContext(), "Unlike the item successfully!", Toast.LENGTH_SHORT).show();
+                }else{
+                    userProfileDO.getThumbItems().add(itemsDO.getItemId());
+                    itemsDO.setThumbUpCount(itemsDO.getThumbUpCount() + 1);
+                    users.setVisibility(View.VISIBLE);
+                    likeCount.setText("like" + itemsDO.getThumbUpCount().intValue());
+                    itemsDO.getThumbUpUserIds().add(userProfileDO.getUserId());
+                    thumbup.setImageResource(R.drawable.like_fill);
+                    ThumbupDO thumbupDO = new ThumbupDO();
+                    thumbupDO.setItemId(itemsDO.getItemId());
+                    thumbupDO.setThumbupTime(TimeUtil.formatYYYYMMDDhhmmss(new Date()));
+                    thumbupDO.setThumbupById(userProfileDO.getUserId());
+                    thumbupDO.setThumbupByName(userProfileDO.getUserName());
+                    thumbupDO.setThumbupByAvatar(userProfileDO.getAvatar());
+                    new CommonAyncTask<ThumbupDO, Void, Void>(
+                            ThumbupService.getInstance()::insertOrUpdate, thumbupDO).with(
+                                    (x)-> {
+                        new CommonAyncTask<String, Void, List<ThumbupDO>>(
+                                ThumbupService.getInstance()::findThumbupByItemId,
+                                itemsDO.getItemId()).with((y)-> {
+                            context.setThumbupDO(y);
+                            updateThumbupAvatars(user1, user2, user3, y);
+                        }).run();
+                    }).run();
+                    new CommonAyncTask<UserProfileDO, Void, Void>(
+                            UserProfileService.getInstance()::insertOrUpdate, userProfileDO).run();
+                    new CommonAyncTask<ProductItemsDO, Void, Void>(
+                            ProductItemService.getInstance()::save, itemsDO).run();
+                    Toast.makeText(getApplicationContext(), "Like the item successfully!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -146,6 +243,13 @@ public class PublishDetailActivity extends AppCompatActivity{
         });
 
         Button button = findViewById(R.id.buy);
+
+        new CommonAyncTask<String, Void, List<ThumbupDO>>(
+                ThumbupService.getInstance()::findThumbupByItemId,
+                itemsDO.getItemId()).with((x)-> {
+            context.setThumbupDO(x);
+            updateThumbupAvatars(user1, user2, user3, x);
+        }).run();
 
         Intent fromIntent = getIntent();
         int jump_from = fromIntent.getIntExtra(AppConstant.JUMP_FROM, 0);
@@ -311,16 +415,107 @@ public class PublishDetailActivity extends AppCompatActivity{
         getSupportLoaderManager().restartLoader(0, null,
                 callback).forceLoad();
 
-        TextView viewCount = findViewById(R.id.view);
-        viewCount.setText("view "+ itemsDO.getViewCount().intValue());
-
         if(itemsDO.getReplyCount().intValue() > 0){
             replyCount.setText("Comments " + itemsDO.getReplyCount().intValue());
         }
 
         itemsDO.setViewCount(itemsDO.getViewCount() + 1);
+        TextView viewCount = findViewById(R.id.view);
+        viewCount.setText("view"+ itemsDO.getViewCount().intValue());
         new CommonAyncTask<ProductItemsDO, Void, Void>(ProductItemService.getInstance()::save, itemsDO).run();
-        AppContextManager.getContextManager().getAppContext().setItemsDO(null);
+    }
+
+    private void updateThumbupAvatars(CircleImageView user1, CircleImageView user2, CircleImageView user3, List<ThumbupDO> list) {
+        if(itemsDO.getThumbUpCount() == 0){
+            user1.setVisibility(View.GONE);
+            user2.setVisibility(View.GONE);
+            user3.setVisibility(View.GONE);
+        }else if(itemsDO.getThumbUpCount() == 1) {
+            user3.setVisibility(View.VISIBLE);
+            user1.setVisibility(View.GONE);
+            user2.setVisibility(View.GONE);
+            ThumbupDO thumbupDO = list.get(0);
+            if(thumbupDO.getThumbupByAvatar() == null){
+                user3.setImageResource(R.drawable.placeholder);
+            }else if(thumbupDO.getThumbupByAvatar().startsWith(S3Service.S3_PREFIX)){
+                S3Service.getInstance(getApplicationContext()).download(thumbupDO.getThumbupByAvatar(),
+                        (x)->{
+                    Picasso.with(getApplicationContext()).load(x.get(0)).fit().into(user3);
+                        });
+            }else{
+                Picasso.with(getApplicationContext()).load(thumbupDO.getThumbupByAvatar()).fit().into(user3);
+            }
+        }else if(itemsDO.getThumbUpCount() == 2){
+            user3.setVisibility(View.VISIBLE);
+            user2.setVisibility(View.VISIBLE);
+            user1.setVisibility(View.GONE);
+            ThumbupDO thumbupDO = list.get(1);
+            if(thumbupDO.getThumbupByAvatar() == null){
+                user3.setImageResource(R.drawable.placeholder);
+            }else if(thumbupDO.getThumbupByAvatar().startsWith(S3Service.S3_PREFIX)){
+                S3Service.getInstance(getApplicationContext()).download(thumbupDO.getThumbupByAvatar(),
+                        (x)->{
+                            Picasso.with(getApplicationContext()).load(x.get(0)).fit().into(user3);
+                        });
+            }else{
+                Picasso.with(getApplicationContext()).load(thumbupDO.getThumbupByAvatar()).fit().into(user3);
+            }
+
+            ThumbupDO thumbupDO2 = list.get(0);
+            if(thumbupDO2.getThumbupByAvatar() == null){
+                user2.setImageResource(R.drawable.placeholder);
+            }else if(thumbupDO2.getThumbupByAvatar().startsWith(S3Service.S3_PREFIX)){
+                S3Service.getInstance(getApplicationContext()).download(thumbupDO2.getThumbupByAvatar(),
+                        (x)->
+                        {
+                            Picasso.with(getApplicationContext()).load(x.get(0)).fit().into(user2);
+                        });
+            }else{
+                Picasso.with(getApplicationContext()).load(thumbupDO2.getThumbupByAvatar()).fit().into(user2);
+            }
+        }else{
+            user3.setVisibility(View.VISIBLE);
+            user2.setVisibility(View.VISIBLE);
+            user1.setVisibility(View.VISIBLE);
+
+            ThumbupDO thumbupDO = list.get(2);
+            if(thumbupDO.getThumbupByAvatar() == null){
+                user3.setImageResource(R.drawable.placeholder);
+            }else if(thumbupDO.getThumbupByAvatar().startsWith(S3Service.S3_PREFIX)){
+                S3Service.getInstance(getApplicationContext()).download(thumbupDO.getThumbupByAvatar(),
+                        (x)->{
+                            Picasso.with(getApplicationContext()).load(x.get(0)).fit().into(user3);
+                        });
+            }else{
+                Picasso.with(getApplicationContext()).load(thumbupDO.getThumbupByAvatar()).fit().into(user3);
+            }
+
+            ThumbupDO thumbupDO2 = list.get(1);
+            if(thumbupDO2.getThumbupByAvatar() == null){
+                user2.setImageResource(R.drawable.placeholder);
+            }else if(thumbupDO2.getThumbupByAvatar().startsWith(S3Service.S3_PREFIX)){
+                S3Service.getInstance(getApplicationContext()).download(thumbupDO2.getThumbupByAvatar(),
+                        (x)->
+                        {
+                            Picasso.with(getApplicationContext()).load(x.get(0)).fit().into(user2);
+                        });
+            }else{
+                Picasso.with(getApplicationContext()).load(thumbupDO2.getThumbupByAvatar()).fit().into(user2);
+            }
+
+            ThumbupDO thumbupDO3 = list.get(0);
+            if(thumbupDO3.getThumbupByAvatar() == null){
+                user1.setImageResource(R.drawable.placeholder);
+            }else if(thumbupDO3.getThumbupByAvatar().startsWith(S3Service.S3_PREFIX)){
+                S3Service.getInstance(getApplicationContext()).download(thumbupDO3.getThumbupByAvatar(),
+                        (x)->
+                        {
+                            Picasso.with(getApplicationContext()).load(x.get(0)).fit().into(user1);
+                        });
+            }else{
+                Picasso.with(getApplicationContext()).load(thumbupDO3.getThumbupByAvatar()).fit().into(user1);
+            }
+        }
     }
 
     @Override
@@ -332,8 +527,9 @@ public class PublishDetailActivity extends AppCompatActivity{
             intent = new Intent(this, ProfilePublishActivity.class);
         }else if(jump_from == AppConstant.HOME_PAGE){
             intent = new Intent(this, MainActivity.class);
+        }else if(jump_from == AppConstant.MY_FAVORITE){
+            intent = new Intent(this, ProfileFavoriteActivity.class);
         }
-        AppContextManager.getContextManager().getAppContext().setItemsDO(null);
         return intent;
     }
 }

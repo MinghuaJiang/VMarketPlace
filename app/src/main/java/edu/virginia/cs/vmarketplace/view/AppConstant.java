@@ -24,4 +24,6 @@ public class AppConstant {
     public static final int PHOTO_ACTIVITY = 9;
 
     public static final int PUBLISH_DETAIL = 10;
+
+    public static final int MY_FAVORITE = 11;
 }

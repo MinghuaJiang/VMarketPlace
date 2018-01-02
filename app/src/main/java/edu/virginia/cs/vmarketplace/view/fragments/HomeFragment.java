@@ -168,7 +168,7 @@ public class HomeFragment extends AbstractFragment {
         ).with((x)->{
                 listener.setHasMorePage(x.getToken() != null);
                 loadMoreToken = x.getToken();
-                homeAdapter.setData(x.getResult(), 0);
+                homeAdapter.initData(x.getResult());
         })).forceLoad();
 
         tabLayoutFixed.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -184,7 +184,7 @@ public class HomeFragment extends AbstractFragment {
                     ).with((x)->{
                         listener.setHasMorePage(x.getToken() != null);
                         loadMoreToken = x.getToken();
-                        homeAdapter.setData(x.getResult(), 2);
+                        homeAdapter.setData(x.getResult(), 2, homeAdapter.getItemCount() - 1);
                     })).forceLoad();
                     if(currentVisiblePosition2 > 1){
                         layoutManager.scrollToPositionWithOffset(2, 130);
@@ -197,7 +197,7 @@ public class HomeFragment extends AbstractFragment {
                     ).with((x)->{
                     listener.setHasMorePage(x.getToken() != null);
                     loadMoreToken = x.getToken();
-                    homeAdapter.setData(x.getResult(), 2);
+                    homeAdapter.setData(x.getResult(), 2, homeAdapter.getItemCount() - 1);
                     })).forceLoad();
                     if(currentVisiblePosition1 > 1) {
                         layoutManager.scrollToPositionWithOffset(2, 130);

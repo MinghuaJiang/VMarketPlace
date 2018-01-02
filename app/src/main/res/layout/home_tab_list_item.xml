@@ -104,27 +104,31 @@
             android:layout_centerVertical="true"
             android:textColor="@android:color/holo_blue_light"
              />
-
-        <TextView
-            android:id="@+id/home_post_thumbup"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/home_post_reply"
-            android:layout_marginRight="@dimen/content_padding"
-            android:layout_centerVertical="true" />
-
-        <TextView
-            android:id="@+id/home_post_reply"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/content_padding"
-            android:layout_centerVertical="true" />
+            >
+            <TextView
+                android:id="@+id/home_post_thumbup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/content_padding"
+                android:layout_gravity="center_vertical" />
+            <TextView
+                android:id="@+id/home_post_reply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/content_padding"
+                android:layout_gravity="center_vertical"
+                />
+        </LinearLayout>
     </RelativeLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_margin"
-        android:background="@color/separator"
         android:layout_below="@id/home_navigator"
-        />
+        android:background="@color/separator" />
 </LinearLayout>
