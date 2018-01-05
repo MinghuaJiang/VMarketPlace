@@ -19,13 +19,16 @@ public class UserProfileDO {
     private String _backgroundPic;
     private String _bio;
     private String _birthdate;
+    private Set<String> _boughtItems;
     private String _buyerRating;
     private String _buyerRatingCount;
     private String _department;
     private Set<String> _favoriteItems;
     private String _gender;
+    private Set<String> _publishItems;
     private String _sellerRating;
     private String _sellerRatingCount;
+    private Set<String> _soldItems;
     private Set<String> _thumbItems;
     private String _userName;
 
@@ -78,6 +81,14 @@ public class UserProfileDO {
     public void setBirthdate(final String _birthdate) {
         this._birthdate = _birthdate;
     }
+    @DynamoDBAttribute(attributeName = "boughtItems")
+    public Set<String> getBoughtItems() {
+        return _boughtItems;
+    }
+
+    public void setBoughtItems(final Set<String> _boughtItems) {
+        this._boughtItems = _boughtItems;
+    }
     @DynamoDBAttribute(attributeName = "buyerRating")
     public String getBuyerRating() {
         return _buyerRating;
@@ -118,6 +129,14 @@ public class UserProfileDO {
     public void setGender(final String _gender) {
         this._gender = _gender;
     }
+    @DynamoDBAttribute(attributeName = "publishItems")
+    public Set<String> getPublishItems() {
+        return _publishItems;
+    }
+
+    public void setPublishItems(final Set<String> _publishItems) {
+        this._publishItems = _publishItems;
+    }
     @DynamoDBAttribute(attributeName = "sellerRating")
     public String getSellerRating() {
         return _sellerRating;
@@ -133,6 +152,14 @@ public class UserProfileDO {
 
     public void setSellerRatingCount(final String _sellerRatingCount) {
         this._sellerRatingCount = _sellerRatingCount;
+    }
+    @DynamoDBAttribute(attributeName = "soldItems")
+    public Set<String> getSoldItems() {
+        return _soldItems;
+    }
+
+    public void setSoldItems(final Set<String> _soldItems) {
+        this._soldItems = _soldItems;
     }
     @DynamoDBAttribute(attributeName = "thumbItems")
     public Set<String> getThumbItems() {

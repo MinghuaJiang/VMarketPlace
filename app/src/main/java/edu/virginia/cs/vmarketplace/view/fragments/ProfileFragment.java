@@ -90,18 +90,15 @@ public class ProfileFragment extends AbstractFragment implements LoaderManager.L
                     handleSold();
                 }else if(position == 2){
                     handleBought();
-                }else{
+                }else if(position == 3){
                     handleFavorite();
+                }else{
+                    handleSettings();
                 }
             }
         });
 
-        ListView settingView =  rootView.findViewById(R.id.settings_container);
-        list = new ArrayList<ProfileItem>();
-        list.add(new ProfileItem(R.drawable.settings_24p, ProfileItem.ProfileType.SETTING, -1));
-        ProfileItemAdapter settingAdapter = new ProfileItemAdapter(getActivity(), list);
-        settingView.setAdapter(settingAdapter);
-        Button button = rootView.findViewById(R.id.logout);
+       /* Button button = rootView.findViewById(R.id.logout);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,7 +106,7 @@ public class ProfileFragment extends AbstractFragment implements LoaderManager.L
                 Intent intent = new Intent(getActivity(), AWSLoginActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
         return rootView;
     }
@@ -136,6 +133,10 @@ public class ProfileFragment extends AbstractFragment implements LoaderManager.L
     private void handleFavorite(){
         Intent intent = new Intent(getActivity(), ProfileFavoriteActivity.class);
         startActivity(intent);
+    }
+
+    private void handleSettings(){
+
     }
 
     @Override

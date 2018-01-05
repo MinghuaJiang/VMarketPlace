@@ -20,9 +20,12 @@ import java.io.File;
 import java.util.List;
 
 import edu.virginia.cs.vmarketplace.R;
+import edu.virginia.cs.vmarketplace.model.UserProfileDO;
 import edu.virginia.cs.vmarketplace.service.ProductItemService;
 import edu.virginia.cs.vmarketplace.service.S3Service;
+import edu.virginia.cs.vmarketplace.service.UserProfileService;
 import edu.virginia.cs.vmarketplace.service.loader.CommonAyncTask;
+import edu.virginia.cs.vmarketplace.service.login.AppContext;
 import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
 import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
 import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
@@ -35,8 +38,10 @@ import edu.virginia.cs.vmarketplace.view.PublishFormActivity;
  */
 
 public class ProfilePublishItemAdapter extends ArrayAdapter<ProductItemsDO> {
+    private AppContext appContext;
     public ProfilePublishItemAdapter(@NonNull Context context, @NonNull List<ProductItemsDO> objects) {
         super(context, 0, objects);
+        appContext = AppContextManager.getContextManager().getAppContext();
     }
 
     @Override
@@ -111,6 +116,9 @@ public class ProfilePublishItemAdapter extends ArrayAdapter<ProductItemsDO> {
                 for(String each : files){
                     new File(each).delete();
                 }
+                appContext.getUserDO().getPublishItems().remove(itemsDO.getItemId());
+                new CommonAyncTask<UserProfileDO, Void, Void>(
+                        UserProfileService.getInstance()::insertOrUpdate, appContext.getUserDO()).run();
                 new CommonAyncTask<ProductItemsDO, Void, ProductItemsDO>(ProductItemService.getInstance()::delete,
                         itemsDO).with(
                                 (x)-> {

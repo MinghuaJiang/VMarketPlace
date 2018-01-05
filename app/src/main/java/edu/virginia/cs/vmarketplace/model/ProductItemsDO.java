@@ -23,6 +23,7 @@ public class ProductItemsDO {
     private String _createdByAvatar;
     private String _createdByName;
     private String _description;
+    private Set<String> _favoriteUserIds;
     private String _lastModificationTime;
     private Double _latitude;
     private String _location;
@@ -120,6 +121,14 @@ public class ProductItemsDO {
 
     public void setDescription(final String _description) {
         this._description = _description;
+    }
+    @DynamoDBAttribute(attributeName = "favorite_user_ids")
+    public Set<String> getFavoriteUserIds() {
+        return _favoriteUserIds;
+    }
+
+    public void setFavoriteUserIds(final Set<String> _favoriteUserIds) {
+        this._favoriteUserIds = _favoriteUserIds;
     }
     @DynamoDBIndexRangeKey(attributeName = "last_modification_time", globalSecondaryIndexNames = {"CREATED_BY","STATUS_PUBLISH",})
     public String getLastModificationTime() {

@@ -8,9 +8,10 @@
 
     <ImageView
         android:id="@+id/profileimage"
-        android:layout_width="@dimen/list_item_height"
-        android:layout_height="@dimen/list_item_height"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:paddingLeft="16dp"
+        android:layout_centerVertical="true"
         />
     <RelativeLayout
         android:id="@+id/text_container"

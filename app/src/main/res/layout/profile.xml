@@ -74,32 +74,7 @@
         android:id="@+id/profile_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4"
+        android:layout_weight="8"
         android:layout_marginBottom="8dp"
         ></ListView>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/separator_height"
-        android:background="@color/separator">
-    </TextView>
-
-    <ListView
-        android:id="@+id/settings_container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        ></ListView>
-
-    <Button
-        android:id="@+id/logout"
-        android:layout_width="@dimen/list_item_height_large"
-        android:layout_height="wrap_content"
-        android:background="@color/hint_color"
-        android:text="Log Out"
-        android:layout_marginBottom="2dp"
-        android:textColor="@color/tan_background"
-        android:layout_gravity="center"
-        android:textAppearance="?android:textAppearanceMedium"
-        />
 </LinearLayout>

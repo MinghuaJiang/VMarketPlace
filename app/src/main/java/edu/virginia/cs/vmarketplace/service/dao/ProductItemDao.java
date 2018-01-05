@@ -64,7 +64,7 @@ public class ProductItemDao {
         return result;
     }
 
-    public PageResult<ProductItemsDO> getFavoritesByItemIds(List<String> items, PageRequest pageRequest){
+    public PageResult<ProductItemsDO> getItemsByItemIds(List<String> items, PageRequest pageRequest){
         List<Object> itemsToGet = new ArrayList<>();
         for(String itemId : items){
             ProductItemsDO itemsDO = new ProductItemsDO();

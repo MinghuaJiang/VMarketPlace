@@ -37,8 +37,10 @@ import java.util.UUID;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.ItemStatus;
+import edu.virginia.cs.vmarketplace.model.UserProfileDO;
 import edu.virginia.cs.vmarketplace.service.ProductItemService;
 import edu.virginia.cs.vmarketplace.service.S3Service;
+import edu.virginia.cs.vmarketplace.service.UserProfileService;
 import edu.virginia.cs.vmarketplace.service.loader.CommonAyncTask;
 import edu.virginia.cs.vmarketplace.service.login.AppContext;
 import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
@@ -207,7 +209,9 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                     productItemsDo.setThumbUpCount(0.0);
                     Set<String> userIds = new HashSet<String>();
                     userIds.add("dummy");
-                    productItemsDo.setThumbUpUserIds(userIds);
+                    Set<String> favoriteIds = new HashSet<String>();
+                    favoriteIds.add("dummy");
+                    productItemsDo.setFavoriteUserIds(favoriteIds);
                     productItemsDo.setCreatedByName(appContext.getUser().getUserName());
                     productItemsDo.setStatus(ItemStatus.publish.toString());
                 }
@@ -282,6 +286,9 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
     }
 
     private void insertToDB(ProductItemsDO productItemsDO){
+        appContext.getUserDO().getPublishItems().add(productItemsDO.getItemId());
+        new CommonAyncTask<UserProfileDO, Void, Void>(
+                UserProfileService.getInstance()::insertOrUpdate, appContext.getUserDO()).run();
         new CommonAyncTask<ProductItemsDO, Void, Void>(ProductItemService.getInstance() :: save, productItemsDO).with(
                 (x) ->{
                     refreshLayout.setRefreshing(false);

@@ -21,7 +21,6 @@ import edu.virginia.cs.vmarketplace.service.ProductItemService;
 import edu.virginia.cs.vmarketplace.service.loader.CommonRecycleViewLoaderCallback;
 import edu.virginia.cs.vmarketplace.service.login.AppContext;
 import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
-import edu.virginia.cs.vmarketplace.view.adapter.HomePageListAdapter;
 import edu.virginia.cs.vmarketplace.view.adapter.ProfileFavoriteItemAdapter;
 
 public class ProfileFavoriteActivity extends AppCompatActivity {
@@ -69,7 +68,7 @@ public class ProfileFavoriteActivity extends AppCompatActivity {
                         ProfileFavoriteActivity.this,
                         adapter,
                         (x)-> {
-                            return ProductItemService.getInstance().getFavoritesByItemIds(
+                            return ProductItemService.getInstance().getItemsByItemIds(
                                     new ArrayList<>(context.getUserDO().getFavoriteItems()), x);
                         }, new PageRequest(PAGE_SIZE, 0)
                 ).with((x)->{
@@ -97,7 +96,7 @@ public class ProfileFavoriteActivity extends AppCompatActivity {
                         ProfileFavoriteActivity.this,
                         adapter,
                         (x)-> {
-                            return ProductItemService.getInstance().getFavoritesByItemIds(
+                            return ProductItemService.getInstance().getItemsByItemIds(
                                     new ArrayList<>(context.getUserDO().getFavoriteItems()), x);
                         }, request
                 ).with((x) ->{
@@ -116,7 +115,7 @@ public class ProfileFavoriteActivity extends AppCompatActivity {
                 this,
                 adapter,
                 (x)-> {
-                    return ProductItemService.getInstance().getFavoritesByItemIds(
+                    return ProductItemService.getInstance().getItemsByItemIds(
                             new ArrayList<>(context.getUserDO().getFavoriteItems()), x);
                 }, new PageRequest(PAGE_SIZE, 0)
         ).with((x)->{

@@ -33,6 +33,7 @@ import edu.virginia.cs.vmarketplace.model.ThumbupDO;
 import edu.virginia.cs.vmarketplace.model.UserProfileDO;
 import edu.virginia.cs.vmarketplace.service.CommentService;
 import edu.virginia.cs.vmarketplace.service.ProductItemService;
+import edu.virginia.cs.vmarketplace.service.ProfileItemService;
 import edu.virginia.cs.vmarketplace.service.S3Service;
 import edu.virginia.cs.vmarketplace.service.ThumbupService;
 import edu.virginia.cs.vmarketplace.service.UserProfileService;
@@ -118,15 +119,21 @@ public class PublishDetailActivity extends AppCompatActivity{
             public void onClick(View v) {
                 if(userProfileDO.getFavoriteItems().contains(itemsDO.getItemId())){
                     favorite.setImageResource(R.drawable.favorite_24dp);
+                    itemsDO.getFavoriteUserIds().remove(userProfileDO.getUserId());
                     userProfileDO.getFavoriteItems().remove(itemsDO.getItemId());
                     new CommonAyncTask<UserProfileDO, Void, Void>(
                             UserProfileService.getInstance()::insertOrUpdate, userProfileDO).run();
+                    new CommonAyncTask<ProductItemsDO, Void,Void>(
+                            ProductItemService.getInstance()::save, itemsDO).run();
                     Toast.makeText(getApplicationContext(), "Unfavorite the item successfully!", Toast.LENGTH_SHORT).show();
                 }else{
                     userProfileDO.getFavoriteItems().add(itemsDO.getItemId());
+                    itemsDO.getFavoriteUserIds().add(userProfileDO.getUserId());
                     favorite.setImageResource(R.drawable.favorite_yellow_24dp);
                     new CommonAyncTask<UserProfileDO, Void, Void>(
                             UserProfileService.getInstance()::insertOrUpdate, userProfileDO).run();
+                    new CommonAyncTask<ProductItemsDO, Void,Void>(
+                            ProductItemService.getInstance()::save, itemsDO).run();
                     Toast.makeText(getApplicationContext(), "Favorite the item successfully!", Toast.LENGTH_SHORT).show();
                 }
             }

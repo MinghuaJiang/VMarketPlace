@@ -57,6 +57,15 @@ public class AppContext {
                 Set<String> thumb = new HashSet<String>();
                 thumb.add("dummy");
                 userDO.setThumbItems(thumb);
+                Set<String> bought = new HashSet<>();
+                bought.add("dummy");
+                userDO.setBoughtItems(bought);
+                Set<String> sold = new HashSet<>();
+                sold.add("dummy");
+                userDO.setSoldItems(sold);
+                Set<String> publish = new HashSet<>();
+                publish.add("dummy");
+                userDO.setPublishItems(publish);
             }
             if(strategy.getUserPicUri() != null){
                 userDO.setAvatar(strategy.getUserPicUri().toString());
