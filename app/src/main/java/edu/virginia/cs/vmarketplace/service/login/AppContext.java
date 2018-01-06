@@ -54,9 +54,6 @@ public class AppContext {
                 Set<String> favorite = new HashSet<String>();
                 favorite.add("dummy");
                 userDO.setFavoriteItems(favorite);
-                Set<String> thumb = new HashSet<String>();
-                thumb.add("dummy");
-                userDO.setThumbItems(thumb);
                 Set<String> bought = new HashSet<>();
                 bought.add("dummy");
                 userDO.setBoughtItems(bought);

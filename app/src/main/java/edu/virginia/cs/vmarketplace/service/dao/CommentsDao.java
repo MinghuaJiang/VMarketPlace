@@ -33,7 +33,8 @@ public class CommentsDao {
         return mapper.query(CommentsDO.class,dynamoDBQueryExpression);
     }
 
-    public void deleteComment(CommentsDO commentsDO){
+    public CommentsDO deleteComment(CommentsDO commentsDO){
         mapper.delete(commentsDO);
+        return commentsDO;
     }
 }

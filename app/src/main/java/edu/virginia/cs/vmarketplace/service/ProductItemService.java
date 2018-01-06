@@ -63,7 +63,7 @@ public class ProductItemService {
         return dao.findItemByUserId(userId);
     }
 
-    public void delete(ProductItemsDO itemsDO){
-        dao.delete(itemsDO);
+    public ProductItemsDO delete(ProductItemsDO itemsDO){
+        return dao.delete(itemsDO);
     }
 }

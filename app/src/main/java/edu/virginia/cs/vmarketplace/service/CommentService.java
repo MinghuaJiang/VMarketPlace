@@ -29,7 +29,7 @@ public class CommentService {
         return dao.findCommentsByItemId(itemId);
     }
 
-    public void deleteComments(CommentsDO commentsDO){
-        dao.deleteComment(commentsDO);
+    public CommentsDO deleteComments(CommentsDO commentsDO){
+        return dao.deleteComment(commentsDO);
     }
 }

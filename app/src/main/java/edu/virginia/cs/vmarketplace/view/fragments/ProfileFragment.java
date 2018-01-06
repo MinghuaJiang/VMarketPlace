@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,6 +19,8 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.virginia.cs.vmarketplace.R;
+import edu.virginia.cs.vmarketplace.service.ProfileItemService;
+import edu.virginia.cs.vmarketplace.service.loader.CommonLoaderCallback;
 import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
 import edu.virginia.cs.vmarketplace.service.login.AppUser;
 import edu.virginia.cs.vmarketplace.model.ProfileItem;
@@ -27,15 +28,13 @@ import edu.virginia.cs.vmarketplace.view.ProfileBoughtActivity;
 import edu.virginia.cs.vmarketplace.view.ProfileFavoriteActivity;
 import edu.virginia.cs.vmarketplace.view.ProfilePublishActivity;
 import edu.virginia.cs.vmarketplace.view.ProfileSoldActivity;
-import edu.virginia.cs.vmarketplace.service.loader.ProfileItemLoader;
 import edu.virginia.cs.vmarketplace.view.adapter.ProfileItemAdapter;
-import edu.virginia.cs.vmarketplace.view.login.AWSLoginActivity;
 
 /**
  * Created by cutehuazai on 11/23/17.
  */
 
-public class ProfileFragment extends AbstractFragment implements LoaderManager.LoaderCallbacks<List<ProfileItem>>{
+public class ProfileFragment extends AbstractFragment{
 
     private ProfileItemAdapter adapter;
 
@@ -79,7 +78,9 @@ public class ProfileFragment extends AbstractFragment implements LoaderManager.L
         ListView listView = rootView.findViewById(R.id.profile_container);
         listView.setAdapter(adapter);
 
-        getLoaderManager().initLoader(0 ,null, this).forceLoad();
+        getLoaderManager().initLoader(0 ,null,
+                new CommonLoaderCallback<Void, ProfileItem>(adapter,
+                        ProfileItemService.getInstance()::getProfileItems)).forceLoad();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -137,21 +138,5 @@ public class ProfileFragment extends AbstractFragment implements LoaderManager.L
 
     private void handleSettings(){
 
-    }
-
-    @Override
-    public Loader<List<ProfileItem>> onCreateLoader(int id, Bundle args) {
-        return new ProfileItemLoader(getActivity());
-    }
-
-    @Override
-    public void onLoadFinished(Loader<List<ProfileItem>> loader, List<ProfileItem> data) {
-        adapter.clear();
-        adapter.addAll(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<ProfileItem>> loader) {
-        adapter.clear();
     }
 }

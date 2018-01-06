@@ -170,7 +170,8 @@ public class ProductItemDao {
         return mapper.query(ProductItemsDO.class,dynamoDBQueryExpression);
     }
 
-    public void delete(ProductItemsDO itemsDO){
+    public ProductItemsDO delete(ProductItemsDO itemsDO){
         mapper.delete(itemsDO);
+        return itemsDO;
     }
 }

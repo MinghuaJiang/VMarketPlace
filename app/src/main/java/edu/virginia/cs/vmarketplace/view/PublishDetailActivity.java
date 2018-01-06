@@ -94,7 +94,7 @@ public class PublishDetailActivity extends AppCompatActivity{
             favorite.setImageResource(R.drawable.favorite_24dp);
         }
 
-        if(userProfileDO.getThumbItems().contains(itemsDO.getItemId())){
+        if(itemsDO.getThumbUpUserIds().contains(userProfileDO.getUserId())){
             thumbup.setImageResource(R.drawable.like_fill);
         }else{
             thumbup.setImageResource(R.drawable.like);
@@ -162,9 +162,8 @@ public class PublishDetailActivity extends AppCompatActivity{
         thumbup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(userProfileDO.getThumbItems().contains(itemsDO.getItemId())){
+                if(itemsDO.getThumbUpUserIds().contains(userProfileDO.getUserId())){
                     thumbup.setImageResource(R.drawable.like);
-                    userProfileDO.getThumbItems().remove(itemsDO.getItemId());
                     itemsDO.getThumbUpUserIds().remove(userProfileDO.getUserId());
                     itemsDO.setThumbUpCount(itemsDO.getThumbUpCount() - 1);
 
@@ -194,7 +193,6 @@ public class PublishDetailActivity extends AppCompatActivity{
                             ProductItemService.getInstance()::save, itemsDO).run();
                     Toast.makeText(getApplicationContext(), "Unlike the item successfully!", Toast.LENGTH_SHORT).show();
                 }else{
-                    userProfileDO.getThumbItems().add(itemsDO.getItemId());
                     itemsDO.setThumbUpCount(itemsDO.getThumbUpCount() + 1);
                     users.setVisibility(View.VISIBLE);
                     likeCount.setText("like" + itemsDO.getThumbUpCount().intValue());
@@ -388,10 +386,10 @@ public class PublishDetailActivity extends AppCompatActivity{
                             .setIcon(R.drawable.warning)
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                    new CommonAyncTask<CommentsDO,Void,Void>((x)-> {
-                                        CommentService.getInstance().deleteComments(x);
+                                    new CommonAyncTask<CommentsDO,Void,CommentsDO>((x)-> {
                                         itemsDO.setReplyCount(itemsDO.getReplyCount() - 1);
                                         ProductItemService.getInstance().save(itemsDO);
+                                        return CommentService.getInstance().deleteComments(x);
                                     }, commentsDO).
                                             with((x)->{
                                                 Toast.makeText(PublishDetailActivity.this, "Comments deleted successfully", Toast.LENGTH_SHORT).show();
@@ -400,7 +398,7 @@ public class PublishDetailActivity extends AppCompatActivity{
                                                 }else{
                                                     replyCount.setText("Comments");
                                                 }
-                                                getSupportLoaderManager().restartLoader(0, null, callback).forceLoad();
+                                                commentsDOAdapter.remove(x);
                                             }).run();
                                 }})
                             .setNegativeButton(android.R.string.no, null).show();

@@ -209,6 +209,7 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                     productItemsDo.setThumbUpCount(0.0);
                     Set<String> userIds = new HashSet<String>();
                     userIds.add("dummy");
+                    productItemsDo.setThumbUpUserIds(userIds);
                     Set<String> favoriteIds = new HashSet<String>();
                     favoriteIds.add("dummy");
                     productItemsDo.setFavoriteUserIds(favoriteIds);

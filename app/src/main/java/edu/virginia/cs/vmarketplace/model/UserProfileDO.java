@@ -29,7 +29,6 @@ public class UserProfileDO {
     private String _sellerRating;
     private String _sellerRatingCount;
     private Set<String> _soldItems;
-    private Set<String> _thumbItems;
     private String _userName;
 
     @DynamoDBHashKey(attributeName = "userId")
@@ -160,14 +159,6 @@ public class UserProfileDO {
 
     public void setSoldItems(final Set<String> _soldItems) {
         this._soldItems = _soldItems;
-    }
-    @DynamoDBAttribute(attributeName = "thumbItems")
-    public Set<String> getThumbItems() {
-        return _thumbItems;
-    }
-
-    public void setThumbItems(final Set<String> _thumbItems) {
-        this._thumbItems = _thumbItems;
     }
     @DynamoDBAttribute(attributeName = "userName")
     public String getUserName() {
