@@ -1,6 +1,7 @@
 package edu.virginia.cs.vmarketplace.service;
 
 import android.content.Context;
+import android.os.Environment;
 
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
@@ -54,7 +55,7 @@ public class S3Service {
     }
 
     public void download(List<String> s3Urls, List<String> downloadedFile, S3Callback callback) {
-        String baseFileDir = context.getExternalFilesDir(null) + File.separator;
+        String baseFileDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) + File.separator;
         List<Integer> count = new ArrayList<>();
         List<File> fileList = new ArrayList<>();
         for (int i = 0; i < s3Urls.size(); i++) {
@@ -87,7 +88,7 @@ public class S3Service {
     }
 
     public void upload(List<String> s3Urls, List<String> files, boolean deleteOriginalFile, S3Callback callback) {
-        String baseFileDir = context.getExternalFilesDir(null) + File.separator;
+        String baseFileDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) + File.separator;
         List<Integer> count = new ArrayList<>();
         for (int i = 0; i < s3Urls.size(); i++) {
             final File file = new File(baseFileDir + files.get(i));

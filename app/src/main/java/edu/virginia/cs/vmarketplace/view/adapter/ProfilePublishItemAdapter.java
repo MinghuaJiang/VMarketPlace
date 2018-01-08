@@ -3,6 +3,7 @@ package edu.virginia.cs.vmarketplace.view.adapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -63,7 +64,7 @@ public class ProfilePublishItemAdapter extends ArrayAdapter<ProductItemsDO> {
             imageView.setImageResource(R.drawable.product_placeholder_96dp);
         } else {
             imageView.setImageResource(R.drawable.product_placeholder_96dp);
-            final File file = new File(getContext().getExternalFilesDir(null ) + File.separator + currentItem.getOriginalFiles().get(0));
+            final File file = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES) + File.separator + currentItem.getOriginalFiles().get(0));
             if(!file.exists()) {
                 S3Service.getInstance(getContext()).download(currentItem.getThumbPic(),file.getName(),
                         (x) -> {

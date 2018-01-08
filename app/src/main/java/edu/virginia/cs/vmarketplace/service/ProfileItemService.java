@@ -26,4 +26,7 @@ public class ProfileItemService {
         return dao.getProfileItems();
     }
 
+    public List<ProfileItem> getSettingItems(){
+        return dao.getSettingItems();
+    }
 }

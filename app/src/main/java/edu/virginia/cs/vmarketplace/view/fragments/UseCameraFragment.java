@@ -28,6 +28,7 @@ import android.media.Image;
 import android.media.ImageReader;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
@@ -215,8 +216,7 @@ public class UseCameraFragment extends AbstractFragment implements LoaderManager
 
         @Override
         public void onImageAvailable(ImageReader reader) {
-            mFiles.add(getActivity().getExternalFilesDir(null) + File.separator + AppContextManager.getContextManager().getAppContext().getUser().getUserId() + "_" + UUID.randomUUID() + ".png");
-            //mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFiles.get(mFiles.size() - 1)));
+            mFiles.add(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES) + File.separator + AppContextManager.getContextManager().getAppContext().getUser().getUserId() + "_" + UUID.randomUUID() + ".png");
             Image mImage = reader.acquireNextImage();
             ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
             byte[] bytes = new byte[buffer.remaining()];

@@ -6,8 +6,9 @@ package edu.virginia.cs.vmarketplace.model;
 
 public class ProfileItem {
     private int mProfileTypeImageResourceId;
-    private ProfileType profileType;
+    private String profileType;
     private int count;
+    private boolean haveSubMenu;
 
     public enum ProfileType{
         PUBLISH_BY_ME{
@@ -45,17 +46,47 @@ public class ProfileItem {
         public abstract String getMessage();
     }
 
-    public ProfileItem(int imageResourceId, ProfileType profileType, int count){
+    public enum SettingType{
+        PROFILE{
+            @Override
+            public String getMessage() {
+                return "Profile Setting";
+            }
+        },
+        SHARE{
+            @Override
+            public String getMessage() {
+                return "Share This App";
+            }
+        },
+        ABOUT{
+            @Override
+            public String getMessage() {
+                return "About This App";
+            }
+        },
+        CACHE_CLEANUP{
+            @Override
+            public String getMessage() {
+                return "Cache Cleanup";
+            }
+        };
+
+        public abstract String getMessage();
+    }
+
+    public ProfileItem(int imageResourceId, String profileType, int count, boolean haveSubMenu){
         this.mProfileTypeImageResourceId = imageResourceId;
         this.profileType = profileType;
         this.count = count;
+        this.haveSubMenu = haveSubMenu;
     }
 
     public int getmProfileTypeImageResourceId() {
         return mProfileTypeImageResourceId;
     }
 
-    public ProfileType getProfileType() {
+    public String getProfileType() {
         return profileType;
     }
 
@@ -67,11 +98,15 @@ public class ProfileItem {
         this.mProfileTypeImageResourceId = mProfileTypeImageResourceId;
     }
 
-    public void setProfileType(ProfileType profileType) {
+    public void setProfileType(String profileType) {
         this.profileType = profileType;
     }
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public boolean isHaveSubMenu() {
+        return haveSubMenu;
     }
 }

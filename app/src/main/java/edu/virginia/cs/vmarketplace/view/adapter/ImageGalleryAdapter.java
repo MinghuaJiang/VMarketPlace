@@ -1,6 +1,7 @@
 package edu.virginia.cs.vmarketplace.view.adapter;
 
 import android.content.Context;
+import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +43,7 @@ public class ImageGalleryAdapter extends RefreshableRecycleAdapter<ImageGalleryI
     public void onBindViewHolder(MyViewHolder holder, int position) {
         ImageGalleryItem item = getItems().get(position);
 
-        File file = new File(getContext().getExternalFilesDir(null) + File.separator +
+        File file = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES) + File.separator +
                 item.getOriginalFile());
         if(file.exists()){
             Picasso.with(getContext()).load(file).placeholder(R.drawable.product_placeholder_96dp).

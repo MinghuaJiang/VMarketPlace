@@ -25,11 +25,21 @@ public class ProfileItemDao {
 
     public List<ProfileItem> getProfileItems(){
         List<ProfileItem> list = new ArrayList<>();
-        list.add(new ProfileItem(R.drawable.publish_24p, ProfileItem.ProfileType.PUBLISH_BY_ME, Math.max(appContext.getUserDO().getPublishItems().size() - 1, 0)));
-        list.add(new ProfileItem(R.drawable.sold_24p, ProfileItem.ProfileType.SOLD_BY_ME, Math.max(appContext.getUserDO().getSoldItems().size() - 1, 0)));
-        list.add(new ProfileItem(R.drawable.bought_24p, ProfileItem.ProfileType.BOUGHT_BY_ME, Math.max(appContext.getUserDO().getBoughtItems().size() - 1, 0)));
-        list.add(new ProfileItem(R.drawable.star_24p, ProfileItem.ProfileType.ADDED_TO_FAVIORITE, Math.max(appContext.getUserDO().getFavoriteItems().size() - 1, 0)));
-        list.add(new ProfileItem(R.drawable.settings_24p, ProfileItem.ProfileType.SETTING, -1));
+        list.add(new ProfileItem(R.drawable.publish_24p, ProfileItem.ProfileType.PUBLISH_BY_ME.getMessage(), Math.max(appContext.getUserDO().getPublishItems().size() - 1, 0), true));
+        list.add(new ProfileItem(R.drawable.sold_24p, ProfileItem.ProfileType.SOLD_BY_ME.getMessage(), Math.max(appContext.getUserDO().getSoldItems().size() - 1, 0),true));
+        list.add(new ProfileItem(R.drawable.bought_24p, ProfileItem.ProfileType.BOUGHT_BY_ME.getMessage(), Math.max(appContext.getUserDO().getBoughtItems().size() - 1, 0),true));
+        list.add(new ProfileItem(R.drawable.star_24p, ProfileItem.ProfileType.ADDED_TO_FAVIORITE.getMessage(), Math.max(appContext.getUserDO().getFavoriteItems().size() - 1, 0),true));
+        list.add(new ProfileItem(R.drawable.settings_24p, ProfileItem.ProfileType.SETTING.getMessage(), -1, true));
         return list;
     }
+
+    public List<ProfileItem> getSettingItems(){
+        List<ProfileItem> list = new ArrayList<>();
+        list.add(new ProfileItem(-1, ProfileItem.SettingType.PROFILE.getMessage(), -1, true));
+        list.add(new ProfileItem(-1, ProfileItem.SettingType.SHARE.getMessage(), -1,true));
+        list.add(new ProfileItem(-1, ProfileItem.SettingType.ABOUT.getMessage(), -1,true));
+        list.add(new ProfileItem(-1, ProfileItem.SettingType.CACHE_CLEANUP.getMessage(), -1,false));
+        return list;
+    }
+
 }

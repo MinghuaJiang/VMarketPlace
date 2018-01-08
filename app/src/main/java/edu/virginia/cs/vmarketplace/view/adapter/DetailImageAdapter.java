@@ -1,6 +1,7 @@
 package edu.virginia.cs.vmarketplace.view.adapter;
 
 import android.content.Context;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +43,7 @@ public class DetailImageAdapter extends ArrayAdapter<String>{
         String fileStr = originalFileList.get(position);
         final ImageView view = listView.findViewById(R.id.image);
         view.setImageResource(R.drawable.place_holder_96p);
-        File file = new File(getContext().getExternalFilesDir(null) + File.separator +fileStr);
+        File file = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES) + File.separator +fileStr);
         if(!file.exists()) {
             S3Service.getInstance(getContext()).download(key, file.getName(), (x) -> {
                 Picasso.with(getContext()).load(x.get(0)).placeholder(R.drawable.place_holder_96p).

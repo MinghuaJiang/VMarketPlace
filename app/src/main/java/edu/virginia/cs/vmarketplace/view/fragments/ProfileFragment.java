@@ -27,6 +27,7 @@ import edu.virginia.cs.vmarketplace.model.ProfileItem;
 import edu.virginia.cs.vmarketplace.view.ProfileBoughtActivity;
 import edu.virginia.cs.vmarketplace.view.ProfileFavoriteActivity;
 import edu.virginia.cs.vmarketplace.view.ProfilePublishActivity;
+import edu.virginia.cs.vmarketplace.view.ProfileSettingsActivity;
 import edu.virginia.cs.vmarketplace.view.ProfileSoldActivity;
 import edu.virginia.cs.vmarketplace.view.adapter.ProfileItemAdapter;
 
@@ -99,16 +100,6 @@ public class ProfileFragment extends AbstractFragment{
             }
         });
 
-       /* Button button = rootView.findViewById(R.id.logout);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AppContextManager.getContextManager().getAppContext().signOut();
-                Intent intent = new Intent(getActivity(), AWSLoginActivity.class);
-                startActivity(intent);
-            }
-        });*/
-
         return rootView;
     }
 
@@ -137,6 +128,7 @@ public class ProfileFragment extends AbstractFragment{
     }
 
     private void handleSettings(){
-
+        Intent intent = new Intent(getActivity(), ProfileSettingsActivity.class);
+        startActivity(intent);
     }
 }

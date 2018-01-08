@@ -1,6 +1,7 @@
 package edu.virginia.cs.vmarketplace.view.adapter;
 
 import android.content.Context;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,7 +68,7 @@ public class MessageDOAdapter extends ArrayAdapter<MessageDO> {
 
         ImageView picView = listView.findViewById(R.id.thumbpic);
 
-        File file = new File(getContext().getExternalFilesDir(null) + File.separator + currentItem.getItemOriginalPicFile());
+        File file = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES) + File.separator + currentItem.getItemOriginalPicFile());
         if(!file.exists()){
             S3Service.getInstance(getContext()).download(currentItem.getItemThumbPic(), file.getName(),
                     (x) ->  Picasso.with(getContext()).load(x.get(0))

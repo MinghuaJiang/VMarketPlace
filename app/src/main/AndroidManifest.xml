@@ -151,10 +151,13 @@
         <activity
             android:name=".view.PublishDetailActivity"
             android:theme="@style/AppTheme.FullScreen" />
-        <activity android:name=".view.LikeHistoryActivity"
-            android:theme="@style/AppTheme.FullScreen"
+        <activity
+            android:name=".view.LikeHistoryActivity"
             android:parentActivityName=".view.PublishDetailActivity"
-            />
+            android:theme="@style/AppTheme.FullScreen" />
+        <activity android:name=".view.ProfileSettingsActivity"
+            android:parentActivityName=".view.MainActivity"
+            android:theme="@style/AppTheme.FullScreen"></activity>
     </application>
 
 </manifest>

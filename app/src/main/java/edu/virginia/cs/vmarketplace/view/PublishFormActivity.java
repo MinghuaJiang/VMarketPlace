@@ -267,7 +267,6 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
 
     private void loadIntoS3(final ProductItemsDO itemDo){
         final List<String> s3urls = new ArrayList<>();
-        final TransferUtility utility = AWSClientFactory.getInstance().getTransferUtility(getApplicationContext());
         final List<String> files = new ArrayList<>();
         for(String each: mFiles) {
             final File file = new File(each);
