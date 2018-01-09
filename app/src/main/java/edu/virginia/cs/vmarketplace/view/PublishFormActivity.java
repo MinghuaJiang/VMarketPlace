@@ -1,17 +1,11 @@
 package edu.virginia.cs.vmarketplace.view;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Geocoder;
-import android.location.Location;
-import android.support.v4.app.LoaderManager;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -23,10 +17,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
-import com.google.android.gms.tasks.OnSuccessListener;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,9 +24,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.ItemStatus;
+import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
 import edu.virginia.cs.vmarketplace.model.UserProfileDO;
 import edu.virginia.cs.vmarketplace.service.ProductItemService;
 import edu.virginia.cs.vmarketplace.service.S3Service;
@@ -44,23 +36,18 @@ import edu.virginia.cs.vmarketplace.service.UserProfileService;
 import edu.virginia.cs.vmarketplace.service.loader.CommonAyncTask;
 import edu.virginia.cs.vmarketplace.service.login.AppContext;
 import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
-import edu.virginia.cs.vmarketplace.model.PreviewImageItem;
-import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
 import edu.virginia.cs.vmarketplace.util.CategoryUtil;
-import edu.virginia.cs.vmarketplace.service.client.AWSClientFactory;
 import edu.virginia.cs.vmarketplace.util.LocationHolder;
 import edu.virginia.cs.vmarketplace.util.TimeUtil;
 import edu.virginia.cs.vmarketplace.view.adapter.ImageViewAdapter;
-import edu.virginia.cs.vmarketplace.service.loader.PreviewImageItemLoader;
 
-public class PublishFormActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<PreviewImageItem>> {
+public class PublishFormActivity extends AppCompatActivity {
     private static final String TITLE_CONTENT = "title";
     private static final String DESCRIPTION_CONTENT = "description";
     private static final String PRICE_CONTENT = "price";
     private static final String CATEGORY_CONTENT = "category";
 
     private AppContext appContext;
-    private DynamoDBMapper mapper;
     private GridView gridView;
     private ImageViewAdapter adapter;
     private List<String> mFiles;
@@ -90,7 +77,6 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
             @Override
             public void onClick(View v) {
                 appContext.destroyInstanceState();
-                appContext.setItemsDO(null);
                 Intent fromIntent = getIntent();
                 int jump_from = fromIntent.getIntExtra(AppConstant.JUMP_FROM, 0);
                 if(jump_from == AppConstant.PUBLISH_BY_ME){
@@ -115,8 +101,6 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
         ab.setDisplayHomeAsUpEnabled(false);
         ab.setDisplayShowTitleEnabled(false);
 
-        mapper = AWSClientFactory.getInstance().getDBMapper();
-
         gridView = findViewById(R.id.container);
 
         locationLogo = findViewById(R.id.location_logo);
@@ -135,15 +119,8 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
         boolean isPublish = appContext.isPublish();
 
         if(isPublish) {
-            mFiles = getIntent().getStringArrayListExtra("image");
-            if (mFiles != null) {
-                adapter = new ImageViewAdapter(this, new ArrayList<PreviewImageItem>());
-                gridView.setAdapter(adapter);
-                adapter.setmFiles(mFiles);
-                getSupportLoaderManager().restartLoader(0, null, this).forceLoad();
-            } else {
-                gridView.setVisibility(View.GONE);
-            }
+            mFiles = getIntent().getStringArrayListExtra("image").stream().map(
+                    (x)->new File(x).getName()).collect(Collectors.toList());
 
             category = appContext.getCurrentCategory();
             ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.category_item, CategoryUtil.getSubCategory(category));
@@ -160,16 +137,16 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
             ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.category_item, CategoryUtil.getSubCategory(category));
             spinner.setAdapter(spinnerAdapter);
             spinner.setSelection(itemsDO.getSubcategoryPosition().intValue());
-            if (mFiles != null) {
-                adapter = new ImageViewAdapter(this, new ArrayList<PreviewImageItem>());
-                gridView.setAdapter(adapter);
-                adapter.setmFiles(mFiles);
-                S3Service.getInstance(getApplicationContext()).download(itemsDO.getPics(), mFiles, (x)->{
-                    getSupportLoaderManager().restartLoader(0, null, PublishFormActivity.this).forceLoad();
-                });
-            } else {
-                gridView.setVisibility(View.GONE);
-            }
+        }
+
+        if (mFiles != null) {
+            List<String> temp = new ArrayList<>(mFiles);
+            temp.add("dummy");
+            adapter = new ImageViewAdapter(this, temp);
+            gridView.setAdapter(adapter);
+            adapter.setmFiles(mFiles);
+        } else {
+            gridView.setVisibility(View.GONE);
         }
 
         if(!appContext.getInstanceState().isEmpty()) {
@@ -200,7 +177,9 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                 String subCategory = (String)spinner.getSelectedItem();
 
                 ProductItemsDO productItemsDo = appContext.getItemsDO();
-                if(productItemsDo == null){
+                Intent fromIntent = getIntent();
+                int jump_from = fromIntent.getIntExtra(AppConstant.JUMP_FROM, 0);
+                if(jump_from == AppConstant.PHOTO_ACTIVITY){
                     productItemsDo = new ProductItemsDO();
                     productItemsDo.setItemId(UUID.randomUUID().toString());
                     productItemsDo.setCreatedBy(appContext.getUser().getUserId());
@@ -234,23 +213,9 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
                 productItemsDo.setLocation(location);
                 productItemsDo.setLastModificationTime(TimeUtil.formatYYYYMMDDhhmmss(new Date()));
                 appContext.destroyInstanceState();
-                appContext.setItemsDO(null);
                 loadIntoS3(productItemsDo);
             }
         });
-    }
-
-    @Override
-    public Loader<List<PreviewImageItem>> onCreateLoader(int id, Bundle args) {
-        return new PreviewImageItemLoader(this, mFiles, 200);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<List<PreviewImageItem>> loader, List<PreviewImageItem> data) {
-        adapter.clear();
-        adapter.addAll(data);
-        PreviewImageItem dummyItem = new PreviewImageItem(null, null);
-        adapter.add(dummyItem);
     }
 
     public void saveState(){
@@ -258,11 +223,6 @@ public class PublishFormActivity extends AppCompatActivity implements LoaderMana
         appContext.getInstanceState().putString(DESCRIPTION_CONTENT, descriptionView.getText().toString());
         appContext.getInstanceState().putString(PRICE_CONTENT, priceView.getText().toString());
         appContext.getInstanceState().putInt(CATEGORY_CONTENT, spinner.getSelectedItemPosition());
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<PreviewImageItem>> loader) {
-        adapter.clear();
     }
 
     private void loadIntoS3(final ProductItemsDO itemDo){

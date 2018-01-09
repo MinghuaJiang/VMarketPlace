@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
@@ -32,9 +31,9 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -44,11 +43,8 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -64,22 +60,22 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import edu.virginia.cs.vmarketplace.R;
+import edu.virginia.cs.vmarketplace.service.loader.CommonAyncTask;
 import edu.virginia.cs.vmarketplace.view.AppConstant;
 import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
-import edu.virginia.cs.vmarketplace.model.PreviewImageItem;
 import edu.virginia.cs.vmarketplace.util.ImageUtil;
 import edu.virginia.cs.vmarketplace.view.AutoFitTextureView;
 import edu.virginia.cs.vmarketplace.view.MainActivity;
 import edu.virginia.cs.vmarketplace.view.MessageDetailActivity;
 import edu.virginia.cs.vmarketplace.view.PublishFormActivity;
-import edu.virginia.cs.vmarketplace.service.loader.PreviewImageItemLoader;
-import edu.virginia.cs.vmarketplace.view.adapter.ImageViewAdapter;
+import edu.virginia.cs.vmarketplace.view.adapter.CameraGalleryAdapter;
+import edu.virginia.cs.vmarketplace.view.adapter.decoration.ItemOffsetDecoration;
 
 /**
  * Created by cutehuazai on 11/25/17.
  */
 
-public class UseCameraFragment extends AbstractFragment implements LoaderManager.LoaderCallbacks<List<PreviewImageItem>> {
+public class UseCameraFragment extends AbstractFragment{
 
     private boolean isPaused;
     private static final String TAG = "UseCameraFragment";
@@ -127,8 +123,6 @@ public class UseCameraFragment extends AbstractFragment implements LoaderManager
     private int flashState = FLASH_OFF;
 
     private ImageReader mImageReader;
-
-    private List<String> mFiles;
 
     private List<String> mExistingFiles;
 
@@ -203,11 +197,9 @@ public class UseCameraFragment extends AbstractFragment implements LoaderManager
 
     private Button closeBtn;
 
-    private GridView gridView;
+    private RecyclerView recyclerView;
 
-    private LinearLayout linearLayout;
-
-    private ImageViewAdapter adapter;
+    private CameraGalleryAdapter adapter;
 
     private ImageView bigImageView;
 
@@ -216,14 +208,14 @@ public class UseCameraFragment extends AbstractFragment implements LoaderManager
 
         @Override
         public void onImageAvailable(ImageReader reader) {
-            mFiles.add(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES) + File.separator + AppContextManager.getContextManager().getAppContext().getUser().getUserId() + "_" + UUID.randomUUID() + ".png");
+            String file = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES) + File.separator + AppContextManager.getContextManager().getAppContext().getUser().getUserId() + "_" + UUID.randomUUID() + ".png";
             Image mImage = reader.acquireNextImage();
             ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
             byte[] bytes = new byte[buffer.remaining()];
             buffer.get(bytes);
             FileOutputStream output = null;
             try {
-                output = new FileOutputStream(mFiles.get(mFiles.size() - 1));
+                output = new FileOutputStream(file);
                 output.write(bytes);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -237,7 +229,14 @@ public class UseCameraFragment extends AbstractFragment implements LoaderManager
                     }
                 }
             }
-            getActivity().getSupportLoaderManager().restartLoader(0, null, UseCameraFragment.this).forceLoad();
+            new CommonAyncTask<Void, Void, Void>(()->
+            {return null;}).with(
+                    (x)->{
+                        List<String> list = new ArrayList<String>();
+                        list.add(file);
+                        adapter.insertData(list, adapter.getItemCount());
+                    }
+            ).run();
         }
     };
 
@@ -353,14 +352,14 @@ public class UseCameraFragment extends AbstractFragment implements LoaderManager
             @Override
             public void onClick(View v) {
                 if (!isPaused) {
-                    if (mFiles.size() + mExistingFiles.size() < picLimit) {
+                    if (adapter.getItemCount() + mExistingFiles.size() < picLimit) {
                         takePicture();
                     }
                 } else {
                     captureBtn.setBackgroundResource(R.drawable.button_record);
-                    if (mFiles.size() != 0) {
-                        captureBtn.setText(String.valueOf(picLimit - mFiles.size() - mExistingFiles.size()));
-                        if ((mFiles.size() + mExistingFiles.size()) == picLimit) {
+                    if (adapter.getItemCount() != 0) {
+                        captureBtn.setText(String.valueOf(picLimit - adapter.getItemCount() - mExistingFiles.size()));
+                        if ((adapter.getItemCount() + mExistingFiles.size()) == picLimit) {
                             captureBtn.setTextColor(Color.WHITE);
                         } else {
                             captureBtn.setTextColor(Color.BLACK);
@@ -369,7 +368,7 @@ public class UseCameraFragment extends AbstractFragment implements LoaderManager
                     } else {
                         nextBtn.setVisibility(View.INVISIBLE);
                         captureBtn.setText("");
-                        gridView.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.GONE);
                     }
                     doResume();
                 }
@@ -383,32 +382,10 @@ public class UseCameraFragment extends AbstractFragment implements LoaderManager
 
         textureView = rootView.findViewById(R.id.texture);
 
-        gridView = rootView.findViewById(R.id.gallery);
-        adapter = new ImageViewAdapter(getActivity(), new ArrayList<PreviewImageItem>());
-        gridView.setAdapter(adapter);
-
-        adapter.registerDataSetObserver(new CameraDataSetObserver(this));
-
-        linearLayout = rootView.findViewById(R.id.gallery_container);
-        linearLayout.setAlpha(0);
-
-        bigImageView = rootView.findViewById(R.id.big_image);
-        bigImageView.setVisibility(View.GONE);
-
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                doPause();
-                String item = mFiles.get(position);
-                bigImageView.setImageBitmap(
-                        ImageUtil.decodeSampledBitmapFromFile(item, textureView.getWidth(), textureView.getHeight()));
-                bigImageView.setVisibility(View.VISIBLE);
-                nextBtn.setVisibility(View.INVISIBLE);
-                captureBtn.setBackgroundResource(R.drawable.button_record2);
-                captureBtn.setText("");
-            }
-        });
-
+        recyclerView = rootView.findViewById(R.id.gallery);
+        ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(getContext(), R.dimen.camera_item_offset);
+        recyclerView.addItemDecoration(itemDecoration);
+        recyclerView.setVisibility(View.GONE);
         closeBtn = rootView.findViewById(R.id.close_btn);
         setCloseBtnListener(
                 new View.OnClickListener() {
@@ -440,6 +417,33 @@ public class UseCameraFragment extends AbstractFragment implements LoaderManager
         }else{
             mExistingFiles = new ArrayList<>();
         }
+
+        adapter = new CameraGalleryAdapter(getActivity(), new ArrayList<String>());
+        recyclerView.setAdapter(adapter);
+
+        recyclerView.setFocusable(false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        adapter.registerAdapterDataObserver(new CameraDataSetObserver(this));
+
+        bigImageView = rootView.findViewById(R.id.big_image);
+        bigImageView.setVisibility(View.GONE);
+
+        adapter.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                doPause();
+                String item = adapter.getItems().get(adapter.getPosition());
+                bigImageView.setImageBitmap(
+                        ImageUtil.decodeSampledBitmapFromFile(item, textureView.getWidth(), textureView.getHeight()));
+                bigImageView.setVisibility(View.VISIBLE);
+                nextBtn.setVisibility(View.INVISIBLE);
+                captureBtn.setBackgroundResource(R.drawable.button_record2);
+                captureBtn.setText("");
+            }
+        });
 
         return rootView;
     }
@@ -736,8 +740,6 @@ public class UseCameraFragment extends AbstractFragment implements LoaderManager
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mFiles = new ArrayList<String>();
-        adapter.setmFiles(mFiles);
     }
 
     @Override
@@ -922,47 +924,28 @@ public class UseCameraFragment extends AbstractFragment implements LoaderManager
         }
     }
 
-    @Override
-    public Loader<List<PreviewImageItem>> onCreateLoader(int id, Bundle args) {
-        return new PreviewImageItemLoader(getActivity(), mFiles, 160);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<List<PreviewImageItem>> loader, List<PreviewImageItem> data) {
-        adapter.clear();
-        adapter.addAll(data);
-        if (data.size() > 0) {
-            linearLayout.setAlpha(0.7f);
-        } else {
-            linearLayout.setAlpha(0);
-        }
-        gridView.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<PreviewImageItem>> loader) {
-        adapter.clear();
-        linearLayout.setAlpha(0);
-    }
-
     public void onDatasetChange() {
         if (!isPaused) {
-            if (mFiles.size() != 0) {
-                captureBtn.setText(String.valueOf(picLimit - mFiles.size() - mExistingFiles.size()));
-                if ((mFiles.size() + mExistingFiles.size()) == picLimit) {
+            if (adapter.getItemCount() != 0) {
+                captureBtn.setText(String.valueOf(picLimit - adapter.getItemCount() - mExistingFiles.size()));
+                if ((adapter.getItemCount() + mExistingFiles.size()) == picLimit) {
                     captureBtn.setTextColor(Color.WHITE);
                 } else {
                     captureBtn.setTextColor(Color.BLACK);
                 }
                 nextBtn.setVisibility(View.VISIBLE);
+                recyclerView.setAlpha(0.7f);
+                recyclerView.setVisibility(View.VISIBLE);
             } else {
                 nextBtn.setVisibility(View.INVISIBLE);
                 captureBtn.setText("");
-                gridView.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.GONE);
+                recyclerView.setAlpha(0);
             }
         }else{
-            if(mFiles.size() == 0){
-                gridView.setVisibility(View.GONE);
+            if(adapter.getItemCount() == 0){
+                recyclerView.setVisibility(View.GONE);
+                recyclerView.setAlpha(0);
             }
         }
     }
@@ -977,7 +960,7 @@ public class UseCameraFragment extends AbstractFragment implements LoaderManager
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), PublishFormActivity.class);
-                    mExistingFiles.addAll(mFiles);
+                    mExistingFiles.addAll(adapter.getItems());
                     AppContextManager.getContextManager().getAppContext().setPublish(true);
                     intent.putStringArrayListExtra("image", new ArrayList<String>(mExistingFiles));
                     intent.putExtra(AppConstant.JUMP_FROM, AppConstant.PHOTO_ACTIVITY);
@@ -991,7 +974,7 @@ public class UseCameraFragment extends AbstractFragment implements LoaderManager
                     doPause();
                     Intent fromIntent = getActivity().getIntent();
                     Intent intent = new Intent(getActivity(), MessageDetailActivity.class);
-                    mExistingFiles.addAll(mFiles);
+                    mExistingFiles.addAll(adapter.getItems());
                     intent.putStringArrayListExtra("image", new ArrayList<String>(mExistingFiles));
                     intent.putExtra(AppConstant.BUYER_NAME, fromIntent.getStringExtra(AppConstant.BUYER_NAME));
                     startActivity(intent);
@@ -1054,7 +1037,7 @@ public class UseCameraFragment extends AbstractFragment implements LoaderManager
         }
     }
 
-    private static final class CameraDataSetObserver extends DataSetObserver {
+    private static final class CameraDataSetObserver extends RecyclerView.AdapterDataObserver {
         private UseCameraFragment fragment;
 
         public CameraDataSetObserver(UseCameraFragment fragment) {
@@ -1062,6 +1045,14 @@ public class UseCameraFragment extends AbstractFragment implements LoaderManager
         }
 
         public void onChanged() {
+            fragment.onDatasetChange();
+        }
+
+        public void onItemRangeChanged(int positionStart, int itemCount) {
+            fragment.onDatasetChange();
+        }
+
+        public void onItemRangeInserted(int position, int itemCount){
             fragment.onDatasetChange();
         }
     }

@@ -16,4 +16,5 @@
     <dimen name="button_margin_large">24dp</dimen>
     <dimen name="text_area">120dp</dimen>
     <dimen name="item_offset">0.5dp</dimen>
+    <dimen name="camera_item_offset">4dp</dimen>
 </resources>

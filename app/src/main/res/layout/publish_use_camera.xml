@@ -40,33 +40,19 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true" />
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:id="@+id/scroll_gallery"
-        android:layout_above="@id/control"
-        android:fillViewport="true"
-        >
-    <LinearLayout
-        android:id="@+id/gallery_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/cameraBackground"
-        android:orientation="horizontal">
 
-        <GridView
-            android:id="@+id/gallery"
-            android:layout_width="600dp"
-            android:layout_height="wrap_content"
-            android:horizontalSpacing="@dimen/content_padding"
-            android:numColumns="10"
-            android:paddingBottom="@dimen/content_padding"
-            android:paddingLeft="@dimen/content_padding"
-            android:paddingRight="@dimen/content_padding"
-            android:paddingTop="@dimen/content_padding" />
-    </LinearLayout>
-    </HorizontalScrollView>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/gallery"
+        android:background="@color/cameraBackground"
+        android:layout_above="@id/control"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="4dp"
+        android:paddingLeft="@dimen/camera_item_offset"
+        android:paddingRight="@dimen/camera_item_offset"
+        android:paddingTop="4dp" />
+
+
     <FrameLayout
         android:id="@+id/control"
         android:layout_width="match_parent"

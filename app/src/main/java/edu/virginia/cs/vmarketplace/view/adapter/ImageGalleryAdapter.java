@@ -54,7 +54,9 @@ public class ImageGalleryAdapter extends RefreshableRecycleAdapter<ImageGalleryI
                             Picasso.with(getContext()).load(x.get(0)).placeholder(R.drawable.product_placeholder_96dp).
                                     fit().into(holder.imageView));
         }
-        holder.imageView.setOnClickListener(listener);
+        if(listener != null) {
+            holder.imageView.setOnClickListener(listener);
+        }
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
