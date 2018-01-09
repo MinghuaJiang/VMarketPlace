@@ -23,7 +23,6 @@ import edu.virginia.cs.vmarketplace.service.S3Service;
 import edu.virginia.cs.vmarketplace.service.login.AppContext;
 import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
 import edu.virginia.cs.vmarketplace.view.AppConstant;
-import edu.virginia.cs.vmarketplace.model.PreviewImageItem;
 import edu.virginia.cs.vmarketplace.view.PhotoActivity;
 import edu.virginia.cs.vmarketplace.view.PublishFormActivity;
 
