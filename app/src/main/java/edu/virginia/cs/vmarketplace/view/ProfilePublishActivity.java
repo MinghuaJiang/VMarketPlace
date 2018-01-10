@@ -69,4 +69,20 @@ public class ProfilePublishActivity extends AppCompatActivity{
     public Intent getSupportParentActivityIntent() { // getParentActivityIntent() if you are not using the Support Library
         return IntentUtil.jumpWithTabRecorded(AppConstant.TAB_PROFILE, this, MainActivity.class);
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent fromIntent = getIntent();
+        if(fromIntent.hasExtra(AppConstant.JUMP_FROM)){
+            int jumpFrom = fromIntent.getIntExtra(AppConstant.JUMP_FROM, -1);
+            if(jumpFrom == AppConstant.PUBLISH_SUCCESS){
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            }else{
+                super.onBackPressed();
+            }
+        }else{
+            super.onBackPressed();
+        }
+    }
 }

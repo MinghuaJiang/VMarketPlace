@@ -26,4 +26,7 @@ public class AppConstant {
     public static final int PUBLISH_DETAIL = 10;
 
     public static final int MY_FAVORITE = 11;
+
+    public static final int PUBLISH_SUCCESS = 12;
+
 }

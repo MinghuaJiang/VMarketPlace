@@ -22,6 +22,7 @@ public class PublishSuccessActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PublishSuccessActivity.this, ProfilePublishActivity.class);
+                intent.putExtra(AppConstant.JUMP_FROM, AppConstant.PUBLISH_SUCCESS);
                 startActivity(intent);
             }
         });
