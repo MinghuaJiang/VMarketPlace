@@ -26,6 +26,7 @@ public class UserProfileDO {
     private Set<String> _favoriteItems;
     private String _gender;
     private Set<String> _publishItems;
+    private String _school;
     private String _sellerRating;
     private String _sellerRatingCount;
     private Set<String> _soldItems;
@@ -135,6 +136,14 @@ public class UserProfileDO {
 
     public void setPublishItems(final Set<String> _publishItems) {
         this._publishItems = _publishItems;
+    }
+    @DynamoDBAttribute(attributeName = "school")
+    public String getSchool() {
+        return _school;
+    }
+
+    public void setSchool(final String _school) {
+        this._school = _school;
     }
     @DynamoDBAttribute(attributeName = "sellerRating")
     public String getSellerRating() {

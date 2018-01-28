@@ -3,7 +3,9 @@ package edu.virginia.cs.vmarketplace.service.dao;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.ProfileItem;
@@ -33,6 +35,14 @@ public class ProfileItemDao {
         return list;
     }
 
+    public List<ProfileItem> getAboutItems(){
+        List<ProfileItem> list = new ArrayList<>();
+        list.add(new ProfileItem(-1, "Check Update", -1, true));
+        list.add(new ProfileItem(-1, "License Agreement",  -1,true));
+        list.add(new ProfileItem(R.drawable.gmail, "Email Me", -1,true));
+        return list;
+    }
+
     public List<ProfileItem> getSettingItems(){
         List<ProfileItem> list = new ArrayList<>();
         list.add(new ProfileItem(-1, ProfileItem.SettingType.PROFILE.getMessage(), -1, true));
@@ -40,6 +50,37 @@ public class ProfileItemDao {
         list.add(new ProfileItem(-1, ProfileItem.SettingType.ABOUT.getMessage(), -1,true));
         list.add(new ProfileItem(-1, ProfileItem.SettingType.CACHE_CLEANUP.getMessage(), -1,false));
         return list;
+    }
+
+    public String[] getSchools(){
+        String[] result = new String[]{
+                "Architecture",
+                "Arts & Sciences",
+                "Business (Darden)",
+                "Commerce (McIntire)",
+                "Education (Curry)",
+                "Engineering & Applied Sciences",
+                "Law",
+                "Leadership & Public Policy (Frank Batten)",
+                "Medicine",
+                "Nursing",
+                "Other"
+        };
+        return result;
+    }
+
+    public List<String> getDepartments(String school){
+        Map<String, List<String>> result = new HashMap<>();
+        List<String> artScience = new ArrayList<>();
+        result.put("Arts & Sciences", artScience);
+        artScience.add("African-American & African Studies");
+        artScience.add("Anthropology");
+        artScience.add("Art");
+        artScience.add("Astronomy");
+        artScience.add("Biology");
+        artScience.add("Chemistry");
+
+        return result.get(school);
     }
 
 }

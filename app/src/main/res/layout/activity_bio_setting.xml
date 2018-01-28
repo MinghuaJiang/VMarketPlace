@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.virginia.cs.vmarketplace.view.ProfileSettingsActivity">
-
+    tools:context="edu.virginia.cs.vmarketplace.view.UserProfileSettingActivity">
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
@@ -13,37 +13,37 @@
         android:elevation="4dp"
         android:layout_alignParentTop="true"
         android:theme="@style/AppTheme.Message">
-
         <TextView
             android:id="@+id/toolbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textAppearance="?android:textAppearanceMedium"
-            android:text="Settings"/>
+            android:text="Bio"
+            />
     </android.support.v7.widget.Toolbar>
 
-    <ListView
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:id="@+id/profile_container"
+    <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/text_area"
         android:layout_below="@id/my_toolbar"
-        >
-    </ListView>
-
-    <Button
-        android:id="@+id/logout"
-        android:layout_width="match_parent"
+        android:hint="Introduce yourself"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:backgroundTint="@android:color/transparent"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_height="40dp"
-        android:background="@android:color/holo_red_light"
-        android:text="Log Out"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/activity_horizontal_margin"
-        android:textColor="@color/tan_background"
-        android:layout_centerHorizontal="true"
-        android:textAppearance="?android:textAppearanceMedium"
+        android:gravity="top"
+        android:background="@color/tan_background"
+        android:id="@+id/description"
         />
+    <Button
+        android:id="@+id/confirm"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:text="@string/post_btn"
+        android:background="@color/colorPrimary"
+        android:layout_below="@id/description"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="24dp"/>
 </RelativeLayout>

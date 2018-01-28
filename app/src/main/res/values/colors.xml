@@ -2,6 +2,7 @@
 <resources>
     <color name="colorPrimary">#ffa500</color>
     <color name="colorPrimaryDark">#f9f9f9</color>
+    <color name="colorPrimaryDark_GREY">#c9c9c9</color>
     <color name="colorAccent">#ffa500</color>
     <color name="barBackground">#ffcc00</color>
     <color name="windowBackground">#e0e0e0</color>

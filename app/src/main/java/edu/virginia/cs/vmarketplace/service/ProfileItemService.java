@@ -29,4 +29,16 @@ public class ProfileItemService {
     public List<ProfileItem> getSettingItems(){
         return dao.getSettingItems();
     }
+
+    public List<ProfileItem> getAboutItems(){
+        return dao.getAboutItems();
+    }
+
+    public List<String> getDepartments(String school){
+        return dao.getDepartments(school);
+    }
+
+    public String[] getSchools(){
+        return dao.getSchools();
+    }
 }

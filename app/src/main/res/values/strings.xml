@@ -42,4 +42,5 @@
     <string name="home_toolbar_title">Home Page</string>
     <string name="search_title">Begin your search here</string>
     <string name="home_page_poster">Home page poster</string>
+    <string name="profile_setting">Profile Setting</string>
 </resources>

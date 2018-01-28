@@ -65,6 +65,7 @@ public class ProfilePublishActivity extends AppCompatActivity{
         getSupportLoaderManager().initLoader(0, null, callback).forceLoad();
     }
 
+    //This is needed only when it is not default backup behavior to parent
     @Override
     public Intent getSupportParentActivityIntent() { // getParentActivityIntent() if you are not using the Support Library
         return IntentUtil.jumpWithTabRecorded(AppConstant.TAB_PROFILE, this, MainActivity.class);

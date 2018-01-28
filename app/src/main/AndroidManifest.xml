@@ -155,9 +155,22 @@
             android:name=".view.LikeHistoryActivity"
             android:parentActivityName=".view.PublishDetailActivity"
             android:theme="@style/AppTheme.FullScreen" />
-        <activity android:name=".view.ProfileSettingsActivity"
+        <activity
+            android:name=".view.ProfileSettingsActivity"
             android:parentActivityName=".view.MainActivity"
-            android:theme="@style/AppTheme.FullScreen"></activity>
+            android:theme="@style/AppTheme.FullScreen" />
+        <activity
+            android:name=".view.UserProfileSettingActivity"
+            android:parentActivityName=".view.ProfileSettingsActivity"
+            android:theme="@style/AppTheme.FullScreen" />
+        <activity
+            android:name=".view.BioSettingActivity"
+            android:parentActivityName=".view.UserProfileSettingActivity"
+            android:theme="@style/AppTheme.FullScreen" />
+        <activity android:name=".view.AboutActivity"
+            android:parentActivityName=".view.UserProfileSettingActivity"
+            android:theme="@style/AppTheme.FullScreen"
+            ></activity>
     </application>
 
 </manifest>

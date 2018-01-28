@@ -78,7 +78,8 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     }
 
     private void handleProfile() {
-
+        Intent intent = new Intent(this, UserProfileSettingActivity.class);
+        startActivity(intent);
     }
 
     private void handleShare() {
@@ -86,7 +87,8 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     }
 
     private void handleAbout() {
-
+        Intent intent = new Intent(this, AboutActivity.class);
+        startActivity(intent);
     }
 
     private void handleCacheCleanup() {
@@ -94,13 +96,12 @@ public class ProfileSettingsActivity extends AppCompatActivity {
             File[] files = this.getExternalFilesDir(Environment.DIRECTORY_PICTURES).listFiles(new FilenameFilter() {
                 @Override
                 public boolean accept(File dir, String name) {
-                    System.out.println(name);
                     return name.endsWith(".png");
                 }
             });
-            /*for (File file : files) {
+            for (File file : files) {
                 file.delete();
-            }*/
+            }
 
             return null;
         }).with((x) -> {

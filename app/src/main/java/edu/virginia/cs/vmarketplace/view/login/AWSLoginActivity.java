@@ -40,32 +40,4 @@ public class AWSLoginActivity extends AppCompatActivity {
             }
         }).execute();
     }
-
-    private void initTabs(){
-        TabLayout layout = findViewById(R.id.sliding_tabs);
-        TabLayout.Tab tab = layout.newTab();
-        tab.setText("home");
-        tab.setIcon(R.drawable.home_24p);
-        layout.addTab(tab);
-
-        tab = layout.newTab();
-        tab.setText("place");
-        tab.setIcon(R.drawable.place_24p);
-        layout.addTab(tab);
-
-        tab = layout.newTab();
-        tab.setText("publish");
-        tab.setIcon(R.drawable.add_24p);
-        layout.addTab(tab);
-
-        tab = layout.newTab();
-        tab.setText("message");
-        tab.setIcon(R.drawable.ic_message_24dp);
-        layout.addTab(tab);
-
-        tab = layout.newTab();
-        tab.setText("profile");
-        tab.setIcon(R.drawable.user_24p);
-        layout.addTab(tab);
-    }
 }
