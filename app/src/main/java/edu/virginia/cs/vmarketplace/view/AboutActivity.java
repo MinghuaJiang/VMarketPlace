@@ -55,16 +55,18 @@ public class AboutActivity extends AppCompatActivity {
 
     private void handleEmail(){
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        emailIntent.setType("plain/text");
+        emailIntent.setType("message/rfc822");
         String toList[] = {"ben.minghuajiang@gmail.com"};
         emailIntent.putExtra(Intent.EXTRA_EMAIL, toList);
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "[vMarketPlace Android] Email Me");
         emailIntent.putExtra(Intent.EXTRA_TEXT,"\n\n\n\n\n\n\n\n\n\n\n" +
-                "Client Version: 1.0.0" + "\n" +  
+                "Client Version: 1.0.0" + "\n" +
                 "Device: " + Build.MANUFACTURER + " " + Build.BRAND + " (" + Build.MODEL+ ")" +"\n" +
                 "OS Version: " + Build.VERSION.RELEASE + "\n" +
                 "User Name: " +
                 AppContextManager.getContextManager().getAppContext().getUser().getUserName());
-        startActivity(Intent.createChooser(emailIntent,"Email Me"));
+        Intent openChooser = Intent.createChooser(emailIntent,"Email Me");
+        
+        startActivity(openChooser);
     }
 }
