@@ -11,12 +11,15 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.ProfileItem;
 import edu.virginia.cs.vmarketplace.service.ProfileItemService;
 import edu.virginia.cs.vmarketplace.service.loader.CommonLoaderCallback;
 import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
+import edu.virginia.cs.vmarketplace.util.ShareUtil;
 import edu.virginia.cs.vmarketplace.view.adapter.ProfileItemAdapter;
 
 public class AboutActivity extends AppCompatActivity {
@@ -55,18 +58,21 @@ public class AboutActivity extends AppCompatActivity {
 
     private void handleEmail(){
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        emailIntent.setType("message/rfc822");
         String toList[] = {"ben.minghuajiang@gmail.com"};
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, toList);
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "[vMarketPlace Android] Email Me");
-        emailIntent.putExtra(Intent.EXTRA_TEXT,"\n\n\n\n\n\n\n\n\n\n\n" +
+        Set<String> whileList = new HashSet<String>();
+        whileList.add("com.google.android.gm");
+        whileList.add("com.tencent.androidqqmail");
+        whileList.add("com.microsoft.office.outlook.dawg");
+        String message = "\n\n\n\n\n\n\n\n\n\n\n" +
                 "Client Version: 1.0.0" + "\n" +
                 "Device: " + Build.MANUFACTURER + " " + Build.BRAND + " (" + Build.MODEL+ ")" +"\n" +
                 "OS Version: " + Build.VERSION.RELEASE + "\n" +
                 "User Name: " +
-                AppContextManager.getContextManager().getAppContext().getUser().getUserName());
-        Intent openChooser = Intent.createChooser(emailIntent,"Email Me");
-        
-        startActivity(openChooser);
+                AppContextManager.getContextManager().getAppContext().getUser().getUserName();
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, toList);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "[vMarketPlace Android] Email Me");
+        Intent intent = ShareUtil.shareContent(getPackageManager(), emailIntent, "plain/text",whileList, message,
+                "Email Me");
+        startActivity(intent);
     }
 }

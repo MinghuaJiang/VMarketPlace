@@ -1,7 +1,13 @@
 package edu.virginia.cs.vmarketplace.view;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.LabeledIntent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +22,12 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.ProfileItem;
@@ -24,6 +35,7 @@ import edu.virginia.cs.vmarketplace.service.ProfileItemService;
 import edu.virginia.cs.vmarketplace.service.loader.CommonAyncTask;
 import edu.virginia.cs.vmarketplace.service.loader.CommonLoaderCallback;
 import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
+import edu.virginia.cs.vmarketplace.util.ShareUtil;
 import edu.virginia.cs.vmarketplace.view.adapter.ProfileItemAdapter;
 import edu.virginia.cs.vmarketplace.view.login.AWSLoginActivity;
 
@@ -83,7 +95,11 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     }
 
     private void handleShare() {
-
+        String message = "Check out latest second-hand marketplace app for UVA students at:" +
+                "\n" + "http://www.cs.virginia.edu/~mj2eu/apps/vmarketplace/vmarketplace.apk";
+        Uri file = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.app);
+        Intent intent = ShareUtil.shareToSocialNetwork(getPackageManager(),message, file);
+        startActivity(intent);
     }
 
     private void handleAbout() {
