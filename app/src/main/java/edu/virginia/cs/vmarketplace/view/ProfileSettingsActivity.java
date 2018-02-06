@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,9 +20,12 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -29,6 +33,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import edu.virginia.cs.vmarketplace.BuildConfig;
 import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.ProfileItem;
 import edu.virginia.cs.vmarketplace.service.ProfileItemService;
@@ -95,11 +100,25 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     }
 
     private void handleShare() {
-        String message = "Check out latest second-hand marketplace app for UVA students at:" +
-                "\n" + "http://www.cs.virginia.edu/~mj2eu/apps/vmarketplace/vmarketplace.apk";
-        Uri file = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.app);
-        Intent intent = ShareUtil.shareToSocialNetwork(getPackageManager(),message, file);
-        startActivity(intent);
+        try {
+            String message = "Check out latest second-hand marketplace app for UVA students at:" +
+                    "\n" + "http://www.cs.virginia.edu/~mj2eu/apps/vmarketplace/vmarketplace.apk";
+            File file = new File(getFilesDir() + "/app.png");
+            if (!file.exists()) {
+                InputStream is = getResources().openRawResource(R.raw.app);
+                byte[] buffer = new byte[is.available()];
+                is.read(buffer);
+                FileOutputStream os = new FileOutputStream(file);
+                os.write(buffer);
+                os.close();
+                is.close();
+            }
+            Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID, file);
+            Intent intent = ShareUtil.shareToSocialNetwork(this, message, uri);
+            startActivity(intent);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void handleAbout() {

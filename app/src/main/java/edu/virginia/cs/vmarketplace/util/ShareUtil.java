@@ -1,6 +1,7 @@
 package edu.virginia.cs.vmarketplace.util;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.LabeledIntent;
 import android.content.pm.PackageManager;
@@ -49,7 +50,8 @@ public class ShareUtil {
         return openChooser;
     }
 
-    public static Intent shareToSocialNetwork(PackageManager packageManager, String text, Uri imagePath){
+    public static Intent shareToSocialNetwork(Context context, String text, Uri imagePath){
+        PackageManager packageManager = context.getPackageManager();
         List<LabeledIntent> intentList = new ArrayList<LabeledIntent>();
         Intent intent = new Intent();
         intent.setType("plain/text");
@@ -77,6 +79,7 @@ public class ShareUtil {
         friendIntent.setAction(Intent.ACTION_SEND);
         friendIntent.putExtra(Intent.EXTRA_STREAM, imagePath);
         friendIntent.setType("image/png");
+        friendIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         resolveInfos = packageManager.queryIntentActivities(friendIntent, 0);
         if(resolveInfos != null && resolveInfos.size() > 0) {
             ResolveInfo ri = resolveInfos.get(0);
@@ -98,7 +101,6 @@ public class ShareUtil {
             //add this intent to the list
             intentList.add(new LabeledIntent(messenger, packageName,
                     ri.loadLabel(packageManager), ri.icon));
-
         }
 
         Intent openChooser = Intent.createChooser(intent,"Share To");
