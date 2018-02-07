@@ -100,7 +100,7 @@
                     android:id="@+id/location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
+                    android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/location_logo"
                     android:layout_marginLeft="@dimen/content_padding"
                     android:text="Loading"/>
