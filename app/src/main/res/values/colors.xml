@@ -18,4 +18,8 @@
     <color name="tan_background">#FFFFFF</color>
     <color name="borderColor">#a1887f</color>
     <color name="cameraBackground">#4d4d4d</color>
+    <color name="SecondHand">#ffa500</color>
+    <color name="Ride">#00b300</color>
+    <color name="Activity">#00b300</color>
+    <color name="Sublease">#00b300</color>
 </resources>

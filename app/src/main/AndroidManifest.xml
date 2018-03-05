@@ -167,21 +167,25 @@
             android:name=".view.BioSettingActivity"
             android:parentActivityName=".view.UserProfileSettingActivity"
             android:theme="@style/AppTheme.FullScreen" />
-        <activity android:name=".view.AboutActivity"
+        <activity
+            android:name=".view.AboutActivity"
             android:parentActivityName=".view.UserProfileSettingActivity"
-            android:theme="@style/AppTheme.FullScreen"
-            ></activity>
+            android:theme="@style/AppTheme.FullScreen" />
+        <activity android:name=".view.CategoryActivity"
+            android:parentActivityName=".view.MainActivity"
+            android:theme="@style/AppTheme.FullScreen"></activity>
+
+        <!--This is for sharing image to third party app-->
         <provider
-            android:authorities="${applicationId}"
             android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"
-                >
-            </meta-data>
+                android:resource="@xml/file_paths"></meta-data>
         </provider>
+
     </application>
 
 </manifest>

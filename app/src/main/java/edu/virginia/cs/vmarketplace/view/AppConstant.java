@@ -11,6 +11,7 @@ public class AppConstant {
     public static final String BUYER_NAME = "buyername";
     public static final String MESSAGE_ID = "messageid";
     public static final String FILE_LIST = "file_list";
+    public static final String CATEGORY = "category";
 
     public static final int TAB_MESSAGE = 3;
     public static final int TAB_PROFILE = 4;
@@ -28,5 +29,7 @@ public class AppConstant {
     public static final int MY_FAVORITE = 11;
 
     public static final int PUBLISH_SUCCESS = 12;
+
+    public static final int PRODUCT_LIST = 13;
 
 }

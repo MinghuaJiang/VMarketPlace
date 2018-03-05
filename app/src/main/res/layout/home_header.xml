@@ -47,9 +47,7 @@
                 android:layout_width="@dimen/list_item_height"
                 android:layout_height="@dimen/list_item_height"
                 android:layout_gravity="center"
-                android:clickable="true"
                 android:contentDescription="@string/second_hand"
-                android:focusable="true"
                 app:srcCompat="@drawable/home_second_hand" />
 
         </LinearLayout>
@@ -81,9 +79,7 @@
                 android:layout_width="@dimen/list_item_height"
                 android:layout_height="@dimen/list_item_height"
                 android:layout_gravity="center"
-                android:clickable="true"
                 android:contentDescription="@string/rides"
-                android:focusable="true"
                 app:srcCompat="@drawable/home_ride" />
         </LinearLayout>
 
@@ -114,9 +110,7 @@
                 android:layout_width="@dimen/list_item_height"
                 android:layout_height="@dimen/list_item_height"
                 android:layout_gravity="center"
-                android:clickable="true"
                 android:contentDescription="@string/sublease"
-                android:focusable="true"
                 app:srcCompat="@drawable/home_sublease" />
 
         </LinearLayout>
@@ -148,9 +142,7 @@
                 android:layout_width="@dimen/list_item_height"
                 android:layout_height="@dimen/list_item_height"
                 android:layout_gravity="center"
-                android:clickable="true"
                 android:contentDescription="@string/activities"
-                android:focusable="true"
                 app:srcCompat="@drawable/home_activity" />
 
         </LinearLayout>

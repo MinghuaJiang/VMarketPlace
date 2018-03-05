@@ -12,8 +12,8 @@
     <string name="click"><![CDATA[>]]></string>
     <string name="second_hand">Second Hand</string>
     <string name="sublease">Sublease</string>
-    <string name="rides">Rides</string>
-    <string name="activities">Activities</string>
+    <string name="rides">Ride</string>
+    <string name="activities">Activity</string>
     <string name="close_btn">close</string>
     <string name="publish">Publish</string>
     <string name="write_post">Post</string>

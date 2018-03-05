@@ -61,6 +61,10 @@
         <item name="android:textSize">10sp</item>
     </style>
 
+    <style name="CategoryTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <style name="CustomHomeTab" parent="TextAppearance.Design.Tab">
         <item name="android:textColor">@android:color/black</item>
     </style>

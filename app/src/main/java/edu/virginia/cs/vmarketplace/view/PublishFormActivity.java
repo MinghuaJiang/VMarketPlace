@@ -123,7 +123,7 @@ public class PublishFormActivity extends AppCompatActivity {
                     (x)->new File(x).getName()).collect(Collectors.toList());
 
             category = appContext.getCurrentCategory();
-            ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.category_item, CategoryUtil.getSubCategory(category));
+            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter(this, R.layout.category_item, CategoryUtil.getSubCategory(category));
             spinner.setAdapter(spinnerAdapter);
         }else{
             ProductItemsDO itemsDO = appContext.getItemsDO();
@@ -134,7 +134,7 @@ public class PublishFormActivity extends AppCompatActivity {
 
             category = itemsDO.getCategory();
             appContext.setCurrentCategory(category);
-            ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.category_item, CategoryUtil.getSubCategory(category));
+            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter(this, R.layout.category_item, CategoryUtil.getSubCategory(category));
             spinner.setAdapter(spinnerAdapter);
             spinner.setSelection(itemsDO.getSubcategoryPosition().intValue());
         }

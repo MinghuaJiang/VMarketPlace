@@ -27,10 +27,13 @@ import edu.virginia.cs.vmarketplace.service.login.AppContextManager;
 import edu.virginia.cs.vmarketplace.util.LocationUtil;
 import edu.virginia.cs.vmarketplace.util.TimeUtil;
 import edu.virginia.cs.vmarketplace.view.AppConstant;
+import edu.virginia.cs.vmarketplace.view.CategoryActivity;
+import edu.virginia.cs.vmarketplace.view.MainActivity;
 import edu.virginia.cs.vmarketplace.view.PublishDetailActivity;
 import edu.virginia.cs.vmarketplace.view.adapter.decoration.ItemOffsetDecoration;
 import edu.virginia.cs.vmarketplace.view.adapter.model.ImageGalleryItem;
 import edu.virginia.cs.vmarketplace.view.adapter.viewholder.FootViewHolder;
+import edu.virginia.cs.vmarketplace.view.adapter.viewholder.ItemViewHolder;
 import edu.virginia.cs.vmarketplace.view.fragments.HomeFragment;
 
 /**
@@ -90,7 +93,7 @@ public class HomePageListAdapter extends RefreshableRecycleAdapter<ProductItemsD
             return tabViewHolder;
         } else if (viewType == TYPE_ITEM) {
             View view = getInflater().inflate(R.layout.home_tab_list_item, parent, false);
-            ItemViewHolder itemViewHolder = new ItemViewHolder(view);
+            ItemViewHolder itemViewHolder = new ItemViewHolder(view, getContext());
             return itemViewHolder;
         }else if(viewType == TYPE_FOOTER){
             View view = getInflater().inflate(R.layout.home_tab_footer, parent, false);
@@ -111,94 +114,7 @@ public class HomePageListAdapter extends RefreshableRecycleAdapter<ProductItemsD
         if (viewHolder instanceof ItemViewHolder) {
             ItemViewHolder holder = (ItemViewHolder)viewHolder;
             ProductItemsDO productItemsDO = getItems().get(position - 2);
-            if (productItemsDO.getCreatedByAvatar() == null) {
-                holder.userAvatar.setImageResource(R.drawable.placeholder);
-            } else if (productItemsDO.getCreatedByAvatar().startsWith(S3Service.S3_PREFIX)) {
-                S3Service.getInstance(getContext()).download(productItemsDO.getCreatedByAvatar(), (x) -> {
-                    Picasso.with(getContext()).load(x.get(0)).
-                            placeholder(R.drawable.placeholder).into(holder.userAvatar);
-                });
-            } else {
-                Picasso.with(getContext()).load(productItemsDO.getCreatedByAvatar()).
-                        placeholder(R.drawable.placeholder).into(holder.userAvatar);
-            }
-
-            holder.userName.setText(productItemsDO.getCreatedByName());
-            holder.price.setText("$" + productItemsDO.getPrice());
-            holder.title.setText(productItemsDO.getTitle());
-            holder.time.setText(TimeUtil.getRelativeTimeFromNow(productItemsDO.getLastModificationTime()));
-            TextView description = holder.description;
-            if (productItemsDO.getDescription() == null) {
-                description.setVisibility(View.GONE);
-            } else {
-                description.setVisibility(View.VISIBLE);
-                if (productItemsDO.getDescription().length() >= 95) {
-                    description.setText(
-                            productItemsDO.getDescription().substring(0, 95) + "...");
-                } else {
-                    description.setText(productItemsDO.getDescription());
-                }
-            }
-            holder.location.setText(LocationUtil.getAddressAndZipCode(productItemsDO.getLocation()));
-
-            // add thumb up
-            TextView replyCount = holder.reply;
-
-            if (productItemsDO.getReplyCount() == 0) {
-                replyCount.setVisibility(View.GONE);
-            } else {
-                replyCount.setText("reply" + productItemsDO.getReplyCount().intValue());
-                replyCount.setVisibility(View.VISIBLE);
-            }
-
-            TextView thumbUpCount = holder.thumbup;
-            if (productItemsDO.getThumbUpCount() == 0) {
-                thumbUpCount.setVisibility(View.GONE);
-            } else {
-                thumbUpCount.setText("like" + productItemsDO.getThumbUpCount().intValue());
-                thumbUpCount.setVisibility(View.VISIBLE);
-
-            }
-
-            RecyclerView gallery = holder.gallery;
-            gallery.setFocusable(false);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-            gallery.setLayoutManager(linearLayoutManager);
-
-            List<String> originalFiles = productItemsDO.getOriginalFiles();
-            List<String> s3Urls = productItemsDO.getPics();
-
-            List<ImageGalleryItem> list = new ArrayList<>();
-            for (int i = 0; i < originalFiles.size(); i++) {
-                ImageGalleryItem item = new ImageGalleryItem(originalFiles.get(i),
-                        s3Urls.get(i));
-                list.add(item);
-            }
-
-            ImageGalleryAdapter imageGalleryAdapter = new ImageGalleryAdapter(getContext(), list);
-            gallery.setAdapter(imageGalleryAdapter);
-
-            imageGalleryAdapter.setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(getContext(), PublishDetailActivity.class);
-                            intent.putExtra(AppConstant.JUMP_FROM, AppConstant.HOME_PAGE);
-                            AppContextManager.getContextManager().getAppContext().setItemsDO(productItemsDO);
-                            getContext().startActivity(intent);
-                        }
-                    }
-            );
-
-            holder.layout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getContext(), PublishDetailActivity.class);
-                    intent.putExtra(AppConstant.JUMP_FROM, AppConstant.HOME_PAGE);
-                    AppContextManager.getContextManager().getAppContext().setItemsDO(productItemsDO);
-                    getContext().startActivity(intent);
-                }
-            });
+            holder.bindProductsItemDO(productItemsDO);
         }else if(viewHolder instanceof HeaderViewHolder) {
             HeaderViewHolder holder = (HeaderViewHolder)viewHolder;
             holder.mSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
@@ -209,25 +125,33 @@ public class HomePageListAdapter extends RefreshableRecycleAdapter<ProductItemsD
             holder.secondHand.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent intent = new Intent(getContext(), CategoryActivity.class);
+                    intent.putExtra(AppConstant.CATEGORY, "Second Hand");
+                    getContext().startActivity(intent);
                 }
             });
             holder.activity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent intent = new Intent(getContext(), CategoryActivity.class);
+                    intent.putExtra(AppConstant.CATEGORY, "Activity");
+                    getContext().startActivity(intent);
                 }
             });
             holder.sublease.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent intent = new Intent(getContext(), CategoryActivity.class);
+                    intent.putExtra(AppConstant.CATEGORY, "Sublease");
+                    getContext().startActivity(intent);
                 }
             });
             holder.rides.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent intent = new Intent(getContext(), CategoryActivity.class);
+                    intent.putExtra(AppConstant.CATEGORY, "Ride");
+                    getContext().startActivity(intent);
                 }
             });
         }else if(viewHolder instanceof FootViewHolder){
@@ -297,37 +221,6 @@ public class HomePageListAdapter extends RefreshableRecycleAdapter<ProductItemsD
 
                 }
             });
-        }
-    }
-
-    public class ItemViewHolder extends RecyclerView.ViewHolder {
-        public CircleImageView userAvatar;
-        public TextView userName;
-        public TextView time;
-        public TextView price;
-        public TextView title;
-        public TextView description;
-        public TextView location;
-        public TextView reply;
-        public TextView thumbup;
-        public RecyclerView gallery;
-        public LinearLayout layout;
-
-        public ItemViewHolder(View itemView) {
-            super(itemView);
-            userAvatar = itemView.findViewById(R.id.home_post_avatar);
-            userName = itemView.findViewById(R.id.home_post_user_name);
-            price = itemView.findViewById(R.id.product_price);
-            title = itemView.findViewById(R.id.home_post_title);
-            time = itemView.findViewById(R.id.home_post_time);
-            description = itemView.findViewById(R.id.home_post_description);
-            location = itemView.findViewById(R.id.home_post_locale);
-            thumbup = itemView.findViewById(R.id.home_post_thumbup);
-            reply = itemView.findViewById(R.id.home_post_reply);
-            gallery = itemView.findViewById(R.id.home_post_image_gallery);
-            layout = itemView.findViewById(R.id.container);
-            ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(getContext(), R.dimen.item_offset);
-            gallery.addItemDecoration(itemDecoration);
         }
     }
 
