@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
@@ -20,6 +21,13 @@
             android:layout_gravity="center"
             android:textAppearance="?android:textAppearanceMedium" />
     </android.support.v7.widget.Toolbar>
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:tabIndicatorColor="@color/barBackground"
+        app:tabTextAppearance="@style/CategoryTabText"
+        />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/category_tab_list"
         android:layout_width="match_parent"

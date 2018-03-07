@@ -10,6 +10,9 @@ import java.util.List;
 public class CategoryUtil {
     public static List<String> getSubCategory(String category){
         List<String> result = new ArrayList();
+        if(category == null){
+            return result;
+        }
         if(category.equals("Second Hand")) {
             result.add("Appliance");
             result.add("Bicycle");

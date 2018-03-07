@@ -51,6 +51,19 @@ public class ProductItemService {
         return result;
     }
 
+    public PageResult<ProductItemsDO> findPostBySubCategory(PageRequest request){
+        String subcategory = request.getParam();
+        if(!cache.containsKey(subcategory)){
+            cache.put(subcategory, dao.calculateTotalPagesForSubcategory(subcategory, request.getPageSize()));
+        }
+        int totalPage = (int)cache.get(subcategory);
+        PageResult<ProductItemsDO> result = dao.findPostBySubCategory(subcategory, request);
+        if(request.getPage() == totalPage - 1){
+            result.setToken(null);
+        }
+        return result;
+    }
+
     public PageResult<ProductItemsDO> getItemsByItemIds(List<String> items, PageRequest pageRequest){
         return dao.getItemsByItemIds(items, pageRequest);
     }

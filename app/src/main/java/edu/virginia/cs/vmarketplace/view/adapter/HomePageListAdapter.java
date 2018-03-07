@@ -93,7 +93,7 @@ public class HomePageListAdapter extends RefreshableRecycleAdapter<ProductItemsD
             return tabViewHolder;
         } else if (viewType == TYPE_ITEM) {
             View view = getInflater().inflate(R.layout.home_tab_list_item, parent, false);
-            ItemViewHolder itemViewHolder = new ItemViewHolder(view, getContext());
+            ItemViewHolder itemViewHolder = new ItemViewHolder(view, getContext(), AppConstant.HOME_PAGE);
             return itemViewHolder;
         }else if(viewType == TYPE_FOOTER){
             View view = getInflater().inflate(R.layout.home_tab_footer, parent, false);

@@ -44,8 +44,9 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     public RecyclerView gallery;
     public LinearLayout layout;
     private Context context;
+    private int currentPage;
 
-    public ItemViewHolder(View itemView, Context context) {
+    public ItemViewHolder(View itemView, Context context, int currentPage) {
         super(itemView);
         this.context = context;
         userAvatar = itemView.findViewById(R.id.home_post_avatar);
@@ -61,6 +62,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         layout = itemView.findViewById(R.id.container);
         ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(this.context, R.dimen.item_offset);
         gallery.addItemDecoration(itemDecoration);
+        this.currentPage = currentPage;
     }
 
     public Context getContext(){
@@ -138,7 +140,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getContext(), PublishDetailActivity.class);
-                        intent.putExtra(AppConstant.JUMP_FROM, AppConstant.HOME_PAGE);
+                        intent.putExtra(AppConstant.JUMP_FROM, currentPage);
                         AppContextManager.getContextManager().getAppContext().setItemsDO(productItemsDO);
                         getContext().startActivity(intent);
                     }
@@ -149,7 +151,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), PublishDetailActivity.class);
-                intent.putExtra(AppConstant.JUMP_FROM, AppConstant.PRODUCT_LIST);
+                intent.putExtra(AppConstant.JUMP_FROM, currentPage);
                 AppContextManager.getContextManager().getAppContext().setItemsDO(productItemsDO);
                 getContext().startActivity(intent);
             }

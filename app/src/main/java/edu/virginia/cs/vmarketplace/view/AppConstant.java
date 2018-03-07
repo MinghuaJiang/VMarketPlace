@@ -30,6 +30,6 @@ public class AppConstant {
 
     public static final int PUBLISH_SUCCESS = 12;
 
-    public static final int PRODUCT_LIST = 13;
+    public static final int CATEGORY_PAGE = 13;
 
 }

@@ -523,6 +523,7 @@ public class PublishDetailActivity extends AppCompatActivity{
         }
     }
 
+    //TODO add state for categoryActivity
     @Override
     public Intent getSupportParentActivityIntent() { // getParentActivityIntent() if you are not using the Support Library
         Intent fromIntent = getIntent();
@@ -534,6 +535,8 @@ public class PublishDetailActivity extends AppCompatActivity{
             intent = new Intent(this, MainActivity.class);
         }else if(jump_from == AppConstant.MY_FAVORITE){
             intent = new Intent(this, ProfileFavoriteActivity.class);
+        }else if(jump_from == AppConstant.CATEGORY_PAGE){
+            intent = new Intent(this, CategoryActivity.class);
         }
         return intent;
     }

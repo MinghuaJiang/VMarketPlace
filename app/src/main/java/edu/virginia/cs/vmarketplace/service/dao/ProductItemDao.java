@@ -1,5 +1,7 @@
 package edu.virginia.cs.vmarketplace.service.dao;
 
+import android.icu.util.ULocale;
+
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExpression;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBScanExpression;
@@ -109,6 +111,67 @@ public class ProductItemDao {
                         withFilterExpression("created_by <> :created_by").withExpressionAttributeValues(eav).withConsistentRead(false);
         int result = mapper.count(ProductItemsDO.class, queryExpression);
         return (result - 1) / pageSize + 1;
+    }
+
+    public int calculateTotalPagesForSubcategory(String subcategory, int pageSize){
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        eav.put(":created_by", new AttributeValue().withS(AppContextManager.getContextManager().getAppContext().getUser().getUserId()));
+
+        ProductItemsDO itemsDO = new ProductItemsDO();
+        itemsDO.setStatus(ItemStatus.publish.toString());
+
+        Condition rangeKeyCondition = new Condition()
+                .withComparisonOperator(ComparisonOperator.EQ)
+                .withAttributeValueList(new AttributeValue().withS(subcategory));
+
+        DynamoDBQueryExpression<ProductItemsDO> queryExpression = new DynamoDBQueryExpression<ProductItemsDO>()
+                .withIndexName("STATUS_PUBLISH_WITH_SUB").withHashKeyValues(itemsDO).
+                        withScanIndexForward(false).
+                        withRangeKeyCondition("subcategory",rangeKeyCondition).
+                        withFilterExpression("created_by <> :created_by").withExpressionAttributeValues(eav).withConsistentRead(false);
+        int result = mapper.count(ProductItemsDO.class, queryExpression);
+        return (result - 1) / pageSize + 1;
+    }
+
+    public PageResult<ProductItemsDO> findPostBySubCategory(String subcategory, PageRequest pageRequest){
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        eav.put(":created_by", new AttributeValue().withS(AppContextManager.getContextManager().getAppContext().getUser().getUserId()));
+
+        ProductItemsDO itemsDO = new ProductItemsDO();
+        itemsDO.setStatus(ItemStatus.publish.toString());
+
+        Condition rangeKeyCondition = new Condition()
+                .withComparisonOperator(ComparisonOperator.EQ)
+                .withAttributeValueList(new AttributeValue().withS(subcategory));
+
+        DynamoDBQueryExpression<ProductItemsDO> queryExpression = new DynamoDBQueryExpression<ProductItemsDO>()
+                .withIndexName("STATUS_PUBLISH_WITH_SUB").withHashKeyValues(itemsDO).
+                        withScanIndexForward(false).
+                        withRangeKeyCondition("subcategory",rangeKeyCondition).
+                        withFilterExpression("created_by <> :created_by").withExpressionAttributeValues(eav).
+                        withLimit(pageRequest.getPageSize()).withConsistentRead(false);
+
+        if(pageRequest.getPage() != 0){
+            queryExpression.setExclusiveStartKey((Map<String, AttributeValue>)pageRequest.getToken());
+        }
+
+        QueryResultPage<ProductItemsDO> queryResult = mapper.queryPage(ProductItemsDO.class, queryExpression);
+        List<ProductItemsDO> result = new ArrayList<>();
+        result.addAll(queryResult.getResults());
+        while (result.size() < pageRequest.getPageSize() && queryResult.getLastEvaluatedKey() != null){
+            queryExpression = new DynamoDBQueryExpression<ProductItemsDO>()
+                    .withIndexName("STATUS_PUBLISH_WITH_SUB").withHashKeyValues(itemsDO).
+                            withScanIndexForward(false).
+                            withRangeKeyCondition("subcategory",rangeKeyCondition).
+                            withFilterExpression("created_by <> :created_by").withExpressionAttributeValues(eav).
+                            withLimit(pageRequest.getPageSize() - result.size()).withConsistentRead(false);
+            queryExpression.setExclusiveStartKey(queryResult.getLastEvaluatedKey());
+            queryResult = mapper.queryPage(ProductItemsDO.class, queryExpression);
+            result.addAll(queryResult.getResults());
+        }
+
+        PageResult<ProductItemsDO> finalResult = new PageResult<>(result, queryResult.getLastEvaluatedKey());
+        return finalResult;
     }
 
     public PageResult<ProductItemsDO> findLatestActivePostWithIn90Days(PageRequest pageRequest){

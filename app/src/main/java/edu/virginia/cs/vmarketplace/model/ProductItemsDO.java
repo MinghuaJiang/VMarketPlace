@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 
 @DynamoDBTable(tableName = "vmarketplace-mobilehub-440270839-PRODUCT_ITEMS")
-
 public class ProductItemsDO {
     private String _itemId;
     private String _buyerRatingTime;
@@ -258,7 +257,7 @@ public class ProductItemsDO {
     public void setSoldTo(final String _soldTo) {
         this._soldTo = _soldTo;
     }
-    @DynamoDBIndexHashKey(attributeName = "status", globalSecondaryIndexName = "STATUS_PUBLISH")
+    @DynamoDBIndexHashKey(attributeName = "status", globalSecondaryIndexNames = {"STATUS_PUBLISH","STATUS_PUBLISH_WITH_SUB",})
     public String getStatus() {
         return _status;
     }
@@ -266,7 +265,7 @@ public class ProductItemsDO {
     public void setStatus(final String _status) {
         this._status = _status;
     }
-    @DynamoDBAttribute(attributeName = "subcategory")
+    @DynamoDBIndexRangeKey(attributeName = "subcategory", globalSecondaryIndexName = "STATUS_PUBLISH_WITH_SUB")
     public String getSubcategory() {
         return _subcategory;
     }

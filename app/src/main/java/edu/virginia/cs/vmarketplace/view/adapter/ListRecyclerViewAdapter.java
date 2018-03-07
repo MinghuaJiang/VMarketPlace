@@ -14,7 +14,9 @@ import edu.virginia.cs.vmarketplace.R;
 import edu.virginia.cs.vmarketplace.model.ProductItemsDO;
 import edu.virginia.cs.vmarketplace.util.CategoryUtil;
 import edu.virginia.cs.vmarketplace.util.ReflectionUtil;
+import edu.virginia.cs.vmarketplace.view.AppConstant;
 import edu.virginia.cs.vmarketplace.view.CategoryActivity;
+import edu.virginia.cs.vmarketplace.view.adapter.viewholder.FootViewHolder;
 import edu.virginia.cs.vmarketplace.view.adapter.viewholder.ItemViewHolder;
 
 /**
@@ -22,46 +24,39 @@ import edu.virginia.cs.vmarketplace.view.adapter.viewholder.ItemViewHolder;
  */
 
 public class ListRecyclerViewAdapter extends RefreshableRecycleAdapter<ProductItemsDO, RecyclerView.ViewHolder> {
-    private static final int TYPE_TAB = 0;
-    private static final int TYPE_ITEM = 1;
-    private String category;
-    private List<String> tabItem;
-    private int backgroundResourceId;
-    private TabViewHolder tabViewHolder;
+    private static final int TYPE_ITEM = 0;
+    private static final int TYPE_FOOTER = 1;
     private ItemViewHolder itemViewHolder;
-    private CategoryActivity activity;
+    private FootViewHolder footViewHolder;
 
-    public ListRecyclerViewAdapter(Context context, List<ProductItemsDO> items, String category, CategoryActivity activity){
+    public ListRecyclerViewAdapter(Context context, List<ProductItemsDO> items){
         super(context, items);
-        this.category = category;
-        this.tabItem = CategoryUtil.getSubCategory(category);
-        this.backgroundResourceId = (int)ReflectionUtil.getConstant(R.color.class, category.replaceAll(" ",""));
-        this.activity = activity;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (isPositionTab(position)) {
-            return TYPE_TAB;
+        if(isPositionFooter(position)){
+            return TYPE_FOOTER;
+        }else {
+            return TYPE_ITEM;
         }
-        return TYPE_ITEM;
     }
 
-    private boolean isPositionTab(int position) {
-        return position == 0;
+    private boolean isPositionFooter(int position){
+        return position == getItemCount() - 1;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == TYPE_TAB) {
-            View view = getInflater().inflate(R.layout.category_tab, parent, false);
-            tabViewHolder = new TabViewHolder(view, tabItem, backgroundResourceId);
-            return tabViewHolder;
-        }else if(viewType == TYPE_ITEM) {
+        if(viewType == TYPE_ITEM) {
             View view = getInflater().inflate(R.layout.home_tab_list_item, parent, false);
-            itemViewHolder = new ItemViewHolder(view, getContext());
+            itemViewHolder = new ItemViewHolder(view, getContext(), AppConstant.CATEGORY_PAGE);
             return itemViewHolder;
-        } else {
+        }else if(viewType == TYPE_FOOTER) {
+            View view = getInflater().inflate(R.layout.home_tab_footer, parent, false);
+            footViewHolder = new FootViewHolder(view);
+            return footViewHolder;
+        }else {
             throw new RuntimeException("No matching viewType");
         }
     }
@@ -70,8 +65,11 @@ public class ListRecyclerViewAdapter extends RefreshableRecycleAdapter<ProductIt
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         if(viewHolder instanceof ItemViewHolder){
             ItemViewHolder holder = (ItemViewHolder)viewHolder;
-            ProductItemsDO productItemsDO = getItems().get(position - 1);
+            ProductItemsDO productItemsDO = getItems().get(position);
             holder.bindProductsItemDO(productItemsDO);
+        }else if(viewHolder instanceof FootViewHolder){
+            FootViewHolder holder = (FootViewHolder)viewHolder;
+            holder.progressBar.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -80,54 +78,8 @@ public class ListRecyclerViewAdapter extends RefreshableRecycleAdapter<ProductIt
         return super.getItemCount() + 1;
     }
 
-    class TabViewHolder extends RecyclerView.ViewHolder {
-        public TabLayout layout;
-        private List<String> tabItem;
-        private int backgroundResourceId;
 
-        public TabViewHolder(View itemView, List<String> tabItem, int backgroundResourceId) {
-            super(itemView);
-            this.tabItem = tabItem;
-            this.backgroundResourceId = backgroundResourceId;
-            layout = itemView.findViewById(R.id.tab);
-            layout.setBackgroundColor(ContextCompat.getColor(getContext(), backgroundResourceId));
-            for(String tabName : this.tabItem){
-                TabLayout.Tab tab = layout.newTab();
-                tab.setText(tabName);
-                layout.addTab(tab);
-            }
-            layout.setTabTextColors(ContextCompat.getColor(getContext(), R.color.tan_background), ContextCompat.getColor(getContext(), R.color.barBackground));
-            layout.post(new Runnable() {
-                @Override
-                public void run() {
-                    int tabLayoutWidth = layout.getWidth();
-                    DisplayMetrics metrics = new DisplayMetrics();
-                    ListRecyclerViewAdapter.this.activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                    int deviceWidth = metrics.widthPixels;
-                    if(tabLayoutWidth < deviceWidth){
-                        layout.setMinimumWidth(deviceWidth);
-                        layout.setTabMode(TabLayout.MODE_FIXED);
-                        layout.setTabGravity(TabLayout.GRAVITY_FILL);
-                    }else {
-                        layout.setTabMode(TabLayout.MODE_SCROLLABLE);
-                    }
-                }
-            });
-            layout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                @Override
-                public void onTabSelected(TabLayout.Tab tab) {
-                }
-
-                @Override
-                public void onTabUnselected(TabLayout.Tab tab) {
-
-                }
-
-                @Override
-                public void onTabReselected(TabLayout.Tab tab) {
-
-                }
-            });
-        }
+    public FootViewHolder getFootViewHolder() {
+        return footViewHolder;
     }
 }
